@@ -2,9 +2,15 @@ package main.tls_maps;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import main.tls_maps.placeholder.NotesContent.Note;
 import main.tls_maps.databinding.FragmentNotesBinding;
@@ -45,12 +51,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
+        public final ImageButton mBtnView;
         public Note mItem;
 
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
             mIdView = binding.itemNumber;
             mContentView = binding.content;
+            mBtnView = binding.imageButton;
+            mBtnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(v, "Löschen?" + mIdView.getText(), Snackbar.LENGTH_LONG).show();
+                }
+            });
         }
 
         @Override
