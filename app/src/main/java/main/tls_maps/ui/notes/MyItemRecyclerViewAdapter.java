@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import main.tls_maps.databinding.FragmentNotesBinding;
-import main.tls_maps.placeholder.PlaceholderContent.PlaceholderItem;
+import main.tls_maps.placeholder.NotesContent.PlaceholderItem;
 
 import java.util.List;
 

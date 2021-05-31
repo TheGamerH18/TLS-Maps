@@ -3,11 +3,10 @@ package main.tls_maps;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import main.tls_maps.placeholder.PlaceholderContent.PlaceholderItem;
+import main.tls_maps.placeholder.NotesContent.PlaceholderItem;
 import main.tls_maps.databinding.FragmentNotesBinding;
 
 import java.util.List;

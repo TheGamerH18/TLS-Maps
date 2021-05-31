@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import main.tls_maps.MyItemRecyclerViewAdapter;
 import main.tls_maps.R;
-import main.tls_maps.placeholder.PlaceholderContent;
+import main.tls_maps.placeholder.NotesContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,7 +68,7 @@ public class NotesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(NotesContent.ITEMS));
         }
         return view;
     }
