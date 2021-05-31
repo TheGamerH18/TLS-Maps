@@ -12,17 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import main.tls_maps.ItemFragment;
-import main.tls_maps.MyItemRecyclerViewAdapter;
 import main.tls_maps.R;
 import main.tls_maps.placeholder.PlaceholderContent;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
  */
-public class NotesFragment extends Fragment {
+public class Items extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,13 +29,13 @@ public class NotesFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public NotesFragment() {
+    public Items() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
-        ItemFragment fragment = new ItemFragment();
+    public static Items newInstance(int columnCount) {
+        Items fragment = new Items();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

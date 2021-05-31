@@ -1,4 +1,4 @@
-package main.tls_maps.ui.notes;
+package main.tls_maps;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,17 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import main.tls_maps.ItemFragment;
-import main.tls_maps.MyItemRecyclerViewAdapter;
-import main.tls_maps.R;
 import main.tls_maps.placeholder.PlaceholderContent;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotesFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
  */
-public class NotesFragment extends Fragment {
+public class ItemFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,7 +28,7 @@ public class NotesFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public NotesFragment() {
+    public ItemFragment() {
     }
 
     // TODO: Customize parameter initialization
