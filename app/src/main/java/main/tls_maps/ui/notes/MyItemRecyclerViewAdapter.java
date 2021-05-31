@@ -2,14 +2,18 @@ package main.tls_maps.ui.notes;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import main.tls_maps.databinding.FragmentNotesBinding;
+import com.google.android.material.snackbar.Snackbar;
+
 import main.tls_maps.placeholder.NotesContent.Note;
+import main.tls_maps.databinding.FragmentNotesBinding;
 
 import java.util.List;
 
@@ -48,13 +52,27 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView mIdView;
         public final TextView mContentView;
         public final ImageButton mBtnView;
+        public final LinearLayout mFrameView;
         public Note mItem;
 
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
+            mFrameView = binding.NoteFrame;
             mIdView = binding.itemNumber;
             mContentView = binding.content;
             mBtnView = binding.imageButton;
+            mBtnView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View.OnClickListener delete = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mFrameView.removeAllViews();
+                        }
+                    };
+                    Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG).setBackgroundTint(Color.rgb(40,40,40)).setAction("Ok", delete).show();
+                }
+            });
         }
 
         @Override

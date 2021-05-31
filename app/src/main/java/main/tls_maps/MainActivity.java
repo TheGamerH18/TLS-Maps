@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.placeholder.NotesContent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new NotesContent.Note("100", "Test", "IDK");
             }
         });
         DrawerLayout drawer = binding.drawerLayout;

@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import main.tls_maps.MyItemRecyclerViewAdapter;
 import main.tls_maps.R;
 import main.tls_maps.placeholder.NotesContent;
 
