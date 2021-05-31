@@ -16,12 +16,12 @@ public class NotesContent {
     /**
      * An array of sample (placeholder) items.
      */
-    public static final List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
+    public static final List<Note> ITEMS = new ArrayList<Note>();
 
     /**
      * A map of sample (placeholder) items, by ID.
      */
-    public static final Map<String, PlaceholderItem> ITEM_MAP = new HashMap<String, PlaceholderItem>();
+    public static final Map<String, Note> ITEM_MAP = new HashMap<String, Note>();
 
     private static final int COUNT = 25;
 
@@ -32,13 +32,13 @@ public class NotesContent {
         }
     }
 
-    private static void addItem(PlaceholderItem item) {
+    private static void addItem(Note item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static PlaceholderItem createPlaceholderItem(int position) {
-        return new PlaceholderItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static Note createPlaceholderItem(int position) {
+        return new Note(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -53,12 +53,12 @@ public class NotesContent {
     /**
      * A placeholder item representing a piece of content.
      */
-    public static class PlaceholderItem {
+    public static class Note {
         public final String id;
         public final String content;
         public final String details;
 
-        public PlaceholderItem(String id, String content, String details) {
+        public Note(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
