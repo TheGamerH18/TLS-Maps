@@ -29,6 +29,29 @@ public class NotesContent {
         ITEMS.add(item);
     }
 
+    /**
+     * Reads the List ITEMS from Filesystem
+     */
+    private static void readlist(Context act) {
+        String ser = SerializeObject.ReadSettings(act, "notes.dat");
+        if(ser != null && !ser.equalsIgnoreCase("")) {
+            Object obj = SerializeObject.stringToObject(ser);
+            // Cast in Arraylist
+            if(obj instanceof List) {
+                //noinspection unchecked
+                ITEMS = (List<Note>) obj;
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private static void writelist(Context act) {
+        String ser = SerializeObject.objectToString((Serializable) ITEMS);
+        if(ser != null && !ser.equalsIgnoreCase("")) {
+            SerializeObject.WriteSettings(act, ser, "notes.dat");
+        }
     }
 
     /**
