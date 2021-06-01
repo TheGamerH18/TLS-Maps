@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import main.tls_maps.placeholder.NotesContent.Note;
+import main.tls_maps.NoteItems.NotesContent.Note;
 import main.tls_maps.databinding.FragmentNotesBinding;
 
 import java.util.List;

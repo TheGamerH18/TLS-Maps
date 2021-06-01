@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import main.tls_maps.R;
-import main.tls_maps.databinding.ActivityMainBinding;
-import main.tls_maps.databinding.FragmentNotesBinding;
-import main.tls_maps.placeholder.NotesContent;
+import main.tls_maps.NoteItems.NotesContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +22,8 @@ import main.tls_maps.placeholder.NotesContent;
  */
 public class NotesFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+
+
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;

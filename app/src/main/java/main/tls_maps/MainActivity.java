@@ -1,15 +1,20 @@
 package main.tls_maps;
 
 import android.app.Activity;
-import android.inputmethodservice.Keyboard;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.app.NotificationCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,14 +24,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
-import main.tls_maps.placeholder.NotesContent;
+import main.tls_maps.NoteItems.NotesContent;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    AppBarConfiguration mAppBarConfiguration;
+    ActivityMainBinding binding;
     FragmentAddNoteBinding overMenuAddNote;
     InputMethodManager imm;
+    NotificationManager NM;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,27 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+/*        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        stackBuilder.addParentStack(MainActivity.class);
+
+        stackBuilder.addNextIntent(resultIntent);
+
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Notification Alert, Click Me!");
+        mBuilder.setContentText("Hi, This is Android Notification Detail!");
+
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NM.notify(0, mBuilder.build()); */
+
 
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
@@ -73,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString()));
+        if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
+            NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString()));
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         overMenuAddNote.inputFieldNotes.setText("");
     }
