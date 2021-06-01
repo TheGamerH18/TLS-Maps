@@ -68,7 +68,7 @@ public class NotesContent {
      */
     public static class Note implements Serializable{
         public final String content;
-        public final String id;
+        public String id;
 
         public Note(String content, int id) {
             this.content = content;
