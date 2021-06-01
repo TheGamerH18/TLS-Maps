@@ -48,6 +48,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mContentView;
+        public final TextView mId;
         public final ImageButton mBtnView;
         public final LinearLayout mFrameView;
         public Note mItem;
@@ -55,6 +56,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
             mFrameView = binding.NoteFrame;
+            mId = binding.itemNumber;
             mContentView = binding.content;
             mBtnView = binding.imageButton;
             mBtnView.setOnClickListener(new View.OnClickListener() {
