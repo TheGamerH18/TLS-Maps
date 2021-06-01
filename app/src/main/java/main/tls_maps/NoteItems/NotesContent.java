@@ -1,5 +1,7 @@
 package main.tls_maps.NoteItems;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +19,8 @@ public class NotesContent {
      */
     public static final List<Note> ITEMS = new ArrayList<Note>();
 
-    private static final int COUNT = 5;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createPlaceholderItem(i));
-        }
+    public static void init(Context context){
+        readlist(context);
     }
 
     public static void addItem(Note item, Context context) {
