@@ -14,10 +14,7 @@ import java.util.List;
  */
 public class NotesContent {
 
-    /**
-     * An array of sample (placeholder) items.
-     */
-    public static final List<Note> ITEMS = new ArrayList<Note>();
+    public static List<Note> ITEMS = new ArrayList<Note>();
 
     public static void init(Context context){
         readlist(context);
