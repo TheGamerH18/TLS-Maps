@@ -66,6 +66,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     View.OnClickListener delete = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            System.out.println(mId.getText());
                             mFrameView.removeAllViews();
                         }
                     };
