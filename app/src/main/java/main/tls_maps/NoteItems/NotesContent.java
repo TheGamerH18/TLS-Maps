@@ -1,5 +1,8 @@
 package main.tls_maps.NoteItems;
 
+import android.content.Context;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,32 +14,46 @@ import java.util.List;
  */
 public class NotesContent {
 
+    public static List<Note> ITEMS = new ArrayList<Note>();
+
+    public static void init(Context context){
+        readlist(context);
+    }
+
+    public static void addItem(Note item, Context context) {
+        ITEMS.add(item);
+        writelist(context);
+    }
+
     /**
-     * An array of sample (placeholder) items.
+     * Reads the List ITEMS from Filesystem
      */
-    public static final List<Note> ITEMS = new ArrayList<Note>();
-
-    private static final int COUNT = 5;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createPlaceholderItem(i));
+    private static void readlist(Context act) {
+        String ser = SerializeObject.ReadSettings(act, "notes.dat");
+        if(ser != null && !ser.equalsIgnoreCase("")) {
+            Object obj = SerializeObject.stringToObject(ser);
+            // Cast in Arraylist
+            if(obj instanceof List) {
+                //noinspection unchecked
+                ITEMS = (List<Note>) obj;
+            }
         }
     }
 
-    public static void addItem(Note item) {
-        ITEMS.add(item);
-    }
-
-    private static Note createPlaceholderItem(int position) {
-        return new Note("Note: " + position);
+    /**
+     *
+     */
+    private static void writelist(Context act) {
+        String ser = SerializeObject.objectToString((Serializable) ITEMS);
+        if(ser != null && !ser.equalsIgnoreCase("")) {
+            SerializeObject.WriteSettings(act, ser, "notes.dat");
+        }
     }
 
     /**
      * A placeholder item representing a piece of content.
      */
-    public static class Note {
+    public static class Note implements Serializable{
         public final String content;
 
         public Note(String content) {
