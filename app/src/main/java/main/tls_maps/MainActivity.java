@@ -43,27 +43,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-        stackBuilder.addParentStack(MainActivity.class);
-
-        stackBuilder.addNextIntent(resultIntent);
-
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Notification Alert, Click Me!");
-        mBuilder.setContentText("Hi, This is Android Notification Detail!");
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        NM.notify(0, mBuilder.build());
-
-
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         overMenuAddNote = binding.appBarMain.addNote;
@@ -103,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
-            NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString()), getApplicationContext());
+            NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString(), 1), getApplicationContext());
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         overMenuAddNote.inputFieldNotes.setText("");
     }
