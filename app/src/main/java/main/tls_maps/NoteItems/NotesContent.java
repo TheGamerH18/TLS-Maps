@@ -29,8 +29,6 @@ public class NotesContent {
         ITEMS.add(item);
     }
 
-    private static Note createPlaceholderItem(int position) {
-        return new Note("Note: " + position);
     }
 
     /**
