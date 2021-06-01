@@ -26,8 +26,9 @@ public class NotesContent {
         }
     }
 
-    public static void addItem(Note item) {
+    public static void addItem(Note item, Context context) {
         ITEMS.add(item);
+        writelist(context);
     }
 
     /**
