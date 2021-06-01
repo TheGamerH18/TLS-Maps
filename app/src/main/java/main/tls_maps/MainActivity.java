@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-/*        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
         Intent resultIntent = new Intent(this, MainActivity.class);
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBuilder.setContentIntent(resultPendingIntent);
 
-        NM.notify(0, mBuilder.build()); */
+        NM.notify(0, mBuilder.build());
 
 
         setSupportActionBar(binding.appBarMain.toolbar);
