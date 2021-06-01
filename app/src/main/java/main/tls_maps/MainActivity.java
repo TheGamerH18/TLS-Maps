@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
-            NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString(), 1), getApplicationContext());
+            NotesContent.addItem(overMenuAddNote.inputFieldNotes.getText().toString(), getApplicationContext());
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         overMenuAddNote.inputFieldNotes.setText("");
     }

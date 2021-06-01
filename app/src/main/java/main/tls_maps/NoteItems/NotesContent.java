@@ -20,8 +20,11 @@ public class NotesContent {
         readlist(context);
     }
 
-    public static void addItem(Note item, Context context) {
-        ITEMS.add(item);
+    public static void addItem(String content, Context context) {
+        int id = ITEMS.size();
+        ITEMS.add(new Note(content, id));
+        writelist(context);
+    }
         writelist(context);
     }
 
