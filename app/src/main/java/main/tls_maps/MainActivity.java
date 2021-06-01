@@ -1,8 +1,11 @@
 package main.tls_maps;
 
+import android.app.Activity;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -15,12 +18,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.placeholder.NotesContent;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    FragmentAddNoteBinding overMenuAddNote;
+    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +36,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
+        DrawerLayout drawer = binding.drawerLayout;
+        overMenuAddNote = binding.appBarMain.addNote;
+        imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new NotesContent.Note("100", "Test", "IDK");
+                overMenuAddNote.getRoot().setVisibility(View.VISIBLE);
             }
         });
-        DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -61,5 +69,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void send(View view) {
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString()));
+        overMenuAddNote.getRoot().setVisibility(View.GONE);
+        overMenuAddNote.inputFieldNotes.setText("");
+    }
+
+    public void stop(View view) {
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        overMenuAddNote.inputFieldNotes.setText("");
+        overMenuAddNote.getRoot().setVisibility(View.GONE);
     }
 }

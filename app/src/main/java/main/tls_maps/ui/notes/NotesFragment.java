@@ -35,6 +35,7 @@ public class NotesFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public NotesFragment() {
+        // Todo
     }
 
     public static RecyclerView getRecyclerView() {

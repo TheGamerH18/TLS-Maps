@@ -19,7 +19,6 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Note}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecyclerViewAdapter.ViewHolder> {
 
@@ -39,7 +38,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
     }
 
@@ -49,7 +47,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
         public final TextView mContentView;
         public final ImageButton mBtnView;
         public final LinearLayout mFrameView;
@@ -58,7 +55,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
             mFrameView = binding.NoteFrame;
-            mIdView = binding.itemNumber;
             mContentView = binding.content;
             mBtnView = binding.imageButton;
             mBtnView.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +66,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                             mFrameView.removeAllViews();
                         }
                     };
-                    Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG).setBackgroundTint(Color.rgb(40,40,40)).setAction("Ok", delete).show();
+                    Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG).setBackgroundTint(Color.rgb(40,40,40)).setAction("Ja", delete).show();
                 }
             });
         }
