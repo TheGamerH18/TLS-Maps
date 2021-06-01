@@ -25,6 +25,16 @@ public class NotesContent {
         ITEMS.add(new Note(content, id));
         writelist(context);
     }
+
+    public static void removeItem(String nr, Context context) {
+        int id = Integer.parseInt(nr);
+        System.out.println(ITEMS.toString());
+        ITEMS.remove(id);
+        System.out.println(ITEMS.toString());
+        System.out.println(ITEMS.size());
+        for(int i = 0; i < ITEMS.size(); i ++) {
+            ITEMS.get(i).id = ""+i;
+        }
         writelist(context);
     }
 
