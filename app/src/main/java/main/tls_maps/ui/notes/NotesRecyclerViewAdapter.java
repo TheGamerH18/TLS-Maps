@@ -21,11 +21,11 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Note}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
+public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecyclerViewAdapter.ViewHolder> {
 
     private final List<Note> mValues;
 
-    public MyItemRecyclerViewAdapter(List<Note> items) {
+    public NotesRecyclerViewAdapter(List<Note> items) {
         mValues = items;
     }
 

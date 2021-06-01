@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import main.tls_maps.R;
+import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentNotesBinding;
 import main.tls_maps.placeholder.NotesContent;
 
 /**
@@ -26,6 +28,7 @@ public class NotesFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    static RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -34,8 +37,10 @@ public class NotesFragment extends Fragment {
     public NotesFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+    public static RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     public static NotesFragment newInstance(int columnCount) {
         NotesFragment fragment = new NotesFragment();
         Bundle args = new Bundle();
@@ -67,7 +72,7 @@ public class NotesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(NotesContent.ITEMS));
+            recyclerView.setAdapter(new NotesRecyclerViewAdapter(NotesContent.ITEMS));
         }
         return view;
     }
