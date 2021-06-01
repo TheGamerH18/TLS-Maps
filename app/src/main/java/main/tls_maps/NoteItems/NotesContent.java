@@ -1,5 +1,6 @@
 package main.tls_maps.NoteItems;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class NotesContent {
     /**
      * A placeholder item representing a piece of content.
      */
-    public static class Note {
+    public static class Note implements Serializable{
         public final String content;
 
         public Note(String content) {
