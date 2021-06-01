@@ -89,19 +89,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        overMenuAddNote.getRoot().setVisibility(View.GONE);
         return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        overMenuAddNote.getRoot().setVisibility(View.GONE);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
+        if(overMenuAddNote.inputFieldNotes.getText().toString() != "" && !overMenuAddNote.inputFieldNotes.getText().toString().equals(""))
             NotesContent.addItem(new NotesContent.Note(overMenuAddNote.inputFieldNotes.getText().toString()));
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         overMenuAddNote.inputFieldNotes.setText("");
