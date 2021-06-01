@@ -55,9 +55,11 @@ public class NotesContent {
      */
     public static class Note implements Serializable{
         public final String content;
+        public final int id;
 
-        public Note(String content) {
+        public Note(String content, int id) {
             this.content = content;
+            this.id = id;
         }
 
         @Override
