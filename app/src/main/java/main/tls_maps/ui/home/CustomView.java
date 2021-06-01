@@ -19,9 +19,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+
+import java.lang.reflect.Field;
 
 import main.tls_maps.R;
 
@@ -29,73 +32,52 @@ public class CustomView extends View {
 
     //private Bitmap Er;
 
+    private Paint paint;
+
     public CustomView(Context context) {
         super(context);
+        paint = new Paint();
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        paint = new Paint();
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        paint = new Paint();
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static Bitmap getBitmap(VectorDrawable vectorDrawable,int maxx,int maxy) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-       // vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.setBounds(0, 0, maxx, maxy);
-        vectorDrawable.draw(canvas);
-        //Log.e(TAG, "getBitmap: 1");
-        return bitmap;
-    }
-
-    private static Bitmap getBitmap(Context context, int drawableId,int maxx,int maxy) {
-        //Log.e(TAG, "getBitmap: 2");
-        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
-        if (drawable instanceof BitmapDrawable) {
-            return BitmapFactory.decodeResource(context.getResources(), drawableId);
-        } else if (drawable instanceof VectorDrawable) {
-            return getBitmap((VectorDrawable) drawable,maxx,maxy);
-        } else {
-            throw new IllegalArgumentException("unsupported drawable type");
-        }
-    }
-
-    private Bitmap getResizedBitmap(Bitmap bitmap, int reqWidth, int reqHeight) {
-        Matrix matrix = new Matrix();
-
-        RectF src = new RectF(0,0,bitmap.getWidth(),bitmap.getHeight());
-        RectF dst = new RectF(0,0,reqWidth,reqHeight);
-
-        matrix.setRectToRect(src,dst, Matrix.ScaleToFit.CENTER);
-
-        return Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
+        paint = new Paint();
     }
 
 
-    private void init(@Nullable AttributeSet set) {
-        //Er = BitmapFactory.decodeResource(getResources(), R.drawable.ic_hauptgebaeude_1stock_1_2_3);
-
+    private int getColor(String Name) {
+        @ColorInt int color = Color.parseColor(Name);
+        return color;
     }
+
+
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Paint pp = new Paint();
-        pp.setARGB(255,255,0,0);
-        //canvas.drawCircle(10,10,5,pp);
-        //Bitmap Er = convertDrawableResToBitmap(R.drawable.ic_hauptgebaeude_1stock_1_2_3 , 500, 500);
-        Bitmap Er = getBitmap(getContext(),R.drawable.ic_hauptgebaeude_1stock_1_2_3,getWidth(),getHeight());
-        //Er = getResizedBitmap(Er,getWidth(),getHeight());
-        //Bitmap.createBitmap("@drawable/ic_hauptgebaeude_1stock_1_2_3");
-        canvas.drawBitmap(Er,20,0,null);
+
+        float[] verts = {
+                100f,100f, //Top Left
+                500f,300f, //Bottom Right
+                100f,200f, //Bottom Left
+                500f,200f, // Top Right
+        };
+        @ColorInt int ColorWanted = getColor("CYAN");
+        int[] colors2 = {ColorWanted,ColorWanted,ColorWanted,ColorWanted};
+        //int[] colors3 = {0xff888888,0xff888888,0xff888888,0xff888888};
+        //int[] colors4 = {Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK};
+        //System.out.println("MYGODPLS: "+ColorWanted);
+        short[] indices = {0,2,1,0,3,1};
+        canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,8,verts,0, null,0,colors2,0,indices,0,6,paint);
 
         super.onDraw(canvas);
     }
