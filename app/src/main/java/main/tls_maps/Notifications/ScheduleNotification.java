@@ -26,7 +26,7 @@ public class ScheduleNotification {
         this.notification = new NotificationTimer(msg, title, context);
 
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
-        notificationIntent.putExtra(notification.notification.ID+"", 1) ;
+        notificationIntent.putExtra(notification.notification.notificationID+"", 1) ;
         notificationIntent.putExtra("Notification" , notification.notification.getNotification());
         PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0 , notificationIntent , PendingIntent.FLAG_ONE_SHOT ) ;
 
