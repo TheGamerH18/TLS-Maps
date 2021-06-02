@@ -1,19 +1,12 @@
 package main.tls_maps;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.core.app.NotificationCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,9 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import main.tls_maps.Notifications.Notification;
-import main.tls_maps.Notifications.NotificationTimer;
-import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.NoteItems.NotesContent;
@@ -72,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        new ScheduleNotification("Test", "", 100,  this);
-        // for(int i = 0; i < 10; i++){
-        //     new Notification("Test " + i, "", this).Notify();
-        // }
     }
 
     @Override

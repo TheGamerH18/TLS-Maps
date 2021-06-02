@@ -2,22 +2,13 @@ package main.tls_maps.Notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import main.tls_maps.R;
-import main.tls_maps.databinding.FragmentNotesBinding;
-
-import static main.tls_maps.NoteItems.NotesContent.ITEMS;
 
 public class Notification {
 
@@ -26,10 +17,6 @@ public class Notification {
     int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
-
-    public Notification () {
-        super();
-    }
 
     public Notification(String msg, String title, Context context) {
         if ( Build.VERSION.SDK_INT >= 26 ) {
@@ -53,16 +40,9 @@ public class Notification {
         ++ID;
     }
 
-    protected void Notify(android.app.Notification notification) {
-        if(notification == null)
-            return;
-        notificationManager.notify( this.notificationID, notification);
-    }
-
     public void Notify () {
         if(notificationManager == null)
             return;
-        Log.d("","Notify");
         notificationManager.notify(this.notificationID, this.builder.build());
     }
 
