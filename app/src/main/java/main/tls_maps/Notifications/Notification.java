@@ -33,10 +33,10 @@ public class Notification {
     }
 
     public Notification(String msg, String title, Context context) {
-        CharSequence name = "studentChannel";
-        String description = "Channel for notification";
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
         if ( Build.VERSION.SDK_INT >= 26 ) {
+            CharSequence name = "studentChannel";
+            String description = "Channel for notification";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(""+ID, name, importance);
             channel.setDescription(description);
 
