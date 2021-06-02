@@ -21,7 +21,6 @@ import static main.tls_maps.NoteItems.NotesContent.ITEMS;
 
 public class Notification {
 
-    protected main.tls_maps.Notifications.Notification Notification;
     String msg, title;
     static int ID = 0;
     int notificationID;
@@ -54,11 +53,12 @@ public class Notification {
         ++ID;
     }
 
-    protected void Notify (android.app.Notification notification) {
+    protected void Notify(android.app.Notification notification) {
         if(notification == null)
             return;
-        notificationManager.notify(this.notificationID, notification);
+        notificationManager.notify( this.notificationID, notification);
     }
+
     public void Notify () {
         if(notificationManager == null)
             return;

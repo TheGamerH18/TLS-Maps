@@ -1,9 +1,12 @@
 package main.tls_maps.Notifications;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationTimer extends BroadcastReceiver {
 
@@ -17,14 +20,8 @@ public class NotificationTimer extends BroadcastReceiver {
         this.notification = new Notification(msg, title, context);
     }
 
-    public NotificationTimer(String msg, Context context) {
-        this.notification = new Notification(msg, "", context);
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(this.notification == null)
-            return;
         Log.d("Receiver: ", "FIRED");
         Log.d("Receiver: ", "FIRED");
         Log.d("Receiver: ", "FIRED");
@@ -39,6 +36,7 @@ public class NotificationTimer extends BroadcastReceiver {
         Log.d("Receiver: ", "FIRED");
         Log.d("Receiver: ", "FIRED");
         android.app.Notification notification = intent.getParcelableExtra( "Notification" );
-        this.notification.Notify(notification);
+        NotificationManagerCompat NM = NotificationManagerCompat.from(context);
+        NM.notify(1 ,notification);
     }
 }
