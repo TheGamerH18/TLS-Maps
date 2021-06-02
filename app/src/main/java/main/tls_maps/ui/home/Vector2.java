@@ -56,11 +56,14 @@ public class Vector2 {
         return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
     }
 
-    public String tostring() {
+    public String ToString() {
         return this.x+","+this.y;
     }
 
     public Vector2 unit() {
+        if (this.x==0 || this.y == 0) {
+            return new Vector2();
+        }
         return this.clone().div(this.magnitude());
     }
 
@@ -90,10 +93,7 @@ public class Vector2 {
         String[] ree = string.split(",");
         String x = ree[0];
         String y = ree[1];
-        //System.out.println(x+"|"+y);
         Vector2 r = new Vector2(Double.parseDouble(x),Double.parseDouble(y));
-        //this.set(new Double(x),new Double(y));
-        //System.out.println(r.tostring());
         return r;
     }
 
