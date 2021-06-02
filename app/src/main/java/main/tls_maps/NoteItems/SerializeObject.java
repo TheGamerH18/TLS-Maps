@@ -70,7 +70,7 @@ public class SerializeObject {
 
     /**
      * Save serialized settings to a file
-     * @param context
+     * @param context -
      * @param data - Serialized Object
      */
     public static void WriteSettings(Context context, String data, String filename){
@@ -82,12 +82,11 @@ public class SerializeObject {
             osw = new OutputStreamWriter(fOut);
             osw.write(data);
             osw.flush();
-            //Toast.makeText(context, "Settings saved",Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
-            // Toast.makeText(context, "Settings not saved",Toast.LENGTH_SHORT).show();
         }
         finally {
+            // try close writer and output stream
             try {
                 if(osw!=null)
                     osw.close();
