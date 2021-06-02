@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,19 +51,22 @@ import main.tls_maps.R;
 
 public class CustomView extends View {
 
-    //private Bitmap Er;
-
     private Paint paint;
 
     private Map CurrentMap;
 
+
     private Vector2 Position = new Vector2();
     private int Level = 1;
     private double Scale = 2;
-    private double GlobRotation = 45;
+    private double GlobRotation = 0;
 
     private final int min_Level = 1;
     private final int max_Level = 1;
+
+    private final int Level_Count = 1;
+
+    private ArrayList<Map> Maps = new ArrayList<Map>(10);
 
     public CustomView(Context context) {
         super(context);
@@ -87,7 +91,13 @@ public class CustomView extends View {
 
     private void init() {
         paint = new Paint();
-        CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
+        //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
+        for (int i=0;i<=max_Level;i++) {
+            Map NewLevelMap = new Map(i,new Vector2(0,0));
+            Maps.add(NewLevelMap);
+            Log.d("Hm",""+i);
+        }
+        CurrentMap = Maps.get(1);
         CurrentMap.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
@@ -95,7 +105,11 @@ public class CustomView extends View {
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
-        ReadFile("BLeh");
+        ReadFile("1stholstein");
+        ReadFile("2stholstein");
+        ReadFile("EGstholstein");
+        ReadFile("Hauptgebäude1Stock");
+        ReadFile("HauptgebäudeEg");
     }
 
 
@@ -120,7 +134,7 @@ public class CustomView extends View {
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             // read from a project's resources folder
-            InputStream stream = assetmanager.open("Maps/map1test.xml");
+            InputStream stream = assetmanager.open("Maps/"+FILENAME);
             Document doc = db.parse(stream);
 
             //System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
@@ -131,6 +145,8 @@ public class CustomView extends View {
                 Log.d("XML READING","File Found");
                 getLinesfromNodes(doc.getChildNodes());
 
+            } else {
+                Log.d("XML READING","File Not Found");
             }
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -140,6 +156,11 @@ public class CustomView extends View {
 
     private void getLinesfromNodes(NodeList nodeList) {
         Node MapNode = nodeList.item(0);
+        NamedNodeMap namedNodeMapAttr = MapNode.getAttributes();
+        String Level = namedNodeMapAttr.getNamedItem("Level").getNodeValue();
+        String xoff = namedNodeMapAttr.getNamedItem("xoff").getNodeValue();
+        String yoff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
+        Vector2 PosOff = new Vector2(Double.parseDouble(xoff),Double.parseDouble(yoff));
         //Log.d("Map Name",""+MapNode.getNodeName());
         for (int count=0;count<MapNode.getChildNodes().getLength();count++) {
             Node LineNode = MapNode.getChildNodes().item(count);
@@ -155,12 +176,12 @@ public class CustomView extends View {
                 Vector2 p1 = new Vector2(Double.parseDouble(x1),Double.parseDouble(y1));
                 Vector2 p2 = new Vector2(Double.parseDouble(x2),Double.parseDouble(y2));
 
-                Vector2 Middle = p1.lerp(p2,0.5);
+                Vector2 Middle = p1.lerp(p2,0.5).add(PosOff);
                 Vector2 Size = new Vector2(10,p1.sub(p2).magnitude());
                 double rotation = -Math.toDegrees(p1.sub(p2).angle());
 
                 Wall NewWall = new Wall(Middle,Size,rotation,stroke);
-                CurrentMap.AddWall(NewWall);
+                Maps.get(Integer.parseInt(Level)).AddWall(NewWall);
                 Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
                 //Log.d("Xml reading","Found item: "+stroke);
             }
@@ -224,6 +245,7 @@ public class CustomView extends View {
 
     private void ChangeLevel(int Going) {
         Level = Math.min(Math.max(Level+Going,min_Level),max_Level);
+        CurrentMap = Maps.get(Level);
     }
 
     private VelocityTracker mVelocityTracker = null;

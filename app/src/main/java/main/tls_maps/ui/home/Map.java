@@ -7,12 +7,10 @@ public class Map {
     public ArrayList<Wall> WallsOnMap = new ArrayList<Wall>(10);
     public final int Level;
     public final Vector2 Position;
-    public final String Name;
 
-    public Map(int level, Vector2 position, String name) {
+    public Map(int level, Vector2 position) {
         this.Level = level;
         this.Position = position;
-        this.Name = name;
     }
 
     public void AddWall(Wall walltoadd) {
