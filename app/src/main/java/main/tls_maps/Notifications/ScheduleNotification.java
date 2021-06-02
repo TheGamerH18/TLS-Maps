@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -17,21 +18,20 @@ import main.tls_maps.MainActivity;
 
 public class ScheduleNotification {
 
-    NotificationTimer notification;
+    private final NotificationTimer notification;
 
     public ScheduleNotification (String msg, String title, int toDate, Context context) {
 
         this.notification = new NotificationTimer(msg, title, context);
 
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
-        notificationIntent.putExtra("Notification" , notification.getNotification());
-        PendingIntent pendingIntent = PendingIntent. getBroadcast ( context, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT ) ;
-        Date date = new Date();
-        long futureInMillis = date.getTime()+(100*60);
-        Log.d( "DEBUG",futureInMillis+"");
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE );
+        notificationIntent.putExtra(notification.notification.ID+"", 1) ;
+        notificationIntent.putExtra("Notification" , notification.notification.getNotification());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT ) ;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         assert alarmManager != null;
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME , futureInMillis , pendingIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , (10 * 1000) , pendingIntent);
+        Toast.makeText(context, "Alarm set in " + (10*1000) + " seconds",Toast.LENGTH_LONG).show();
     }
 
 

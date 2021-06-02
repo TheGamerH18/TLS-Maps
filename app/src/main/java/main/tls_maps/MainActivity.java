@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         new ScheduleNotification("Test", "", 100,  this);
-        new NotificationTimer("Test",this).Notify();
+        // for(int i = 0; i < 10; i++){
+        //     new Notification("Test " + i, "", this).Notify();
+        // }
     }
 
     @Override
