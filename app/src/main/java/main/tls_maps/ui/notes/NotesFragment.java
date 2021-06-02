@@ -25,7 +25,6 @@ public class NotesFragment extends Fragment {
 
 
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     static RecyclerView recyclerView;
 
