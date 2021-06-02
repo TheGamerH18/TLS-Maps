@@ -31,7 +31,7 @@ public class ScheduleNotification {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         assert alarmManager != null;
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , (10 * 1000) , pendingIntent);
-        Toast.makeText(context, "Alarm set in " + (10*1000) + " seconds",Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Alarm set in " + 10 + " seconds",Toast.LENGTH_LONG).show();
     }
 
 

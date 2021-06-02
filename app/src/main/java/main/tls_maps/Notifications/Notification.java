@@ -24,6 +24,7 @@ public class Notification {
     protected main.tls_maps.Notifications.Notification Notification;
     String msg, title;
     static int ID = 0;
+    int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
@@ -36,7 +37,7 @@ public class Notification {
         String description = "Channel for notification";
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         if ( Build.VERSION.SDK_INT >= 26 ) {
-            NotificationChannel channel = new NotificationChannel(""+this.ID, name, importance);
+            NotificationChannel channel = new NotificationChannel(""+ID, name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
@@ -44,26 +45,25 @@ public class Notification {
         }
         notificationManager = NotificationManagerCompat.from(context);
         title = "TLS-Maps " + title;
-        builder = new NotificationCompat.Builder(context, ""+this.ID)
+        builder = new NotificationCompat.Builder(context, ""+ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        this.notificationID = ID;
         ++ID;
     }
 
     protected void Notify (android.app.Notification notification) {
         if(notification == null)
             return;
-        notificationManager.notify(this.ID, notification);
+        notificationManager.notify(this.notificationID, notification);
     }
     public void Notify () {
-        if(this == null)
-            return;
         if(notificationManager == null)
             return;
         Log.d("","Notify");
-        notificationManager.notify(this.ID, this.builder.build());
+        notificationManager.notify(this.notificationID, this.builder.build());
     }
 
     public android.app.Notification getNotification() {
