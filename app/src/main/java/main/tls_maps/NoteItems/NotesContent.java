@@ -16,16 +16,31 @@ public class NotesContent {
 
     public static List<Note> ITEMS = new ArrayList<Note>();
 
+    /**
+     * Initializes the Notes, Reads all Notes from Filesystem.
+     * Needs to be called at start of application
+     * @param context - Context of Application
+     */
     public static void init(Context context){
         readlist(context);
     }
 
+    /**
+     * Adds a Note to the List, calculates the Identifier and writes it to the Filesystem
+     * @param content - Content of the Note
+     * @param context - Context of Application
+     */
     public static void addItem(String content, Context context) {
         int id = ITEMS.size();
         ITEMS.add(new Note(content, id));
         writelist(context);
     }
 
+    /**
+     * Removes an Item from the List ITEMS
+     * @param Nummer - Index of the Item to delete
+     * @param context - Context of Application
+     */
     public static void removeItem(String Nummer, Context context) {
         int id = Integer.parseInt(Nummer);
         System.out.println(ITEMS.toString());
@@ -40,6 +55,7 @@ public class NotesContent {
 
     /**
      * Reads the List ITEMS from Filesystem
+     * @param act - Context of Application
      */
     private static void readlist(Context act) {
         String ser = SerializeObject.ReadSettings(act, "notes.dat");
@@ -54,7 +70,8 @@ public class NotesContent {
     }
 
     /**
-     *
+     * Writes List ITEMS to Filesystem
+     * @param act - Context of Application
      */
     private static void writelist(Context act) {
         String ser = SerializeObject.objectToString((Serializable) ITEMS);
@@ -64,12 +81,17 @@ public class NotesContent {
     }
 
     /**
-     * A placeholder item representing a piece of content.
+     * A Note containing, the content and a id
      */
     public static class Note implements Serializable{
         public final String content;
         public String id;
 
+        /**
+         * Constructor
+         * @param content - Content of Note
+         * @param id - ID of Note
+         */
         public Note(String content, int id) {
             this.content = content;
             this.id = ""+id;
