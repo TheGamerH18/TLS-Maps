@@ -26,8 +26,8 @@ public class NotesContent {
         writelist(context);
     }
 
-    public static void removeItem(String nr, Context context) {
-        int id = Integer.parseInt(nr);
+    public static void removeItem(String Nummer, Context context) {
+        int id = Integer.parseInt(Nummer);
         System.out.println(ITEMS.toString());
         ITEMS.remove(id);
         System.out.println(ITEMS.toString());
