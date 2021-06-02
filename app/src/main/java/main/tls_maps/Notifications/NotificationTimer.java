@@ -18,6 +18,9 @@ public class NotificationTimer extends BroadcastReceiver {
     };
 
     @Override
+    /**
+     * called from {@link ScheduleNotification}
+     */
     public void onReceive(Context context, Intent intent) {
         // get the notification from the Intent
         android.app.Notification notification = intent.getParcelableExtra( "Notification" );
