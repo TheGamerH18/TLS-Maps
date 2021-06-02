@@ -1,7 +1,6 @@
 package main.tls_maps;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -22,6 +21,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import main.tls_maps.Notifications.Notification;
+import main.tls_maps.Notifications.NotificationTimer;
+import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.NoteItems.NotesContent;
@@ -32,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     FragmentAddNoteBinding overMenuAddNote;
     InputMethodManager imm;
-    NotificationManager NM;
 
 
     @Override
@@ -45,14 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
+
+        // Open the add Notes Overlay
         overMenuAddNote = binding.appBarMain.addNote;
+
+        // Input Methode Manager to close the Keyboard
         imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+
+        // and add the Click Listener
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 overMenuAddNote.getRoot().setVisibility(View.VISIBLE);
             }
         });
+
+
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -63,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        new ScheduleNotification("Test", "", 100,  this);
+        new NotificationTimer("Test",this).Notify();
     }
 
     @Override
