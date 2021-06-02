@@ -8,17 +8,22 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationTimer extends BroadcastReceiver {
 
-
-    Notification notification;
+    /**
+     * This Class is for the Time Based Notification
+     */
 
     public NotificationTimer () {
+        // Needed for the init
         super();
     };
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        // get the notification from the Intent
         android.app.Notification notification = intent.getParcelableExtra( "Notification" );
+        // get the ID from the Notification
+        int id = Integer.parseInt(intent.getParcelableExtra( "ID" ));
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
-        NM.notify(1 ,notification);
+        NM.notify(id, notification);
     }
 }
