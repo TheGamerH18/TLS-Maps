@@ -18,18 +18,29 @@ public class Notification {
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
+    /**
+     * Creates a new Notification
+     * @param msg - Message of Notification
+     * @param context - Context of Application
+     */
     public Notification(String msg, Context context) {
+        // Tries to create a new NotificationChannel in > Android 8.0
         if ( Build.VERSION.SDK_INT >= 26 ) {
+            // Name of Channel | Description of Channel | Importance of Channel
             CharSequence name = "studentChannel";
             String description = "Channel for notification";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            // Create Object of Channel
             NotificationChannel channel = new NotificationChannel(""+ID, name, importance);
             channel.setDescription(description);
 
+            // Add Channel to NotificationManager
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+
         notificationManager = NotificationManagerCompat.from(context);
+        // Create Notification
         builder = new NotificationCompat.Builder(context, ""+ID)
                 .setSmallIcon(R.drawable.ic_reminder)
                 .setContentTitle(title)
