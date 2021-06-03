@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 public class ScheduleNotification {
 
@@ -28,7 +27,7 @@ public class ScheduleNotification {
         // Create the Intent
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
         // Put a ID
-        notificationIntent.putExtra("ID", ""+notification.notificationID) ;
+        notificationIntent.putExtra("ID", notification.notificationID) ;
         // Put the Notification
         notificationIntent.putExtra("Notification" , notification.getNotification());
         // Start / Finish the Intent

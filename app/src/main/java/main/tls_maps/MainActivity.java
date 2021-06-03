@@ -14,7 +14,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.NoteItems.NotesContent;
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        new ScheduleNotification("Test", this);
     }
 
     @Override
