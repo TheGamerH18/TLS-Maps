@@ -8,18 +8,25 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationTimer extends BroadcastReceiver {
 
-
-    Notification notification;
-
+    /**
+     * Empty Constructor for the Init of the Receiver
+     */
     public NotificationTimer () {
         super();
     };
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String msg = intent.getStringExtra("Notification" );
+
+        // Get the Notification Message
+        String msg = intent.getStringExtra("Notification");
+
+        // Create the Notification
         Notification notification = new Notification(msg, context);
+
+        // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
+        // send the Notification
         NM.notify(notification.notificationID ,notification.getNotification());
     }
 }

@@ -1,12 +1,7 @@
 package main.tls_maps;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
@@ -18,11 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Calendar;
-
-import main.tls_maps.Notifications.Notification;
-import main.tls_maps.Notifications.NotificationTimer;
 import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
