@@ -32,7 +32,7 @@ public class Notification {
         notificationManager = NotificationManagerCompat.from(context);
         title = "TLS-Maps " + title;
         builder = new NotificationCompat.Builder(context, ""+ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_reminder)
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
