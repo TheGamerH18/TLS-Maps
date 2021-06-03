@@ -10,6 +10,8 @@ public class NotificationTimer extends BroadcastReceiver {
 
     /**
      * Empty Constructor for the Init of the Receiver
+     * for {@link ScheduleNotification}
+     * Notification: {@link Notification}
      */
     public NotificationTimer () {
         super();
