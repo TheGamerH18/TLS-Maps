@@ -7,18 +7,12 @@ import android.content.Intent;
 
 public class ScheduleNotification {
 
-    private final Notification notification;
-
-
     /**
      * This Class is to create a Time / Date Specific Notification
-     * @param msg - its the Message him self
-     * @param title - the Title of the Notification
-     * @param context - Context of the Application
-     * @param delay - the Delay in Milliseconds
-     *
-     * {@link Notification}
      */
+
+    private final Notification notification;
+
     public ScheduleNotification (String msg, String title, int delay, Context context) {
 
         // Create the Notification from our self Notification Class

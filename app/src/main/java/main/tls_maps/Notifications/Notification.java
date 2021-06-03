@@ -12,19 +12,16 @@ import main.tls_maps.R;
 
 public class Notification {
 
+    /**
+     * This Class is to make a Notification much more easier
+     */
+
     // Static ID to get a unique ID
     static int ID = 0;
     int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
-
-    /**
-     * This Class is to make a Notification much more easier
-     * @param msg - its the Message him self
-     * @param title - the Title of the Notification, with addition of TLS-Maps
-     * @param context - Context of the Application
-     */
     public Notification(String msg, String title, Context context) {
 
         // Check if the Android Version is below 26
