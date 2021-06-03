@@ -1,4 +1,4 @@
-<map Level="1" xoff="0" yoff="0">
+<map Level="1" xoff="-1000" yoff="-1000" scale="1" rotation="0">
 <line x1="7" y1="85.5" x2="716" y2="85.5" stroke="#FF0000"/>
 <line x1="715" y1="24.5" x2="1620" y2="24.5" stroke="#FF0000"/>
 <line x1="1340" y1="3.5" x2="1480" y2="3.5" stroke="#FF0000"/>

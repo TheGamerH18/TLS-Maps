@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<map Level="1" xoff="0" yoff="0">
+<map Level="1" xoff="0" yoff="0" scale="1" rotation="0">
 <line x1="2698.5" y1="873" x2="2698.5" y2="610" stroke="#0038FF"/>
 <line x1="2336.5" y1="873" x2="2336.5" y2="784" stroke="#0038FF"/>
 <line x1="2216" y1="784.5" x2="2337" y2="784.5" stroke="#0038FF"/>

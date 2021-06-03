@@ -97,4 +97,12 @@ public class Vector2 {
         return r;
     }
 
+    private double clamp(double val, double max, double min) {
+        return Math.min(Math.max(val,min),max);
+    }
+
+    public Vector2 clamp(double max,double min) {
+        return new Vector2(clamp(this.x,max,min),clamp(this.y,max,min));
+    }
+
 }

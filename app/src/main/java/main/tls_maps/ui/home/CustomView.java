@@ -54,19 +54,16 @@ public class CustomView extends View {
     private Paint paint;
 
     private Map CurrentMap;
-
+    private int Level = 0;
 
     private Vector2 Position = new Vector2();
-    private int Level = 1;
-    private double Scale = 2;
+    private double Scale = .5;
     private double GlobRotation = 0;
 
-    private final int min_Level = 1;
-    private final int max_Level = 1;
+    private final int min_Level = 0;
+    private final int max_Level = 2;
 
-    private final int Level_Count = 1;
-
-    private ArrayList<Map> Maps = new ArrayList<Map>(10);
+    private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
     public CustomView(Context context) {
         super(context);
@@ -89,15 +86,27 @@ public class CustomView extends View {
         init();
     }
 
+    private Map getMapAtLevel(int Level) {
+        Map LevelMap = null;
+        for (int i=min_Level;i<Maps.size();i++) {
+            Map TempMap = Maps.get(i);
+            if (TempMap.Level == Level) {
+                LevelMap = TempMap;
+                break;
+            }
+        }
+        return LevelMap;
+    }
+
     private void init() {
         paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i=0;i<=max_Level;i++) {
             Map NewLevelMap = new Map(i,new Vector2(0,0));
             Maps.add(NewLevelMap);
-            Log.d("Hm",""+i);
+            //Log.d("Hm",""+i);
         }
-        CurrentMap = Maps.get(1);
+        CurrentMap = getMapAtLevel(Level);
         CurrentMap.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
@@ -105,11 +114,11 @@ public class CustomView extends View {
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
-        ReadFile("1stholstein");
-        ReadFile("2stholstein");
-        ReadFile("EGstholstein");
-        ReadFile("Hauptgebäude1Stock");
-        ReadFile("HauptgebäudeEg");
+        ReadFile("1stholstein.xml");
+        ReadFile("2stholstein.xml");
+        ReadFile("EGHolsten.xml");
+        ReadFile("Hauptgebäude1Stock.xml");
+        ReadFile("HauptgebäudeEg.xml");
     }
 
 
@@ -119,16 +128,6 @@ public class CustomView extends View {
 
         AssetManager assetmanager = getResources().getAssets();
 
-
-        String[] idk = new String[0];
-        try {
-            idk = assetmanager.list("Maps");
-        } catch (Exception e) {
-
-        }
-        for (int i=0;i<idk.length;i++) {
-            Log.d("idk help",""+idk[i]);
-        }
         try {
 
             // parse XML file
@@ -142,11 +141,11 @@ public class CustomView extends View {
 
             if (doc.hasChildNodes()) {
                 //printNote(doc.getChildNodes());
-                Log.d("XML READING","File Found");
+                Log.d("XML READING","File Found: "+FILENAME);
                 getLinesfromNodes(doc.getChildNodes());
 
             } else {
-                Log.d("XML READING","File Not Found");
+                Log.d("XML READING","File Not Found: "+FILENAME);
             }
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -162,6 +161,13 @@ public class CustomView extends View {
         String yoff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
         Vector2 PosOff = new Vector2(Double.parseDouble(xoff),Double.parseDouble(yoff));
         //Log.d("Map Name",""+MapNode.getNodeName());
+
+
+        double Rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
+        double Scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
+
+        Map MapToAddTo = getMapAtLevel(Integer.parseInt(Level));
+
         for (int count=0;count<MapNode.getChildNodes().getLength();count++) {
             Node LineNode = MapNode.getChildNodes().item(count);
             //Log.d("XML NODE TYPE",""+LineNode.getNodeType());
@@ -176,13 +182,20 @@ public class CustomView extends View {
                 Vector2 p1 = new Vector2(Double.parseDouble(x1),Double.parseDouble(y1));
                 Vector2 p2 = new Vector2(Double.parseDouble(x2),Double.parseDouble(y2));
 
+                p1 = p1.Transform(Rotation);
+                p2 = p2.Transform(Rotation);
+
+                Vector2 nullvector = new Vector2();
+                p1 = nullvector.lerp(p1,Scale);
+                p2 = nullvector.lerp(p2,Scale);
+
                 Vector2 Middle = p1.lerp(p2,0.5).add(PosOff);
                 Vector2 Size = new Vector2(10,p1.sub(p2).magnitude());
                 double rotation = -Math.toDegrees(p1.sub(p2).angle());
 
                 Wall NewWall = new Wall(Middle,Size,rotation,stroke);
-                Maps.get(Integer.parseInt(Level)).AddWall(NewWall);
-                Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
+                MapToAddTo.AddWall(NewWall);
+                //Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
                 //Log.d("Xml reading","Found item: "+stroke);
             }
         }
@@ -236,8 +249,6 @@ public class CustomView extends View {
         }
     }
 
-
-
     private int getColor(String Name) {
         @ColorInt int color = Color.parseColor(Name);
         return color;
@@ -245,7 +256,7 @@ public class CustomView extends View {
 
     private void ChangeLevel(int Going) {
         Level = Math.min(Math.max(Level+Going,min_Level),max_Level);
-        CurrentMap = Maps.get(Level);
+        CurrentMap = getMapAtLevel(Level);
     }
 
     private VelocityTracker mVelocityTracker = null;
@@ -281,8 +292,8 @@ public class CustomView extends View {
                 //Log.d("", "X velocity: " + mVelocityTracker.getXVelocity(pointerId));
                 //Log.d("", "Y velocity: " + mVelocityTracker.getYVelocity(pointerId));
                 Vector2 Velocity = new Vector2(mVelocityTracker.getXVelocity(),mVelocityTracker.getYVelocity());
-                Position = Position.sub(Velocity.div(50).Transform(-GlobRotation));
-                Log.d("Position Debug","Position at: " + Position.ToString()+ " with a last Velocity of: " + Velocity.ToString());
+                Position = Position.sub(Velocity.div(50).clamp(200,-200).Transform(-GlobRotation));
+                //Log.d("Position Debug","Position at: " + Position.ToString()+ " with a last Velocity of: " + Velocity.ToString());
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -312,7 +323,7 @@ public class CustomView extends View {
     private void drawLine(Vector2 Position, Vector2 Size, double Rotation,String Color,Canvas canvas) {
 
         Position = Position.mul(Scale);
-        Size = Size.mul(Scale);
+        Size = new Vector2(10,Size.mul(Scale).y);
 
         Vector2 TopRight = Position.add(Size.mul(0.5).Transform(Rotation));
         Vector2 BottomLeft = Position.add(Size.mul(-0.5).Transform(Rotation));
