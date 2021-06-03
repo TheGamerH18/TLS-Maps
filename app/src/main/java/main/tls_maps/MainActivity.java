@@ -1,7 +1,12 @@
 package main.tls_maps;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +19,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
+import main.tls_maps.Notifications.Notification;
+import main.tls_maps.Notifications.NotificationTimer;
+import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.NoteItems.NotesContent;
@@ -48,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 overMenuAddNote.getRoot().setVisibility(View.VISIBLE);
+                binding.appBarMain.fab.setVisibility(View.GONE);
             }
         });
 
@@ -62,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        new ScheduleNotification("test", System.currentTimeMillis()+(1000*10), this);
     }
 
     @Override
@@ -83,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
             NotesContent.addItem(overMenuAddNote.inputFieldNotes.getText().toString(), getApplicationContext());
         overMenuAddNote.getRoot().setVisibility(View.GONE);
+        binding.appBarMain.fab.setVisibility(View.VISIBLE);
         overMenuAddNote.inputFieldNotes.setText("");
     }
 
@@ -90,5 +104,6 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         overMenuAddNote.inputFieldNotes.setText("");
         overMenuAddNote.getRoot().setVisibility(View.GONE);
+        binding.appBarMain.fab.setVisibility(View.VISIBLE);
     }
 }

@@ -14,11 +14,11 @@ public class Notification {
 
     String msg, title;
     static int ID = 0;
-    int notificationID;
+    public int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
-    public Notification(String msg, String title, Context context) {
+    public Notification(String msg, Context context) {
         if ( Build.VERSION.SDK_INT >= 26 ) {
             CharSequence name = "studentChannel";
             String description = "Channel for notification";

@@ -7,27 +7,18 @@ import android.content.Intent;
 
 public class ScheduleNotification {
 
-    private final Notification notification;
 
-    public ScheduleNotification (String msg, String title, int delay, Context context) {
-
-        this.notification = new Notification(msg, title, context);
+    public ScheduleNotification (String msg, long delay, Context context) {
 
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
-        notificationIntent.putExtra(notification.notificationID+"", 1) ;
-        notificationIntent.putExtra("Notification" , notification.getNotification());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0 , notificationIntent , PendingIntent.FLAG_ONE_SHOT ) ;
+        notificationIntent.putExtra("Notification" , msg);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT) ;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , delay, pendingIntent);
-    }
-
-
-    public ScheduleNotification (String msg, String title, Context context) {
-        this(msg, title, 0, context);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, delay, pendingIntent);
     }
 
     public ScheduleNotification (String msg, Context context) {
-        this(msg, "", 0, context);
+        this(msg, 0, context);
     }
 }

@@ -17,8 +17,9 @@ public class NotificationTimer extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        android.app.Notification notification = intent.getParcelableExtra( "Notification" );
+        String msg = intent.getStringExtra("Notification" );
+        Notification notification = new Notification(msg, context);
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
-        NM.notify(1 ,notification);
+        NM.notify(notification.notificationID ,notification.getNotification());
     }
 }
