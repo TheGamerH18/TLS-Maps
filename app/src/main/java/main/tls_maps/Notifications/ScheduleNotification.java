@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 
 public class ScheduleNotification {
 
@@ -22,13 +23,18 @@ public class ScheduleNotification {
         notificationIntent.putExtra("Notification" , msg);
 
         // Create The Pending
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT) ;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, getUniqueID() , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT) ;
 
         // Create the Alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
 
+    private int getUniqueID() {
+        return ((int) System.currentTimeMillis());
+    }
+
+    // To create a Instant Notification
     public ScheduleNotification (String msg, Context context) {
         this(msg, 0, context);
     }

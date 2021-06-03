@@ -17,7 +17,6 @@ public class Notification {
     public final int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
-
     /**
      * Creates a new Notification
      * @param msg - Message of Notification
@@ -45,6 +44,7 @@ public class Notification {
                 .setSmallIcon(R.drawable.ic_reminder)
                 .setContentTitle(title)
                 .setContentText(msg)
+                .setVibrate(new long[]{0, 500, 0})
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         this.notificationID = ID;
         ++ID;
