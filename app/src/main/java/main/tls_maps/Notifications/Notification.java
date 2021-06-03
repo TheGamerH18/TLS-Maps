@@ -14,7 +14,7 @@ public class Notification {
 
     String msg, title;
     static int ID = 0;
-    public int notificationID;
+    public final int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
