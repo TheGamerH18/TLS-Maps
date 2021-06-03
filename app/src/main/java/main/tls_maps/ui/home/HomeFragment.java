@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,24 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+        binding.floatingActionButtonUp.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d("ClickEvent","The Level Up button has been Pressed");
+                binding.imageHome.ChangeLevel(1);
+            }
+        });
+        binding.floatingActionButtonDown.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d("ClickEvent","The Level Down button has been Pressed");
+                binding.imageHome.ChangeLevel(-1);
+            }
+        });
 
 
         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

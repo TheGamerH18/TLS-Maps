@@ -6,11 +6,9 @@ public class Map {
     public ArrayList<String> WayPointsOnMap = new ArrayList<String>(10);
     public ArrayList<Wall> WallsOnMap = new ArrayList<Wall>(10);
     public final int Level;
-    public final Vector2 Position;
 
-    public Map(int level, Vector2 position) {
+    public Map(int level) {
         this.Level = level;
-        this.Position = position;
     }
 
     public void AddWall(Wall walltoadd) {

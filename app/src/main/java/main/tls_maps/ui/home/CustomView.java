@@ -53,6 +53,7 @@ public class CustomView extends View {
 
     private Paint paint;
 
+    private Map BackGround;
     private Map CurrentMap;
     private int Level = 0;
 
@@ -102,17 +103,18 @@ public class CustomView extends View {
         paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i=0;i<=max_Level;i++) {
-            Map NewLevelMap = new Map(i,new Vector2(0,0));
+            Map NewLevelMap = new Map(i);
             Maps.add(NewLevelMap);
             //Log.d("Hm",""+i);
         }
+        BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        CurrentMap.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
-        CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
-        CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
-        CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
-        CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
-        CurrentMap.AddWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
+        BackGround.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
+        BackGround.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
+        BackGround.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
+        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
+        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
+        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
         ReadFile("1stholstein.xml");
         ReadFile("2stholstein.xml");
@@ -122,7 +124,7 @@ public class CustomView extends View {
     }
 
 
-    public void ReadFile(String FILENAME) {
+    private void ReadFile(String FILENAME) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -254,7 +256,7 @@ public class CustomView extends View {
         return color;
     }
 
-    private void ChangeLevel(int Going) {
+    protected void ChangeLevel(int Going) {
         Level = Math.min(Math.max(Level+Going,min_Level),max_Level);
         CurrentMap = getMapAtLevel(Level);
     }
@@ -338,8 +340,8 @@ public class CustomView extends View {
         postInvalidate();
     }
 
-    private void drawMap(Canvas canvas) {
-        for (int i=0;i<CurrentMap.WallsOnMap.size();i++) {
+    private void drawMap(Canvas canvas,Map MapToDraw) {
+        for (int i=0;i<MapToDraw.WallsOnMap.size();i++) {
             Wall ThisWall = CurrentMap.WallsOnMap.get(i);
             drawLine(ThisWall.Position,ThisWall.Size,ThisWall.Rotation,ThisWall.Color,canvas);
         }
@@ -347,7 +349,9 @@ public class CustomView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawMap(canvas);
+        drawMap(canvas,BackGround);
+
+        drawMap(canvas,CurrentMap);
 
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
