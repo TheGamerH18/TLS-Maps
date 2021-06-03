@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class NotesContent {
 
-    public static List<Note> ITEMS = new ArrayList<Note>();
+    private static List<Note> ITEMS = new ArrayList<Note>();
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
@@ -23,6 +23,13 @@ public class NotesContent {
      */
     public static void init(Context context){
         readlist(context);
+    }
+
+    /**
+     * @return - List<> ITEMS
+     */
+    public static List<Note> getITEMS() {
+        return ITEMS;
     }
 
     /**
