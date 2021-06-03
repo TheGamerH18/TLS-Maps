@@ -12,7 +12,7 @@ import main.tls_maps.R;
 
 public class Notification {
 
-    String msg, title;
+    private static final String title = "TLS-Maps";
     static int ID = 0;
     public final int notificationID;
     NotificationManagerCompat notificationManager;
@@ -30,7 +30,6 @@ public class Notification {
             notificationManager.createNotificationChannel(channel);
         }
         notificationManager = NotificationManagerCompat.from(context);
-        title = "TLS-Maps " + title;
         builder = new NotificationCompat.Builder(context, ""+ID)
                 .setSmallIcon(R.drawable.ic_reminder)
                 .setContentTitle(title)
