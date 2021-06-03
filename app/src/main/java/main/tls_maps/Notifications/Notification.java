@@ -2,18 +2,22 @@ package main.tls_maps.Notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import main.tls_maps.MainActivity;
 import main.tls_maps.R;
+import main.tls_maps.ui.notes.NotesFragment;
 
 public class Notification {
 
     // Static ID to get a unique ID
-    static int ID = 0;
+    static int ID = 1;
     int notificationID;
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
@@ -51,6 +55,7 @@ public class Notification {
                 .setContentTitle(title)
                 .setContentText(msg)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                // .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, NotesFragment.class), 0));
 
         // Save the ID for this Notification
         this.notificationID = ID;
