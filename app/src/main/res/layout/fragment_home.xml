@@ -57,12 +57,12 @@
         android:visibility="visible" />
 
     <ImageButton
+        android:id="@+id/search"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginRight="3dp"
         android:backgroundTint="@color/gray"
         android:gravity="center_horizontal"
-        android:onClick="getTargets"
         android:src="@android:drawable/ic_menu_search"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@id/image_home"
@@ -113,9 +113,9 @@
             android:id="@+id/target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Ziel"
-            android:textAlignment="center"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:hint="Nach"
+            android:textAlignment="center" />
 
 
     </com.google.android.material.textfield.TextInputLayout>

@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import main.tls_maps.R;
+import main.tls_maps.databinding.ActivityMainBinding;
 import main.tls_maps.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -41,6 +42,31 @@ public class HomeFragment extends Fragment {
                 binding.imageHome.ChangeLevel(1);
             }
         });
+        binding.floatingActionButtonDown.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d("ClickEvent","The Level Down button has been Pressed");
+                binding.imageHome.ChangeLevel(-1);
+            }
+        });
+
+        binding.search.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String from = binding.start.getText().toString();
+                String target = binding.target.getText().toString();
+
+                if(from == "" || from.equals("")){
+                    Log.d("FindRoom", "getTargets: " + target);
+                    return;
+                }
+                Log.d("LaunchAStar", "Start: " + from + "\tTarget: " + target);
+            }
+        });
+
         binding.floatingActionButtonDown.setOnClickListener(new View.OnClickListener() {
 
             @Override

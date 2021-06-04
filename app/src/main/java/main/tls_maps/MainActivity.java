@@ -1,6 +1,7 @@
 package main.tls_maps;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentHomeBinding;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,9 +63,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    public void getTargets(View view) {
-        binding.
     }
 }
