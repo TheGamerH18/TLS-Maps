@@ -1,11 +1,11 @@
 package main.tls_maps.ui.home;
 
 public class Vector2 {
-    public double x = 0,y = 0;
+
+    public double x, y;
 
     public Vector2() {
-        this.x = 0;
-        this.y = 0;
+
     }
 
     public Vector2(double x, double y) {
@@ -13,15 +13,9 @@ public class Vector2 {
         this.y = y;
     }
 
-    public Vector2 set(double x,double y) {
+    public void set(double x,double y) {
         this.x = x;
         this.y = y;
-        return this;
-    }
-
-    public Vector2(String string) {
-        Vector2 r = new Vector2(string);
-        this.set(r.x, r.y);
     }
 
     public Vector2 clone() {
@@ -75,12 +69,6 @@ public class Vector2 {
         return this.add(vector.sub(this).mul(t));
     }
 
-    public Vector2 converttorender() {
-        Vector2 E = this.clone();
-        E.y *= -1;
-        return E;
-    }
-
     public Vector2 Transform(double angle) {
         double radian = Math.toRadians(angle);
         double x = this.x*Math.cos(radian) - this.y*Math.sin(radian);
@@ -93,8 +81,7 @@ public class Vector2 {
         String[] ree = string.split(",");
         String x = ree[0];
         String y = ree[1];
-        Vector2 r = new Vector2(Double.parseDouble(x),Double.parseDouble(y));
-        return r;
+        return new Vector2(Double.parseDouble(x),Double.parseDouble(y));
     }
 
     private double clamp(double val, double max, double min) {

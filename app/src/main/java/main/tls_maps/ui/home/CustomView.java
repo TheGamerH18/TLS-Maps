@@ -1,22 +1,10 @@
 package main.tls_maps.ui.home;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.database.CursorIndexOutOfBoundsException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Picture;
-import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -25,10 +13,8 @@ import android.view.VelocityTracker;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -36,22 +22,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import main.tls_maps.R;
-
 public class CustomView extends View {
 
-    private Paint paint;
+    public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholstein", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
+
+    private Paint Paint;
 
     private Map BackGround;
     private Map CurrentMap;
@@ -61,8 +44,8 @@ public class CustomView extends View {
     private double Scale = .5;
     private double GlobRotation = 0;
 
-    private final int min_Level = 0;
-    private final int max_Level = 2;
+    private final int Min_Level = 0;
+    private final int Max_Level = 2;
 
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
@@ -88,43 +71,41 @@ public class CustomView extends View {
     }
 
     private Map getMapAtLevel(int Level) {
-        Map LevelMap = null;
-        for (int i=min_Level;i<Maps.size();i++) {
+        Map levelMap = null;
+        for (int i = Min_Level; i< Maps.size(); i++) {
             Map TempMap = Maps.get(i);
             if (TempMap.Level == Level) {
-                LevelMap = TempMap;
+                levelMap = TempMap;
                 break;
             }
         }
-        return LevelMap;
+        return levelMap;
     }
 
     private void init() {
-        paint = new Paint();
+        Paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
-        for (int i=0;i<=max_Level;i++) {
-            Map NewLevelMap = new Map(i);
-            Maps.add(NewLevelMap);
+        for (int i = 0; i<= Max_Level; i++) {
+            Map newLevelMap = new Map(i);
+            Maps.add(newLevelMap);
             //Log.d("Hm",""+i);
         }
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        BackGround.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
-        BackGround.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
-        BackGround.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
-        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
-        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
-        BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
+        BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
+        BackGround.addWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
+        BackGround.addWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
+        BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
+        BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
+        BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
-        ReadFile("1stholstein.xml");
-        ReadFile("2stholstein.xml");
-        ReadFile("EGHolsten.xml");
-        ReadFile("Hauptgebäude1Stock.xml");
-        ReadFile("HauptgebäudeEg.xml");
+        for(String MapName : MAPNAMES){
+            ReadFile(MapName+".xml");
+        }
     }
 
 
-    private void ReadFile(String FILENAME) {
+    private void ReadFile(String fileName) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -135,20 +116,16 @@ public class CustomView extends View {
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             // read from a project's resources folder
-            InputStream stream = assetmanager.open("Maps/"+FILENAME);
+            InputStream stream = assetmanager.open("Maps/"+fileName);
             Document doc = db.parse(stream);
 
             //System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
             //System.out.println("------");
 
             if (doc.hasChildNodes()) {
-                //printNote(doc.getChildNodes());
-                Log.d("XML READING","File Found: "+FILENAME);
                 getLinesfromNodes(doc.getChildNodes());
-
-            } else {
-                Log.d("XML READING","File Not Found: "+FILENAME);
             }
+            Log.d("XML READING","File " + ((doc.hasChildNodes())?"":"not ") + "Found: "+fileName);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -156,26 +133,26 @@ public class CustomView extends View {
     }
 
     private void getLinesfromNodes(NodeList nodeList) {
-        Node MapNode = nodeList.item(0);
-        NamedNodeMap namedNodeMapAttr = MapNode.getAttributes();
-        String Level = namedNodeMapAttr.getNamedItem("Level").getNodeValue();
-        String xoff = namedNodeMapAttr.getNamedItem("xoff").getNodeValue();
-        String yoff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
-        Vector2 PosOff = new Vector2(Double.parseDouble(xoff),Double.parseDouble(yoff));
+        Node mapNode = nodeList.item(0);
+        NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
+        String level = namedNodeMapAttr.getNamedItem("Level").getNodeValue();
+        String xOff = namedNodeMapAttr.getNamedItem("xoff").getNodeValue();
+        String yOff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
+        Vector2 posOff = new Vector2(Double.parseDouble(xOff),Double.parseDouble(yOff));
         //Log.d("Map Name",""+MapNode.getNodeName());
 
 
         double Rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
         double Scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
 
-        Map MapToAddTo = getMapAtLevel(Integer.parseInt(Level));
+        Map MapToAddTo = getMapAtLevel(Integer.parseInt(level));
 
-        for (int count=0;count<MapNode.getChildNodes().getLength();count++) {
-            Node LineNode = MapNode.getChildNodes().item(count);
+        for (int count=0;count<mapNode.getChildNodes().getLength();count++) {
+            Node lineNode = mapNode.getChildNodes().item(count);
             //Log.d("XML NODE TYPE",""+LineNode.getNodeType());
-            if (LineNode.getNodeType() == Node.ELEMENT_NODE) {
+            if (lineNode.getNodeType() == Node.ELEMENT_NODE) {
                 //Log.d("Node Name", "" + LineNode.getNodeName());
-                NamedNodeMap namedNodeMap = LineNode.getAttributes();
+                NamedNodeMap namedNodeMap = lineNode.getAttributes();
                 String stroke = namedNodeMap.getNamedItem("stroke").getNodeValue();
                 String x1 = namedNodeMap.getNamedItem("x1").getNodeValue();
                 String y1 = namedNodeMap.getNamedItem("y1").getNodeValue();
@@ -187,66 +164,18 @@ public class CustomView extends View {
                 p1 = p1.Transform(Rotation);
                 p2 = p2.Transform(Rotation);
 
-                Vector2 nullvector = new Vector2();
-                p1 = nullvector.lerp(p1,Scale);
-                p2 = nullvector.lerp(p2,Scale);
+                Vector2 nullVector = new Vector2();
+                p1 = nullVector.lerp(p1,Scale);
+                p2 = nullVector.lerp(p2,Scale);
 
-                Vector2 Middle = p1.lerp(p2,0.5).add(PosOff);
-                Vector2 Size = new Vector2(10,p1.sub(p2).magnitude());
+                Vector2 middle = p1.lerp(p2,0.5).add(posOff);
+                Vector2 size = new Vector2(10,p1.sub(p2).magnitude());
                 double rotation = -Math.toDegrees(p1.sub(p2).angle());
 
-                Wall NewWall = new Wall(Middle,Size,rotation,stroke);
-                MapToAddTo.AddWall(NewWall);
+                Wall NewWall = new Wall(middle,size,rotation,stroke);
+                MapToAddTo.addWall(NewWall);
                 //Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
                 //Log.d("Xml reading","Found item: "+stroke);
-            }
-        }
-    }
-
-    private void printNote(NodeList nodeList) {
-
-        for (int count = 0; count < nodeList.getLength(); count++) {
-
-            Node tempNode = nodeList.item(count);
-
-            // make sure it's element node.
-            Log.d("XML NODE TYPE",""+tempNode.getNodeType());
-            if (tempNode.getNodeType() == Node.ATTRIBUTE_NODE) {
-
-                // get node name and value
-                System.out.println("\nNode Name =" + tempNode.getNodeName() + " [OPEN]");
-                System.out.println("Node Value =" + tempNode.getTextContent());
-                String Name = tempNode.getNodeName();
-                if (Name == "line") {
-
-                    Log.d("XML READER","Found List Item ");
-
-                    //Instance Inst = clazz.newInstance();
-                    NodeList Properties = tempNode.getChildNodes();
-                    for (int c=0;c<Properties.getLength();c++) {
-                        Node vtempNode = Properties.item(c);
-                        String Prop_Name = vtempNode.getNodeName();
-                    }
-
-                }
-
-				/*if (tempNode.hasAttributes()) {
-
-					// get attributes names and values
-					NamedNodeMap nodeMap = tempNode.getAttributes();
-					for (int i = 0; i < nodeMap.getLength(); i++) {
-						Node node = nodeMap.item(i);
-						System.out.println("attr name : " + node.getNodeName());
-						System.out.println("attr value : " + node.getNodeValue());
-					}
-
-				}*/
-
-                if (tempNode.hasChildNodes()) {
-                    // loop again if has child nodes
-                    printNote(tempNode.getChildNodes());
-                }
-
             }
         }
     }
@@ -257,7 +186,7 @@ public class CustomView extends View {
     }
 
     protected void ChangeLevel(int Going) {
-        Level = Math.min(Math.max(Level+Going,min_Level),max_Level);
+        Level = Math.min(Math.max(Level +Going, Min_Level), Max_Level);
         CurrentMap = getMapAtLevel(Level);
     }
 
@@ -333,33 +262,29 @@ public class CustomView extends View {
         Vector2 BottomRight = Position.add(new Vector2(Size.x/2,-Size.y/2).Transform(Rotation));
 
         float[] verts = getCameraOffset(TopLeft,TopRight,BottomRight,BottomLeft);
-        int ColorWanted = getColor(Color);
-        int[] colors = {ColorWanted,ColorWanted,ColorWanted,ColorWanted};
+        int colorWanted = getColor(Color);
+        int[] colors = {colorWanted,colorWanted,colorWanted,colorWanted};
         short[] indices = {0,2,1,0,3,1};
-        canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,8,verts,0, null,0,colors,0,indices,0,6,paint);
+        canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,8,verts,0, null,0,colors,0,indices,0,6, Paint);
         postInvalidate();
     }
 
-    private void drawMap(Canvas canvas,Map MapToDraw) {
-        for (int i=0;i<MapToDraw.WallsOnMap.size();i++) {
-            Wall ThisWall = CurrentMap.WallsOnMap.get(i);
+    private void drawMap(Canvas canvas,Map mapToDraw) {
+        for (int i=0;i<mapToDraw.WallsOnMap.size();i++) {
+            Wall ThisWall = mapToDraw.WallsOnMap.get(i);
             drawLine(ThisWall.Position,ThisWall.Size,ThisWall.Rotation,ThisWall.Color,canvas);
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawMap(canvas,BackGround);
+        drawMap(canvas, BackGround);
 
-        drawMap(canvas,CurrentMap);
+        drawMap(canvas, CurrentMap);
 
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
     }
 
-    /*TODO
-    - Hand Movements for scaling, rotation
-    - Add a better Rotation
-    
-     */
+    // TODO - Hand Movements for scaling, rotation | -Add a better Rotation | -Refactor?
 }

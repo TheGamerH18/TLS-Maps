@@ -59,16 +59,16 @@
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="0dp"
         android:layout_marginRight="3dp"
-        android:gravity="center_horizontal"
         android:backgroundTint="@color/gray"
+        android:gravity="center_horizontal"
+        android:onClick="getTargets"
+        android:src="@android:drawable/ic_menu_search"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@id/image_home"
         app:layout_constraintLeft_toRightOf="@id/GoalOutside"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@android:drawable/ic_menu_search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/LocationOutside"
@@ -85,12 +85,12 @@
         app:layout_constraintWidth_percent="0.38">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/Location"
+            android:id="@+id/start"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Ort"
-            android:textAlignment="center"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:hint="Von"
+            android:textAlignment="center" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -110,7 +110,7 @@
         app:layout_constraintWidth_percent="0.38">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/Search"
+            android:id="@+id/target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Ziel"
