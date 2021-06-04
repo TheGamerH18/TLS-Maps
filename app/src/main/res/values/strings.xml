@@ -8,6 +8,7 @@
 
     <string name="menu_card">Karte</string>
     <string name="menu_notes">Notizen</string>
+    <string name="add_notes">Notiz hinzufügen</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
