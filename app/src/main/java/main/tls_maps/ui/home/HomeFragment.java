@@ -1,25 +1,19 @@
 package main.tls_maps.ui.home;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import main.tls_maps.R;
-import main.tls_maps.databinding.ActivityMainBinding;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
+
 import main.tls_maps.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -64,6 +58,57 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 Log.d("LaunchAStar", "Start: " + from + "\tTarget: " + target);
+            }
+        });
+
+        binding.start.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus)
+                    binding.QR.setVisibility(View.VISIBLE);
+                else
+                    binding.QR.setVisibility(View.GONE);
+            }
+        });
+
+        binding.start.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                binding.QR.setVisibility(View.VISIBLE);
+            }
+        });
+
+        binding.start.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
+                    return;
+                BarcodeDetector detector;
+                detector = new BarcodeDetector.Builder(v.getContext())
+                        .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+                        .build();
+
+                CameraSource cameraSource = new CameraSource.Builder(v.getContext(), detector)
+                        .setRequestedPreviewSize(1920, 1080)
+                        .setAutoFocusEnabled(true) //you should add this feature
+                        .build();
+            /*
+                try {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        cameraSource.start());
+                    } else {
+                        ActivityCompat.requestPermissions(ScannedBarcodeActivity.this, new
+                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+             */
             }
         });
 
