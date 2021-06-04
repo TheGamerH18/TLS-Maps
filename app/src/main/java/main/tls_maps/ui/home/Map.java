@@ -15,4 +15,8 @@ public class Map {
     public void addWall(Wall wallToAdd) {
         WallsOnMap.add(wallToAdd);
     }
+
+    public void addWayPoint(String name) {
+        WayPointsOnMap.add(name);
+    }
 }

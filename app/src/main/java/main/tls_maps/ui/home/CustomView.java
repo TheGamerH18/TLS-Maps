@@ -276,9 +276,22 @@ public class CustomView extends View {
         }
     }
 
+    private void drawWayPoints(Canvas canvas,ArrayList<WayPoint> wayPoints) {
+        for (int i=0;i<wayPoints.size();i++) {
+            WayPoint currentWayPoint = wayPoints.get(i);
+            canvas.drawCircle(200,200,50,Paint);
+        }
+    }
+
+    private boolean WayPointDebug = true;
+
     @Override
     protected void onDraw(Canvas canvas) {
         drawMap(canvas, BackGround);
+
+        if (WayPointDebug) {
+            //drawWayPoints();
+        }
 
         drawMap(canvas, CurrentMap);
 
