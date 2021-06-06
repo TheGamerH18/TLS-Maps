@@ -64,7 +64,7 @@ public class CustomView extends View {
     private final int min_Level = 0;
     private final int max_Level = 2;
 
-    private ArrayList<Map> Maps = new ArrayList<Map>(3);
+    private ArrayList<Map> Maps = new ArrayList<Map>();
 
     public CustomView(Context context) {
         super(context);
@@ -109,7 +109,7 @@ public class CustomView extends View {
         }
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        BackGround.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
+        //BackGround.AddWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         BackGround.AddWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
         BackGround.AddWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
         BackGround.AddWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
@@ -342,7 +342,7 @@ public class CustomView extends View {
 
     private void drawMap(Canvas canvas,Map MapToDraw) {
         for (int i=0;i<MapToDraw.WallsOnMap.size();i++) {
-            Wall ThisWall = CurrentMap.WallsOnMap.get(i);
+            Wall ThisWall = MapToDraw.WallsOnMap.get(i);
             drawLine(ThisWall.Position,ThisWall.Size,ThisWall.Rotation,ThisWall.Color,canvas);
         }
     }
