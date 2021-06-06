@@ -44,8 +44,8 @@ public class CustomView extends View {
     private double Scale = .5;
     private double GlobRotation = 0;
 
-    private final int Min_Level = 0;
-    private final int Max_Level = 2;
+    private final int MinLevel = 0;
+    private final int MaxLevel = 2;
 
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
@@ -70,12 +70,12 @@ public class CustomView extends View {
         init();
     }
 
-    private Map getMapAtLevel(int Level) {
+    private Map getMapAtLevel(int level) {
         Map levelMap = null;
-        for (int i = Min_Level; i< Maps.size(); i++) {
-            Map TempMap = Maps.get(i);
-            if (TempMap.Level == Level) {
-                levelMap = TempMap;
+        for (int i = MinLevel; i< Maps.size(); i++) {
+            Map tempMap = Maps.get(i);
+            if (tempMap.Level == level) {
+                levelMap = tempMap;
                 break;
             }
         }
@@ -85,7 +85,7 @@ public class CustomView extends View {
     private void init() {
         Paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
-        for (int i = 0; i<= Max_Level; i++) {
+        for (int i = 0; i<= MaxLevel; i++) {
             Map newLevelMap = new Map(i);
             Maps.add(newLevelMap);
             //Log.d("Hm",""+i);
@@ -109,14 +109,14 @@ public class CustomView extends View {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-        AssetManager assetmanager = getResources().getAssets();
+        AssetManager assetManager = getResources().getAssets();
 
         try {
 
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             // read from a project's resources folder
-            InputStream stream = assetmanager.open("Maps/"+fileName);
+            InputStream stream = assetManager.open("Maps/"+fileName);
             Document doc = db.parse(stream);
 
             //System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
@@ -142,8 +142,8 @@ public class CustomView extends View {
         //Log.d("Map Name",""+MapNode.getNodeName());
 
 
-        double Rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
-        double Scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
+        double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
+        double scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
 
         Map MapToAddTo = getMapAtLevel(Integer.parseInt(level));
 
@@ -161,18 +161,18 @@ public class CustomView extends View {
                 Vector2 p1 = new Vector2(Double.parseDouble(x1),Double.parseDouble(y1));
                 Vector2 p2 = new Vector2(Double.parseDouble(x2),Double.parseDouble(y2));
 
-                p1 = p1.Transform(Rotation);
-                p2 = p2.Transform(Rotation);
+                p1 = p1.Transform(rotation);
+                p2 = p2.Transform(rotation);
 
                 Vector2 nullVector = new Vector2();
-                p1 = nullVector.lerp(p1,Scale);
-                p2 = nullVector.lerp(p2,Scale);
+                p1 = nullVector.lerp(p1,scale);
+                p2 = nullVector.lerp(p2,scale);
 
                 Vector2 middle = p1.lerp(p2,0.5).add(posOff);
                 Vector2 size = new Vector2(10,p1.sub(p2).magnitude());
-                double rotation = -Math.toDegrees(p1.sub(p2).angle());
+                double rotationOfVector = -Math.toDegrees(p1.sub(p2).angle());
 
-                Wall NewWall = new Wall(middle,size,rotation,stroke);
+                Wall NewWall = new Wall(middle,size,rotationOfVector,stroke);
                 MapToAddTo.addWall(NewWall);
                 //Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
                 //Log.d("Xml reading","Found item: "+stroke);
@@ -180,13 +180,13 @@ public class CustomView extends View {
         }
     }
 
-    private int getColor(String Name) {
-        @ColorInt int color = Color.parseColor(Name);
+    private int getColor(String name) {
+        @ColorInt int color = Color.parseColor(name);
         return color;
     }
 
-    protected void ChangeLevel(int Going) {
-        Level = Math.min(Math.max(Level +Going, Min_Level), Max_Level);
+    protected void ChangeLevel(int going) {
+        Level = Math.min(Math.max(Level +going, MinLevel), MaxLevel);
         CurrentMap = getMapAtLevel(Level);
     }
 
@@ -235,48 +235,48 @@ public class CustomView extends View {
         return true;
     }
 
-    private float[] getCameraOffset(Vector2 TopLeft, Vector2 TopRight, Vector2 BottomRight, Vector2 BottomLeft) {
-        Vector2 ScreenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-        TopLeft = TopLeft.sub(Position).Transform(GlobRotation).add(ScreenMiddle);
-        TopRight = TopRight.sub(Position).Transform(GlobRotation).add(ScreenMiddle);
-        BottomLeft = BottomLeft.sub(Position).Transform(GlobRotation).add(ScreenMiddle);
-        BottomRight = BottomRight.sub(Position).Transform(GlobRotation).add(ScreenMiddle);
+    private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
+        Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+        topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
+        topRight = topRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
+        bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
+        bottomRight = bottomRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
 
         float[] verts = {
-                (float) TopLeft.x, (float) TopLeft.y,
-                (float) BottomRight.x, (float) BottomRight.y,
-                (float) BottomLeft.x, (float) BottomLeft.y,
-                (float) TopRight.x, (float) TopRight.y,
+                (float) topLeft.x, (float) topLeft.y,
+                (float) bottomRight.x, (float) bottomRight.y,
+                (float) bottomLeft.x, (float) bottomLeft.y,
+                (float) topRight.x, (float) topRight.y,
         };
         return verts;
     }
 
-    private void drawLine(Vector2 Position, Vector2 Size, double Rotation,String Color,Canvas canvas) {
+    private void drawLine(Vector2 position, Vector2 size, double rotation, String color, Canvas canvas) {
 
-        Position = Position.mul(Scale);
-        Size = new Vector2(10,Size.mul(Scale).y);
+        position = position.mul(Scale);
+        size = new Vector2(10,size.mul(Scale).y);
 
-        Vector2 TopRight = Position.add(Size.mul(0.5).Transform(Rotation));
-        Vector2 BottomLeft = Position.add(Size.mul(-0.5).Transform(Rotation));
-        Vector2 TopLeft = Position.add(new Vector2(-Size.x/2,Size.y/2).Transform(Rotation));
-        Vector2 BottomRight = Position.add(new Vector2(Size.x/2,-Size.y/2).Transform(Rotation));
+        Vector2 topRight = position.add(size.mul(0.5).Transform(rotation));
+        Vector2 bottomLeft = position.add(size.mul(-0.5).Transform(rotation));
+        Vector2 topLeft = position.add(new Vector2(-size.x/2,size.y/2).Transform(rotation));
+        Vector2 bottomRight = position.add(new Vector2(size.x/2,-size.y/2).Transform(rotation));
 
-        float[] verts = getCameraOffset(TopLeft,TopRight,BottomRight,BottomLeft);
-        int colorWanted = getColor(Color);
+        float[] verts = getCameraOffset(topLeft,topRight,bottomRight,bottomLeft);
+        int colorWanted = getColor(color);
         int[] colors = {colorWanted,colorWanted,colorWanted,colorWanted};
         short[] indices = {0,2,1,0,3,1};
         canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,8,verts,0, null,0,colors,0,indices,0,6, Paint);
         postInvalidate();
     }
 
-    private void drawMap(Canvas canvas,Map mapToDraw) {
+    private void drawMap(Canvas canvas, Map mapToDraw) {
         for (int i=0;i<mapToDraw.WallsOnMap.size();i++) {
-            Wall ThisWall = mapToDraw.WallsOnMap.get(i);
-            drawLine(ThisWall.Position,ThisWall.Size,ThisWall.Rotation,ThisWall.Color,canvas);
+            Wall thisWall = mapToDraw.WallsOnMap.get(i);
+            drawLine(thisWall.Position,thisWall.Size,thisWall.Rotation,thisWall.Color,canvas);
         }
     }
 
-    private void drawWayPoints(Canvas canvas,ArrayList<WayPoint> wayPoints) {
+    private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints) {
         for (int i=0;i<wayPoints.size();i++) {
             WayPoint currentWayPoint = wayPoints.get(i);
             canvas.drawCircle(200,200,50,Paint);
@@ -299,5 +299,5 @@ public class CustomView extends View {
         super.onDraw(canvas);
     }
 
-    // TODO - Hand Movements for scaling, rotation | -Add a better Rotation | -Refactor?
+    // TODO - Hand Movements for scaling, rotation | -Add a better Rotation
 }

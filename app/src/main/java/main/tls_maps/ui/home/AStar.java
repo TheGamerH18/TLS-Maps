@@ -1,6 +1,5 @@
 package main.tls_maps.ui.home;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AStar {
@@ -8,7 +7,7 @@ public class AStar {
     public ArrayList<WayPoint> waypoints = new ArrayList<WayPoint>();
 
     public AStar() {
-
+        // TODO
     }
 
     public void AddWaypoint(WayPoint wayPoint) {

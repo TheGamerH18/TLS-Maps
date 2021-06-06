@@ -9,10 +9,10 @@ public class WayPoint {
     public ArrayList<String> NeighbourPoints = new ArrayList<String>();
 
 
-    public WayPoint(String name, Vector2 position, int level) {
-        this.Name = name;
-        this.position = position;
-        this.Level = level;
+    public WayPoint(String Name, Vector2 Position, int Level) {
+        this.Name = Name;
+        this.position = Position;
+        this.Level = Level;
     }
 
     public void AddNeighbourPoint(String name) {

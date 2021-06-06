@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+// import com.google.android.gms.vision.CameraSource;
+// import com.google.android.gms.vision.barcode.Barcode;
+// import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import main.tls_maps.databinding.FragmentHomeBinding;
 
@@ -72,22 +72,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.start.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                binding.QR.setVisibility(View.VISIBLE);
-            }
-        });
-
-        binding.start.setOnClickListener(new View.OnClickListener() {
+        binding.QR.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
                 if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
                     return;
-                BarcodeDetector detector;
+               /* BarcodeDetector detector;
                 detector = new BarcodeDetector.Builder(v.getContext())
                         .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
                         .build();
