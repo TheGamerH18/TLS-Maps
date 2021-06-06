@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        if(overMenuAddNote.inputFieldNotes.getText().toString() != "")
+        if(!overMenuAddNote.inputFieldNotes.getText().toString().isEmpty())
             NotesContent.addItem(overMenuAddNote.inputFieldNotes.getText().toString(), getApplicationContext());
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         binding.appBarMain.fab.setVisibility(View.VISIBLE);
