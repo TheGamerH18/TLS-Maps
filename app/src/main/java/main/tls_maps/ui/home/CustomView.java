@@ -30,6 +30,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import main.tls_maps.map.Map;
+import main.tls_maps.map.Vector2;
+import main.tls_maps.map.Wall;
+import main.tls_maps.map.WayPoint;
+
 public class CustomView extends View {
 
     public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholstein", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};

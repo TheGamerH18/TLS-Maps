@@ -1,6 +1,4 @@
-package main.tls_maps.ui.home;
-
-import android.graphics.Color;
+package main.tls_maps.map;
 
 public class Wall {
     public Vector2 Position;

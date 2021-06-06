@@ -1,4 +1,4 @@
-package main.tls_maps.ui.home;
+package main.tls_maps.map;
 
 public class Vector2 {
 
