@@ -2,10 +2,12 @@ package main.tls_maps.ui.notes;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         public final TextView mContentView;
         public final TextView mId;
         public final ImageButton mBtnView;
+        public final ImageButton mBtnViewReminder;
         public final LinearLayout mFrameView;
         public Note mItem;
 
@@ -63,6 +66,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             mId = binding.itemNumber;
             mContentView = binding.content;
             mBtnView = binding.imageButton;
+            mBtnViewReminder = binding.imageButton2;
             mBtnView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,6 +78,12 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                         }
                     };
                     Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG).setBackgroundTint(Color.rgb(40,40,40)).setAction("Ja", delete).show();
+                }
+            });
+            mBtnViewReminder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
         }
