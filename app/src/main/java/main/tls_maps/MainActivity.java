@@ -2,6 +2,7 @@ package main.tls_maps;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
@@ -15,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentHomeBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
 import main.tls_maps.NoteItems.NotesContent;
 
