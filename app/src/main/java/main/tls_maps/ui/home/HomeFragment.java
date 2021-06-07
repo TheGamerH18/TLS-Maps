@@ -19,7 +19,7 @@ import main.tls_maps.databinding.FragmentHomeBinding;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
+    public static String from;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.start.setText(from);
 
         binding.floatingActionButtonUp.setOnClickListener(new View.OnClickListener() {
 
@@ -88,13 +89,13 @@ public class HomeFragment extends Fragment {
                 binding.imageHome.ChangeLevel(-1);
             }
         });
-
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        from = null;
         binding = null;
     }
 }

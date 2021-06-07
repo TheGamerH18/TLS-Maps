@@ -1,14 +1,13 @@
 package main.tls_maps.QRCode;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,6 +20,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import main.tls_maps.R;
+import main.tls_maps.ui.home.HomeFragment;
 
 public class Scanner extends AppCompatActivity {
 
@@ -29,9 +29,6 @@ public class Scanner extends AppCompatActivity {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    Button btnAction;
-    String intentData = "";
-    boolean isEmail = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +45,8 @@ public class Scanner extends AppCompatActivity {
 
     private void initialiseDetectorsAndSources() {
 
-        Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
-
         barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.TEXT)
+                .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
@@ -91,7 +86,6 @@ public class Scanner extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -104,12 +98,9 @@ public class Scanner extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            if (barcodes.valueAt(0).rawValue != null) {
-                                txtBarcodeValue.removeCallbacks(null);
-                                intentData = barcodes.valueAt(0).rawValue;
-                                txtBarcodeValue.setText(intentData);
-                                Toast.makeText(getApplicationContext(), "BarCode: " + barcodes.valueAt(0).rawValue, Toast.LENGTH_LONG).show();
-                            }
+                            HomeFragment.from = barcodes.valueAt(0).rawValue;
+                            overridePendingTransition(0,0);
+                            startActivity(new Intent(Scanner.this, main.tls_maps.MainActivity.class));
                         }
                     });
 

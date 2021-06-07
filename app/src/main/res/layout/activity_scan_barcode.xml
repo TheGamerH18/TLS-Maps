@@ -29,10 +29,12 @@
         android:text="No Barcode Detected"
         android:textColor="@android:color/white"
         android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
         app:layout_constraintEnd_toEndOf="@+id/surfaceView"
         app:layout_constraintStart_toStartOf="@+id/surfaceView"
-        app:layout_constraintTop_toTopOf="@+id/surfaceView" />
+        app:layout_constraintTop_toTopOf="@+id/surfaceView"
+        tools:visibility="gone" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
