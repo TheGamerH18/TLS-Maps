@@ -22,6 +22,8 @@ import main.tls_maps.NoteItems.NotesContent;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static NotesContent notes;
+
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     FragmentAddNoteBinding overMenuAddNote;
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        NotesContent.init(getApplicationContext());
+        notes = new NotesContent(getApplicationContext());
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     public void send(View view) {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         if(!overMenuAddNote.inputFieldNotes.getText().toString().isEmpty())
-            NotesContent.addItem(overMenuAddNote.inputFieldNotes.getText().toString(), getApplicationContext());
+            notes.addItem(overMenuAddNote.inputFieldNotes.getText().toString(), getApplicationContext());
         overMenuAddNote.getRoot().setVisibility(View.GONE);
         binding.appBarMain.fab.setVisibility(View.VISIBLE);
         overMenuAddNote.inputFieldNotes.setText("");

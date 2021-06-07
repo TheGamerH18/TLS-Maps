@@ -14,21 +14,21 @@ import java.util.List;
  */
 public class NotesContent {
 
-    private static List<Note> ITEMS = new ArrayList<Note>();
+    private List<Note> ITEMS = new ArrayList<Note>();
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
      * Needs to be called at start of application
      * @param context - Context of Application
      */
-    public static void init(Context context){
+    public NotesContent(Context context){
         readlist(context);
     }
 
     /**
      * @return - List<> ITEMS
      */
-    public static List<Note> getITEMS() {
+    public List<Note> getITEMS() {
         return ITEMS;
     }
 
@@ -37,7 +37,7 @@ public class NotesContent {
      * @param content - Content of the Note
      * @param context - Context of Application
      */
-    public static void addItem(String content, Context context) {
+    public void addItem(String content, Context context) {
         int id = ITEMS.size();
         ITEMS.add(new Note(content, id));
         writelist(context);
@@ -48,7 +48,7 @@ public class NotesContent {
      * @param Nummer - Index of the Item to delete
      * @param context - Context of Application
      */
-    public static void removeItem(String Nummer, Context context) {
+    public void removeItem(String Nummer, Context context) {
         int id = Integer.parseInt(Nummer);
         System.out.println(ITEMS.toString());
         ITEMS.remove(id);
@@ -64,7 +64,7 @@ public class NotesContent {
      * Reads the List ITEMS from Filesystem
      * @param act - Context of Application
      */
-    private static void readlist(Context act) {
+    private void readlist(Context act) {
         String ser = SerializeObject.ReadSettings(act, "notes.dat");
         if(ser != null && !ser.equalsIgnoreCase("")) {
             Object obj = SerializeObject.stringToObject(ser);
@@ -80,7 +80,7 @@ public class NotesContent {
      * Writes List ITEMS to Filesystem
      * @param act - Context of Application
      */
-    private static void writelist(Context act) {
+    private void writelist(Context act) {
         String ser = SerializeObject.objectToString((Serializable) ITEMS);
         if(ser != null && !ser.equalsIgnoreCase("")) {
             SerializeObject.WriteSettings(act, ser, "notes.dat");
