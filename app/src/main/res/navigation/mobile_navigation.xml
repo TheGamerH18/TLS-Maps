@@ -15,5 +15,5 @@
         android:id="@+id/nav_notes"
         android:name="main.tls_maps.ui.notes.NotesFragment"
         android:label="@string/menu_notes"
-        tools:layout="@layout/fragment_notes" />
+        tools:layout="@layout/fragment_notes_list" />
 </navigation>
