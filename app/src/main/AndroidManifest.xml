@@ -23,6 +23,7 @@
             android:enabled="true"
             android:exported="false" >
         </receiver>
+        <receiver android:name=".Notifications.NotificationReceiver" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
