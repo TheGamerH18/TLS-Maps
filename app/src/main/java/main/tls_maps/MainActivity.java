@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        overridePendingTransition(0,0);
+
         NotesContent.init(getApplicationContext());
         super.onCreate(savedInstanceState);
 
