@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import main.tls_maps.MainActivity;
+
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int noteID = intent.getIntExtra("NoteID", -1);
         if(noteID == -1) return;
-        Toast.makeText(context, ""+noteID, Toast.LENGTH_LONG).show();
+        MainActivity.notes.removeItem(context, noteID);
+        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
     }
 }
