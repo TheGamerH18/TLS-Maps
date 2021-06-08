@@ -28,7 +28,8 @@ public class NotesContent {
     /**
      * @return - List<> ITEMS
      */
-    public List<Note> getITEMS() {
+    public List<Note> getITEMS(Context act) {
+        readlist(act);
         return ITEMS;
     }
 
