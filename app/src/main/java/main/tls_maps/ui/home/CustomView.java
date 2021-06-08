@@ -10,12 +10,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.VelocityTracker;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.view.MotionEventCompat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -35,6 +35,8 @@ import main.tls_maps.map.Map;
 import main.tls_maps.map.Vector2;
 import main.tls_maps.map.Wall;
 import main.tls_maps.map.WayPoint;
+
+import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class CustomView extends View {
 
@@ -57,9 +59,9 @@ public class CustomView extends View {
 
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
-
-    private float YOffset, XOffset;
-    int Height, Width;
+    private float mLastTouchX;
+    private float mLastTouchY;
+    private float mPosX, mPosY;
 
     public CustomView(Context context) {
         super(context);
@@ -79,7 +81,7 @@ public class CustomView extends View {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(context);
     }
 
     private Map getMapAtLevel(int level) {
@@ -95,9 +97,6 @@ public class CustomView extends View {
     }
 
     private void init(Context context) {
-
-        Height = this.getHeight();
-        Width = this.getWidth();
 
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
@@ -208,65 +207,87 @@ public class CustomView extends View {
         CurrentMap = getMapAtLevel(Level);
     }
 
-    private VelocityTracker mVelocityTracker = null;
+    private int mActivePointerId = INVALID_POINTER_ID;
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int index = event.getActionIndex();
-        int action = event.getActionMasked();
-        int pointerId = event.getPointerId(index);
+    public boolean onTouchEvent(MotionEvent ev) {
 
-        switch(action) {
-            case MotionEvent.ACTION_DOWN:
-                if(mVelocityTracker == null) {
-                    // Retrieve a new VelocityTracker object to watch the
-                    // velocity of a motion.
-                    mVelocityTracker = VelocityTracker.obtain();
-                }
-                else {
-                    // Reset the velocity tracker back to its initial state.
-                    mVelocityTracker.clear();
-                }
-                // Add a user's movement to the tracker.
-                mVelocityTracker.addMovement(event);
-                break;
 
-        if(event.getPointerCount() >= 2){
-            this.XOffset = event.getX(0)-event.getY(0);
-            this.YOffset = event.getX(1)-event.getY(1);
-            Log.d("TAG", "onTouchEvent: X: " + this.XOffset + "  Y: " + this.YOffset);
-            ScaleDetector.onTouchEvent(event);
+            if(ev.getPointerCount() >= 2) {
+                ScaleDetector.onTouchEvent(ev);
+                return true;
+            }
+
+            final int action = ev.getAction();
+
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
+                    final float x = ev.getX();
+                    final float y = ev.getY();
+
+                    // Remember where we started (for dragging)
+                    mLastTouchX = x;
+                    mLastTouchY = y;
+                    // Save the ID of this pointer (for dragging)
+                    mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                    break;
+                }
+
+                case MotionEvent.ACTION_MOVE: {
+                    // Find the index of the active pointer and fetch its position
+                    final int pointerIndex =
+                            MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+
+                    final float x = MotionEventCompat.getX(ev, pointerIndex);
+                    final float y = MotionEventCompat.getY(ev, pointerIndex);
+
+                    // Calculate the distance moved
+                    final float dx = x - mLastTouchX;
+                    final float dy = y - mLastTouchY;
+
+                    mPosX += dx;
+                    mPosY += dy;
+
+                    invalidate();
+
+                    // Remember this touch position for the next move event
+                    mLastTouchX = x;
+                    mLastTouchY = y;
+
+                    break;
+                }
+
+                case MotionEvent.ACTION_UP: {
+                    mActivePointerId = INVALID_POINTER_ID;
+                    break;
+                }
+
+                case MotionEvent.ACTION_CANCEL: {
+                    mActivePointerId = INVALID_POINTER_ID;
+                    break;
+                }
+
+                case MotionEvent.ACTION_POINTER_UP: {
+
+                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                    final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+
+                    if (pointerId == mActivePointerId) {
+                        // This was our active pointer going up. Choose a new
+                        // active pointer and adjust accordingly.
+                        final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                        mLastTouchX = MotionEventCompat.getX(ev, newPointerIndex);
+                        mLastTouchY = MotionEventCompat.getY(ev, newPointerIndex);
+                        mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                    }
+                    break;
+                }
+            }
             return true;
-        }
-
-        switch (action) {
-            case MotionEvent.ACTION_MOVE:
-                mVelocityTracker.addMovement(event);
-                // When you want to determine the velocity, call
-                // computeCurrentVelocity(). Then call getXVelocity()
-                // and getYVelocity() to retrieve the velocity for each pointer ID.
-                mVelocityTracker.computeCurrentVelocity(1000);
-                // Log velocity of pixels per second
-                // Best practice to use VelocityTrackerCompat where possible.
-                //Log.d("", "X velocity: " + mVelocityTracker.getXVelocity(pointerId));
-                //Log.d("", "Y velocity: " + mVelocityTracker.getYVelocity(pointerId));
-                Vector2 Velocity = new Vector2(mVelocityTracker.getXVelocity(),mVelocityTracker.getYVelocity());
-                Position = Position.sub(Velocity.div(50).clamp(200,-200).Transform(-GlobRotation));
-                //Log.d("Position Debug","Position at: " + Position.ToString()+ " with a last Velocity of: " + Velocity.ToString());
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                // Return a VelocityTracker object back to be re-used by others.
-                mVelocityTracker.recycle();
-                this.XOffset = event.getX(0) + this.Width;
-                this.YOffset = event.getY(0) + ;
-                break;
-        }
-        return true;
     }
 
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
-        Vector2 screenMiddle = new Vector2(getWidth()/2+XOffset,getHeight()/2+YOffset);
+        Vector2 screenMiddle = new Vector2(mPosX,mPosY);
         topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
         topRight = topRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
         bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
@@ -331,8 +352,13 @@ public class CustomView extends View {
         super.onDraw(canvas);
     }
 
-    private class ScaleListener
-            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        public boolean onRotate() {
+
+            return true;
+        }
+
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             Scale *= detector.getScaleFactor();
@@ -346,4 +372,5 @@ public class CustomView extends View {
     }
 
     // TODO - Hand Movements for scaling, rotation | -Add a better Rotation
-}
+
+    }
