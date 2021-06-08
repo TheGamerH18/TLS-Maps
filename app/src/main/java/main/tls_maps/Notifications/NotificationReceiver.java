@@ -8,7 +8,8 @@ import android.widget.Toast;
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String message = intent.getStringExtra("NoteID");
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        int noteID = intent.getIntExtra("NoteID", -1);
+        if(noteID == -1) return;
+        Toast.makeText(context, ""+noteID, Toast.LENGTH_LONG).show();
     }
 }
