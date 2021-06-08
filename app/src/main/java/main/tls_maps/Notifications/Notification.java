@@ -29,6 +29,7 @@ public class Notification {
 
         Intent broadcastIntent = new Intent(context, NotificationReceiver.class);
         broadcastIntent.putExtra("NoteID", NoteID);
+        broadcastIntent.addCategory("NOTES");
         PendingIntent actionIntent = PendingIntent.getBroadcast(context,
                 this.UID,
                 broadcastIntent,
