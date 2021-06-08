@@ -27,9 +27,11 @@ import java.util.List;
 public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecyclerViewAdapter.ViewHolder> {
 
     private final List<Note> mValues;
+    private NotesFragment fragment;
 
-    public NotesRecyclerViewAdapter(List<Note> items) {
+    public NotesRecyclerViewAdapter(List<Note> items, NotesFragment frag) {
         mValues = items;
+        fragment = frag;
     }
 
     @Override
