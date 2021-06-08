@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
 import android.view.View;
 
@@ -52,21 +53,27 @@ public class CustomView extends View {
     private final int MinLevel = 0;
     private final int MaxLevel = 2;
 
+    private ScaleGestureDetector ScaleDetector;
+
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
+
+
+    private float YOffset, XOffset;
+    int Height, Width;
 
     public CustomView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -87,7 +94,13 @@ public class CustomView extends View {
         return levelMap;
     }
 
-    private void init() {
+    private void init(Context context) {
+
+        Height = this.getHeight();
+        Width = this.getWidth();
+
+        ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+
         Paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i = 0; i<= MaxLevel; i++) {
@@ -217,6 +230,16 @@ public class CustomView extends View {
                 // Add a user's movement to the tracker.
                 mVelocityTracker.addMovement(event);
                 break;
+
+        if(event.getPointerCount() >= 2){
+            this.XOffset = event.getX(0)-event.getY(0);
+            this.YOffset = event.getX(1)-event.getY(1);
+            Log.d("TAG", "onTouchEvent: X: " + this.XOffset + "  Y: " + this.YOffset);
+            ScaleDetector.onTouchEvent(event);
+            return true;
+        }
+
+        switch (action) {
             case MotionEvent.ACTION_MOVE:
                 mVelocityTracker.addMovement(event);
                 // When you want to determine the velocity, call
@@ -235,13 +258,15 @@ public class CustomView extends View {
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.
                 mVelocityTracker.recycle();
+                this.XOffset = event.getX(0) + this.Width;
+                this.YOffset = event.getY(0) + ;
                 break;
         }
         return true;
     }
 
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
-        Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+        Vector2 screenMiddle = new Vector2(getWidth()/2+XOffset,getHeight()/2+YOffset);
         topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
         topRight = topRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
         bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
@@ -259,7 +284,7 @@ public class CustomView extends View {
     private void drawLine(Vector2 position, Vector2 size, double rotation, String color, Canvas canvas) {
 
         position = position.mul(Scale);
-        size = new Vector2(10,size.mul(Scale).y);
+        size = new Vector2(4,size.mul(Scale).y);
 
         Vector2 topRight = position.add(size.mul(0.5).Transform(rotation));
         Vector2 bottomLeft = position.add(size.mul(-0.5).Transform(rotation));
@@ -300,8 +325,24 @@ public class CustomView extends View {
 
         drawMap(canvas, CurrentMap);
 
+
+
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
+    }
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            Scale *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            Scale = Math.max(0.25f, Math.min(Scale, 2.0f));
+
+            invalidate();
+            return true;
+        }
     }
 
     // TODO - Hand Movements for scaling, rotation | -Add a better Rotation

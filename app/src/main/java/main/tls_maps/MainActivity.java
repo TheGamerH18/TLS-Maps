@@ -2,38 +2,44 @@ package main.tls_maps;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import main.tls_maps.Notifications.ScheduleNotification;
-import main.tls_maps.databinding.ActivityMainBinding;
-import main.tls_maps.databinding.FragmentHomeBinding;
-import main.tls_maps.databinding.FragmentAddNoteBinding;
+
+import com.google.android.material.navigation.NavigationView;
+
 import main.tls_maps.NoteItems.NotesContent;
+import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentAddNoteBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     public static NotesContent notes;
 
+
+
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     FragmentAddNoteBinding overMenuAddNote;
     InputMethodManager imm;
+    public static DisplayMetrics displayMetrics;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         notes = new NotesContent(getApplicationContext());
         super.onCreate(savedInstanceState);
+
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -67,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        new ScheduleNotification("Test", this);
-        new ScheduleNotification("TEst 2", System.currentTimeMillis()+30000, this);
     }
 
     @Override
