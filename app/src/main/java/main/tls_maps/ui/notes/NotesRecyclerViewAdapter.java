@@ -64,6 +64,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         public final ImageButton mBtnViewReminder;
         public final LinearLayout mFrameView;
         public Note mItem;
+        private Calendar cl;
 
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
@@ -116,10 +117,16 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     true);
             tpd.show(fragment.getChildFragmentManager(), "test");
             tpd.dismissOnPause(true);
+            cl.set(Calendar.YEAR, year);
+            cl.set(Calendar.MONTH, monthOfYear);
+            cl.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         }
 
         @Override
         public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+            cl.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cl.set(Calendar.MINUTE, minute);
+            cl.set(Calendar.SECOND, second);
         }
     }
 }
