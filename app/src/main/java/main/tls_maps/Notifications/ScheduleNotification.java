@@ -32,7 +32,11 @@ public class ScheduleNotification {
         notificationIntent.putExtra("Notification" , msg);
 
         // Create The Pending
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, UID , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                UID ,
+                notificationIntent ,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT
+        );
         // Create the Alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
