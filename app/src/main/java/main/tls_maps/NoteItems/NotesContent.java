@@ -46,11 +46,10 @@ public class NotesContent {
 
     /**
      * Removes an Item from the List ITEMS
-     * @param Nummer - Index of the Item to delete
      * @param context - Context of Application
+     * @param id - Index of the Item to delete
      */
-    public void removeItem(String Nummer, Context context) {
-        int id = Integer.parseInt(Nummer);
+    public void removeItem(Context context, int id) {
         System.out.println(ITEMS.toString());
         ITEMS.remove(id);
         System.out.println(ITEMS.toString());
