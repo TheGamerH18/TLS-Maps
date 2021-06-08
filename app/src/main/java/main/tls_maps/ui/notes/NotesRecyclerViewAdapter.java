@@ -39,7 +39,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         return new ViewHolder(FragmentNotesBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
@@ -68,6 +67,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
         public ViewHolder(FragmentNotesBinding binding) {
             super(binding.getRoot());
+            cl = Calendar.getInstance();
             mFrameView = binding.NoteFrame;
             mId = binding.itemNumber;
             mContentView = binding.content;
@@ -139,6 +139,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             cl.set(Calendar.HOUR_OF_DAY, hourOfDay);
             cl.set(Calendar.MINUTE, minute);
             cl.set(Calendar.SECOND, second);
+            createNotification(view.getView());
         }
     }
 }
