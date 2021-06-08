@@ -27,7 +27,7 @@ public class NotificationTimer extends BroadcastReceiver {
         String msg = intent.getStringExtra("Notification");
 
         // Get the UID | Or get a Fallback UID
-        int uid = intent.getIntExtra("UID", ((int) System.currentTimeMillis()));
+        int uid = intent.getIntExtra("UID", (int) System.currentTimeMillis());
 
         // Create the Notification
         Notification notification = new Notification(msg, context, uid);
