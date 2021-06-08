@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
 import org.jetbrains.annotations.NotNull;
 
 import main.tls_maps.MainActivity;
@@ -53,7 +56,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
         public final TextView mContentView;
         public final TextView mId;
         public final ImageButton mBtnView;
@@ -95,6 +98,14 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
+        }
+
+        @Override
+        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        }
+
+        @Override
+        public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         }
     }
 }
