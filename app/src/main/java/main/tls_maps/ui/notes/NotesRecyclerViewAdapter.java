@@ -79,7 +79,9 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                             notifyDataSetChanged();
                         }
                     };
-                    Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG).setBackgroundTint(Color.rgb(40,40,40)).setAction("Ja", delete).show();
+                    Snackbar.make(v, "Wollen sie diese Notiz Löschen?", Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(Color.rgb(40,40,40))
+                            .setAction("Ja", delete).show();
                 }
             });
             mBtnViewReminder.setOnClickListener(new View.OnClickListener() {
