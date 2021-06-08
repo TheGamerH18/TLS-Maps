@@ -29,7 +29,10 @@ public class Notification {
 
         Intent broadcastIntent = new Intent(context, NotificationReceiver.class);
         broadcastIntent.putExtra("NoteID", NoteID);
-        PendingIntent actionIntent = PendingIntent.getBroadcast(context, this.UID, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(context,
+                this.UID,
+                broadcastIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create Notification
         builder = createBuilder(context, msg);
