@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 public class NotificationTimer extends BroadcastReceiver {
 
+    private Notification notification;
+
     /**
      * Empty Constructor for the Init of the Receiver
      * for {@link ScheduleNotification}
@@ -29,8 +31,14 @@ public class NotificationTimer extends BroadcastReceiver {
         // Get the UID | Or get a Fallback UID
         int uid = intent.getIntExtra("UID", (int) System.currentTimeMillis());
 
-        // Create the Notification
-        Notification notification = new Notification(msg, context, uid);
+        int noteID = intent.getIntExtra("NoteID", -1);
+
+        if(noteID == -1) {
+            // Create the Notification, without
+            notification = new Notification(msg, context, uid);
+        } else {
+            notification = new Notification(context, msg, uid, noteID);
+        }
 
         // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
