@@ -79,7 +79,8 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     View.OnClickListener delete = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MainActivity.notes.removeItem(""+mId.getText(), v.getContext());
+                            MainActivity.notes.removeItem(v.getContext(),
+                                    Integer.parseInt(""+mId.getText()));
                             notifyDataSetChanged();
                         }
                     };
