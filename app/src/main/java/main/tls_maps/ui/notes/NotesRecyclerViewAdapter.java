@@ -102,6 +102,17 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             });
         }
 
+        private void createNotification(View v) {
+            if(cl.getTimeInMillis() >= System.currentTimeMillis()) {
+                new ScheduleNotification(v.getContext(),
+                        mContentView.getText().toString(),
+                        cl.getTimeInMillis(),
+                        Integer.parseInt(mId.getText().toString())
+                );
+            }
+            System.out.println(cl.getTimeInMillis() + " " + System.currentTimeMillis());
+        }
+
         @NotNull
         @Override
         public String toString() {
