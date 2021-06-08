@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import org.jetbrains.annotations.NotNull;
 
 import main.tls_maps.MainActivity;
 import main.tls_maps.NoteItems.NotesContent;
@@ -92,6 +93,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             });
         }
 
+        @NotNull
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
