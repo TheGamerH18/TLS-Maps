@@ -42,6 +42,22 @@ public class ScheduleNotification {
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
 
+    public ScheduleNotification (Context context, String msg, long triggerAt, int NoteID) {
+        Intent notificationIntent = new Intent(context, NotificationTimer.class);
+        int uid = getUniqueID();
+        notificationIntent.putExtra("UID", uid);
+        notificationIntent.putExtra("Notification", msg);
+        notificationIntent.putExtra("NoteID", NoteID);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                uid,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT
+                );
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
+    }
+
     // To create a Instant Notification
     public ScheduleNotification (String msg, Context context) {
         this(msg, 0, context);
