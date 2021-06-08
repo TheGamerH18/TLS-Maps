@@ -21,6 +21,7 @@ import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.NoteItems.NotesContent.Note;
 import main.tls_maps.databinding.FragmentNotesBinding;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -89,7 +90,13 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             mBtnViewReminder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Calendar now = Calendar.getInstance();
+                    DatePickerDialog dpd = DatePickerDialog.newInstance(ViewHolder.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH));
+                    dpd.show(fragment.getChildFragmentManager(), "test");
+                    dpd.dismissOnPause(true);
                 }
             });
         }
@@ -102,6 +109,13 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
         @Override
         public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(ViewHolder.this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    true);
+            tpd.show(fragment.getChildFragmentManager(), "test");
+            tpd.dismissOnPause(true);
         }
 
         @Override
