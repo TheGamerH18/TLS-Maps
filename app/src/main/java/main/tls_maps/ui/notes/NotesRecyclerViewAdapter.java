@@ -10,20 +10,21 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
+import java.util.List;
+
 import main.tls_maps.MainActivity;
-import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.NoteItems.NotesContent.Note;
 import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.FragmentNotesBinding;
-
-import java.util.Calendar;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Note}.

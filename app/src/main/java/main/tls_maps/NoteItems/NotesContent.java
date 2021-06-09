@@ -2,6 +2,8 @@ package main.tls_maps.NoteItems;
 
 import android.content.Context;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

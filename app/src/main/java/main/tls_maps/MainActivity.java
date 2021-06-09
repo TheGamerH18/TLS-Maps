@@ -1,24 +1,27 @@
 package main.tls_maps;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import main.tls_maps.Notifications.ScheduleNotification;
-import main.tls_maps.databinding.ActivityMainBinding;
-import main.tls_maps.databinding.FragmentHomeBinding;
-import main.tls_maps.databinding.FragmentAddNoteBinding;
+
+import com.google.android.material.navigation.NavigationView;
+
 import main.tls_maps.NoteItems.NotesContent;
+import main.tls_maps.databinding.ActivityMainBinding;
+import main.tls_maps.databinding.FragmentAddNoteBinding;
 
 public class MainActivity extends AppCompatActivity {
 
