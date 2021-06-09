@@ -247,6 +247,7 @@ public class CustomView extends View {
 
                 case MotionEvent.ACTION_MOVE: {
 
+                    // get the Coordinates
                     final float x = ev.getX();
                     final float y = ev.getY();
 
@@ -254,6 +255,7 @@ public class CustomView extends View {
                     final float dx = x - LastTouchX;
                     final float dy = y - LastTouchY;
 
+                    // Set the Pos
                     PosX += dx;
                     PosY += dy;
 
@@ -278,13 +280,12 @@ public class CustomView extends View {
 
                 case MotionEvent.ACTION_POINTER_UP: {
 
-                    final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                    final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+                    final int pointerId = ev.getActionIndex();
 
                     if (pointerId == ActivePointerId) {
                         // This was our active pointer going up. Choose a new
                         // active pointer and adjust accordingly.
-                        final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                        final int newPointerIndex = pointerId == 0 ? 1 : 0;
                         LastTouchX = MotionEventCompat.getX(ev, newPointerIndex);
                         LastTouchY = MotionEventCompat.getY(ev, newPointerIndex);
                         ActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
