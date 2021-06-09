@@ -28,13 +28,13 @@ public class NotificationTimer extends BroadcastReceiver {
         // Get the UID | Or get a Fallback UID
         int uid = intent.getIntExtra("UID", (int) System.currentTimeMillis());
 
-        int noteID = intent.getIntExtra("NoteID", -1);
+        int noteUID = intent.getIntExtra("NoteUID", -1);
 
-        if(noteID == -1) {
+        if(noteUID == -1) {
             // Create the Notification, without
             notification = new Notification(msg, context, uid);
         } else {
-            notification = new Notification(context, msg, uid, noteID);
+            notification = new Notification(context, msg, uid, noteUID);
         }
 
         // Create the Notification Manager

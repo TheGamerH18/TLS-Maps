@@ -1,7 +1,5 @@
 package main.tls_maps.ui.notes;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,8 +47,9 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).content);
-        holder.mId.setText(mValues.get(position).id);
-        mValues.get(position).id = ""+ position;
+        holder.mId.setText(""+mValues.get(position).getId());
+        holder.UID = mValues.get(position).getUid();
+        mValues.get(position).setId(position);
     }
 
     @Override
@@ -61,6 +60,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     public class ViewHolder extends RecyclerView.ViewHolder implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
         public final TextView mContentView;
         public final TextView mId;
+        public int UID;
         public final ImageButton mBtnView;
         public final ImageButton mBtnViewReminder;
         public final LinearLayout mFrameView;
@@ -81,8 +81,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     View.OnClickListener delete = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MainActivity.notes.removeItem(v.getContext(),
-                                    Integer.parseInt(""+mId.getText()));
+                            MainActivity.notes.removeItem(v.getContext(), UID);
                             notifyDataSetChanged();
                         }
                     };
@@ -110,7 +109,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                 new ScheduleNotification(v.getContext(),
                         mContentView.getText().toString(),
                         cl.getTimeInMillis(),
-                        Integer.parseInt(mId.getText().toString())
+                       UID
                 );
             }
             System.out.println(cl.getTimeInMillis() + " " + System.currentTimeMillis());

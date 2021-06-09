@@ -42,12 +42,12 @@ public class ScheduleNotification {
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
 
-    public ScheduleNotification (Context context, String msg, long triggerAt, int NoteID) {
+    public ScheduleNotification (Context context, String msg, long triggerAt, int NoteUID) {
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
         int uid = getUniqueID();
         notificationIntent.putExtra("UID", uid);
         notificationIntent.putExtra("Notification", msg);
-        notificationIntent.putExtra("NoteID", NoteID);
+        notificationIntent.putExtra("NoteUID", NoteUID);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 uid,

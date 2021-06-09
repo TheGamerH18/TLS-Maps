@@ -42,23 +42,23 @@ public class NotesContent {
      */
     public void addItem(String content, Context context) {
         int id = ITEMS.size();
-        ITEMS.add(new Note(content, id));
+        ITEMS.add(new Note(content, id, getUniqueID()));
         writelist(context);
     }
 
     /**
      * Removes an Item from the List ITEMS
      * @param context - Context of Application
-     * @param id - Index of the Item to delete
+     * @param uid - Index of the Item to delete
      */
-    public void removeItem(Context context, int id) {
-        System.out.println(ITEMS.toString());
-        ITEMS.remove(id);
-        System.out.println(ITEMS.toString());
-        System.out.println(ITEMS.size());
-        for(int i = 0; i < ITEMS.size(); i ++) {
-            ITEMS.get(i).id = ""+i;
-        }
+    public void removeItem(Context context, int uid) {
+        int id = -1;
+        for (Note note: ITEMS)
+            if (note.getUid() == uid) id = note.getId();
+        if(id != -1) ITEMS.remove(id);
+
+        for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
+
         writelist(context);
     }
 
@@ -89,21 +89,39 @@ public class NotesContent {
         }
     }
 
+    private int getUniqueID() {
+        return (int) (System.currentTimeMillis() < 0 ?-(System.currentTimeMillis()):System.currentTimeMillis());
+    }
+
     /**
      * A Note containing, the content and a id
      */
     public static class Note implements Serializable{
         public final String content;
-        public String id;
+        private int id;
+        private final int uid;
 
         /**
          * Constructor
          * @param content - Content of Note
          * @param id - ID of Note
          */
-        public Note(String content, int id) {
+        public Note(String content, int id, int uid) {
             this.content = content;
-            this.id = ""+id;
+            this.id = id;
+            this.uid = uid;
+        }
+
+        public int getUid() {
+            return uid;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
         }
 
         @Override

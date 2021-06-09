@@ -20,13 +20,14 @@ public class Notification {
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
-    public Notification(Context context, String msg, int UID, int NoteID) {
+    public Notification(Context context, String msg, int UID, int NoteUID) {
         this.UID = UID;
         NotificationChannel(context);
         notificationManager = NotificationManagerCompat.from(context);
 
         Intent broadcastIntent = new Intent(context, NotificationReceiver.class);
-        broadcastIntent.putExtra("NoteID", NoteID);
+        broadcastIntent.putExtra("UID", this.UID);
+        broadcastIntent.putExtra("NoteUID", NoteUID);
         broadcastIntent.addCategory("NOTES");
         PendingIntent actionIntent = PendingIntent.getBroadcast(context,
                 this.UID,

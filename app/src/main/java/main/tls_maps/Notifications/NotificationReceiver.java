@@ -12,9 +12,18 @@ import main.tls_maps.NoteItems.NotesContent;
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        int noteID = intent.getIntExtra("NoteID", -1);
+        System.out.println(intent.getCategories());
+        int noteID = intent.getIntExtra("NoteUID", -1);
+        int UID = intent.getIntExtra("UID", -1);
         if(noteID == -1) return;
-        MainActivity.notes.removeItem(context, noteID);
-        Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show();
+        if(UID == -1) return;
+        try {
+            MainActivity.notes.removeItem(context, noteID);
+        } catch (Exception e) {
+            NotesContent notes = new NotesContent(context);
+            notes.removeItem(context, noteID);
+        }
+        NotificationManagerCompat NM = NotificationManagerCompat.from(context);
+        NM.cancel(UID);
     }
 }
