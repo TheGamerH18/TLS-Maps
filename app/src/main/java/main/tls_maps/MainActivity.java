@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        notes = new NotesContent(getApplicationContext());
         super.onCreate(savedInstanceState);
 
+        notes = new NotesContent(getApplicationContext());
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
