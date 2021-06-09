@@ -221,6 +221,16 @@ public class CustomView extends View {
                  * einfach Offsets nehmen
                  */
 
+                double   distance = Math.sqrt((Math.pow(ev.getX(0)-ev.getX(1),2)+Math.pow(ev.getY(0)-ev.getY(1),2))),
+                                r = distance/2,
+                          centerX = (ev.getX(0)+ev.getX(1))/2,
+                          centerY = (ev.getY(0)+ev.getY(1))/2,
+                        centerDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2)+Math.pow(ev.getY(0)-centerY,2))),
+                         punktDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2))),
+                            angle = Math.atan(punktDis/centerDis) * (360/Math.PI);
+
+                this.GlobRotation = angle;
+                Log.d("Rotate", "Dist: " + distance + "  rad: " + r + "  Center: " + centerX + ", " + centerY + "  Winkel: " + angle);
 
                 // Hier wird nach events geprüft
                 ScaleDetector.onTouchEvent(ev);
