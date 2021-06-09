@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import main.tls_maps.MainActivity;
 import main.tls_maps.map.Map;
 import main.tls_maps.map.Vector2;
 import main.tls_maps.map.Wall;
@@ -99,6 +100,9 @@ public class CustomView extends View {
     private void init(Context context) {
 
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+
+        PosY = MainActivity.displayMetrics.heightPixels/2;
+        PosX = MainActivity.displayMetrics.widthPixels/2;
 
         Paint = new Paint();
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
@@ -227,7 +231,7 @@ public class CustomView extends View {
                           centerY = (ev.getY(0)+ev.getY(1))/2,
                         centerDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2)+Math.pow(ev.getY(0)-centerY,2))),
                          punktDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2))),
-                            angle = Math.atan(punktDis/centerDis) * (360/Math.PI);
+                            angle = Math.atan(punktDis/centerDis)*(180);
 
                 this.GlobRotation = angle;
                 Log.d("Rotate", "Dist: " + distance + "  rad: " + r + "  Center: " + centerX + ", " + centerY + "  Winkel: " + angle);
