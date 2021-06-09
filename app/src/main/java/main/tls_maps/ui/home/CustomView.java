@@ -59,9 +59,9 @@ public class CustomView extends View {
 
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
-    private float mLastTouchX;
-    private float mLastTouchY;
-    private float mPosX, mPosY;
+    private float LastTouchX;
+    private float LastTouchY;
+    private float PosX, PosY;
 
     public CustomView(Context context) {
         super(context);
@@ -207,13 +207,22 @@ public class CustomView extends View {
         CurrentMap = getMapAtLevel(Level);
     }
 
-    private int mActivePointerId = INVALID_POINTER_ID;
+    private int ActivePointerId = INVALID_POINTER_ID;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
 
             if(ev.getPointerCount() >= 2) {
+
+                // TODO Rotation - Skalierung zum mittelpunkt von x1,y1 und x2,y2
+                /**
+                 * Bitte das System nicht auf Velocity umstellen, es entstehen dadurch Sprünge
+                 * einfach Offsets nehmen
+                 */
+
+
+                // Hier wird nach events geprüft
                 ScaleDetector.onTouchEvent(ev);
                 return true;
             }
@@ -222,48 +231,48 @@ public class CustomView extends View {
 
             switch (action) {
                 case MotionEvent.ACTION_DOWN: {
+
+                    // get the Coordinates
                     final float x = ev.getX();
                     final float y = ev.getY();
 
                     // Remember where we started (for dragging)
-                    mLastTouchX = x;
-                    mLastTouchY = y;
+                    LastTouchX = x;
+                    LastTouchY = y;
+
                     // Save the ID of this pointer (for dragging)
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                    ActivePointerId = ev.getActionIndex();
                     break;
                 }
 
                 case MotionEvent.ACTION_MOVE: {
-                    // Find the index of the active pointer and fetch its position
-                    final int pointerIndex =
-                            MotionEventCompat.findPointerIndex(ev, mActivePointerId);
 
-                    final float x = MotionEventCompat.getX(ev, pointerIndex);
-                    final float y = MotionEventCompat.getY(ev, pointerIndex);
+                    final float x = ev.getX();
+                    final float y = ev.getY();
 
                     // Calculate the distance moved
-                    final float dx = x - mLastTouchX;
-                    final float dy = y - mLastTouchY;
+                    final float dx = x - LastTouchX;
+                    final float dy = y - LastTouchY;
 
-                    mPosX += dx;
-                    mPosY += dy;
+                    PosX += dx;
+                    PosY += dy;
 
                     invalidate();
 
                     // Remember this touch position for the next move event
-                    mLastTouchX = x;
-                    mLastTouchY = y;
+                    LastTouchX = x;
+                    LastTouchY = y;
 
                     break;
                 }
 
                 case MotionEvent.ACTION_UP: {
-                    mActivePointerId = INVALID_POINTER_ID;
+                    ActivePointerId = INVALID_POINTER_ID;
                     break;
                 }
 
                 case MotionEvent.ACTION_CANCEL: {
-                    mActivePointerId = INVALID_POINTER_ID;
+                    ActivePointerId = INVALID_POINTER_ID;
                     break;
                 }
 
@@ -272,13 +281,13 @@ public class CustomView extends View {
                     final int pointerIndex = MotionEventCompat.getActionIndex(ev);
                     final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
 
-                    if (pointerId == mActivePointerId) {
+                    if (pointerId == ActivePointerId) {
                         // This was our active pointer going up. Choose a new
                         // active pointer and adjust accordingly.
                         final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                        mLastTouchX = MotionEventCompat.getX(ev, newPointerIndex);
-                        mLastTouchY = MotionEventCompat.getY(ev, newPointerIndex);
-                        mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                        LastTouchX = MotionEventCompat.getX(ev, newPointerIndex);
+                        LastTouchY = MotionEventCompat.getY(ev, newPointerIndex);
+                        ActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
                     }
                     break;
                 }
@@ -287,7 +296,7 @@ public class CustomView extends View {
     }
 
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
-        Vector2 screenMiddle = new Vector2(mPosX,mPosY);
+        Vector2 screenMiddle = new Vector2(PosX, PosY);
         topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
         topRight = topRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
         bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
@@ -353,11 +362,6 @@ public class CustomView extends View {
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-
-        public boolean onRotate() {
-
-            return true;
-        }
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
