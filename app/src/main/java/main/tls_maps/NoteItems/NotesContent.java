@@ -17,6 +17,7 @@ import java.util.List;
 public class NotesContent {
 
     private List<Note> ITEMS = new ArrayList<Note>();
+    RecyclerView rv;
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
@@ -25,6 +26,10 @@ public class NotesContent {
      */
     public NotesContent(Context context){
         readlist(context);
+    }
+
+    public void recyclerview(RecyclerView recyclerView) {
+        rv = recyclerView;
     }
 
     /**
@@ -60,6 +65,7 @@ public class NotesContent {
         for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
 
         writelist(context);
+        if(rv.getAdapter() != null) rv.getAdapter().notifyDataSetChanged();
     }
 
     /**

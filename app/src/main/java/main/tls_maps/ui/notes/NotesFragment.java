@@ -73,6 +73,7 @@ public class NotesFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new NotesRecyclerViewAdapter(MainActivity.notes.getITEMS(context), this));
+            MainActivity.notes.recyclerview(recyclerView);
         }
         return view;
     }
