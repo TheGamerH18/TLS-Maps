@@ -116,6 +116,10 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                         cl.getTimeInMillis(),
                        UID
                 );
+            } else {
+                new ScheduleNotification(v.getContext(),
+                        mContentView.getText().toString(),
+                        UID);
             }
             System.out.println(cl.getTimeInMillis() + " " + System.currentTimeMillis());
         }
