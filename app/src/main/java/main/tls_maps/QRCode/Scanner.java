@@ -50,7 +50,8 @@ public class Scanner extends AppCompatActivity {
         super.onResume();
         initialiseDetectorsAndSources();
     }
-
+    
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if(grantResults[0] == PackageManager.PERMISSION_GRANTED) startActivity(getIntent());
     }
