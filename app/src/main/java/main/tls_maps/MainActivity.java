@@ -2,23 +2,23 @@ package main.tls_maps;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.navigation.NavigationView;
+
+import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.Notifications.ScheduleNotification;
 import main.tls_maps.databinding.ActivityMainBinding;
-import main.tls_maps.databinding.FragmentHomeBinding;
 import main.tls_maps.databinding.FragmentAddNoteBinding;
-import main.tls_maps.NoteItems.NotesContent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         overridePendingTransition(0,0);
 
-        NotesContent.init(getApplicationContext());
         notes = new NotesContent(getApplicationContext());
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
