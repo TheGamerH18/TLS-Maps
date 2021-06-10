@@ -111,6 +111,7 @@ public class NotesContent {
         public final String content;
         private int id;
         private final int uid;
+        private final ArrayList<Integer> NotificationUIDs = new ArrayList<>();
 
         /**
          * Constructor
@@ -137,6 +138,38 @@ public class NotesContent {
          */
         public void setId(int id) {
             if(id >= 0) this.id = id;
+        }
+
+        /**
+         * Adds the UID of a Notification to the Note
+         * @param uid - UID of the Notification
+         */
+        public void addNotification(int uid) {
+            if(uid != 0) NotificationUIDs.add(uid);
+        }
+
+        /**
+         * Removes the UID of a Notification from the Note
+         * @param uid - UID of the Notification
+         */
+        public void removeNotification(int uid) {
+            int index = -1;
+            for(int i = 0; i < NotificationUIDs.size(); i ++) {
+                if(NotificationUIDs.get(i) == uid) index = i;
+            }
+            if(index != -1) NotificationUIDs.remove(index);
+        }
+
+        /**
+         * Checks if the UID of the Notification is registered in this Note
+         * @param uid - UID of the Notification
+         * @return true if the UID is registered
+         */
+        public boolean checkNotificationUID(int uid) {
+            for(int UID : NotificationUIDs) {
+                if(UID == uid) return true;
+            }
+            return false;
         }
 
         /**
