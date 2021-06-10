@@ -3,6 +3,7 @@ package main.tls_maps.Notifications;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationManagerCompat;
 
@@ -19,6 +20,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if(UID == -1) return;
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
         NM.cancel(UID);
+        Toast.makeText(context, "Gelöscht", Toast.LENGTH_LONG).show();
         try {
             MainActivity.notes.removeItem(context, noteID);
         } catch (Exception e) {
