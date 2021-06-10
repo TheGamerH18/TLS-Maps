@@ -18,6 +18,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import main.tls_maps.MainActivity;
 import main.tls_maps.R;
 import main.tls_maps.ui.home.HomeFragment;
 
@@ -50,7 +51,12 @@ public class Scanner extends AppCompatActivity {
         initialiseDetectorsAndSources();
     }
 
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED) startActivity(getIntent());
+    }
+
     private void initialiseDetectorsAndSources() {
+        this.
 
         QRCodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
@@ -99,7 +105,7 @@ public class Scanner extends AppCompatActivity {
                         @Override
                         public void run() {
                             HomeFragment.from = barcodes.valueAt(0).rawValue;
-                            startActivity(new Intent(Scanner.this, main.tls_maps.MainActivity.class));
+                            startActivity(new Intent(Scanner.this, MainActivity.class));
                         }
                     });
                 }
