@@ -27,6 +27,7 @@
             android:exported="false" >
         </receiver>
         <receiver android:name=".Notifications.NotificationReceiver" />
+        <receiver android:name=".Notifications.NotificationDeleteReceiver" />
       
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
