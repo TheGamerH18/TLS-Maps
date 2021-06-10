@@ -17,13 +17,13 @@ public class NotificationReceiver extends BroadcastReceiver {
         int UID = intent.getIntExtra("UID", -1);
         if(noteID == -1) return;
         if(UID == -1) return;
+        NotificationManagerCompat NM = NotificationManagerCompat.from(context);
+        NM.cancel(UID);
         try {
             MainActivity.notes.removeItem(context, noteID);
         } catch (Exception e) {
             NotesContent notes = new NotesContent(context);
             notes.removeItem(context, noteID);
         }
-        NotificationManagerCompat NM = NotificationManagerCompat.from(context);
-        NM.cancel(UID);
     }
 }
