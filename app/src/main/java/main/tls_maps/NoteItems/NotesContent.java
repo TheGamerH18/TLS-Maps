@@ -71,10 +71,10 @@ public class NotesContent {
 
     /**
      * Reads the List ITEMS from Filesystem
-     * @param act - Context of Application
+     * @param context - Context of Application
      */
-    private void readlist(Context act) {
-        String ser = SerializeObject.ReadSettings(act, "notes.dat");
+    private void readlist(Context context) {
+        String ser = SerializeObject.ReadSettings(context, "notes.dat");
         if(ser != null && !ser.equalsIgnoreCase("")) {
             Object obj = SerializeObject.stringToObject(ser);
             // Cast in Arraylist
@@ -87,12 +87,12 @@ public class NotesContent {
 
     /**
      * Writes List ITEMS to Filesystem
-     * @param act - Context of Application
+     * @param context - Context of Application
      */
-    private void writelist(Context act) {
+    public void writelist(Context context) {
         String ser = SerializeObject.objectToString((Serializable) ITEMS);
         if(ser != null && !ser.equalsIgnoreCase("")) {
-            SerializeObject.WriteSettings(act, ser, "notes.dat");
+            SerializeObject.WriteSettings(context, ser, "notes.dat");
         }
     }
 
