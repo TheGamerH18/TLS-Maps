@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,8 +13,6 @@ import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.view.MotionEventCompat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -58,7 +55,7 @@ public class CustomView extends View {
 
     private ScaleGestureDetector ScaleDetector;
 
-    private ArrayList<Map> Maps = new ArrayList<Map>(3);
+    private ArrayList<Map> Maps = new ArrayList<>(3);
 
     private float LastTouchX;
     private float LastTouchY;
@@ -76,12 +73,6 @@ public class CustomView extends View {
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
@@ -236,6 +227,11 @@ public class CustomView extends View {
                 this.GlobRotation = angle;
                 Log.d("Rotate", "Dist: " + distance + "  rad: " + r + "  Center: " + centerX + ", " + centerY + "  Winkel: " + angle);
 
+                PosX += (float)centerX - LastTouchX;
+                PosY += (float)centerY - LastTouchY;
+
+                LastTouchX = (float)centerX;
+                LastTouchY = (float)centerY;
                 // Hier wird nach events geprüft
                 ScaleDetector.onTouchEvent(ev);
                 return true;
@@ -300,9 +296,9 @@ public class CustomView extends View {
                         // This was our active pointer going up. Choose a new
                         // active pointer and adjust accordingly.
                         final int newPointerIndex = pointerId == 0 ? 1 : 0;
-                        LastTouchX = MotionEventCompat.getX(ev, newPointerIndex);
-                        LastTouchY = MotionEventCompat.getY(ev, newPointerIndex);
-                        ActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                        LastTouchX = ev.getX();
+                        LastTouchY = ev.getY();
+                        ActivePointerId = ev.getPointerId(newPointerIndex);
                     }
                     break;
                 }
@@ -317,13 +313,12 @@ public class CustomView extends View {
         bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
         bottomRight = bottomRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
 
-        float[] verts = {
+        return new float[] {
                 (float) topLeft.x, (float) topLeft.y,
                 (float) bottomRight.x, (float) bottomRight.y,
                 (float) bottomLeft.x, (float) bottomLeft.y,
                 (float) topRight.x, (float) topRight.y,
         };
-        return verts;
     }
 
     private void drawLine(Vector2 position, Vector2 size, double rotation, String color, Canvas canvas) {
@@ -336,11 +331,21 @@ public class CustomView extends View {
         Vector2 topLeft = position.add(new Vector2(-size.x/2,size.y/2).Transform(rotation));
         Vector2 bottomRight = position.add(new Vector2(size.x/2,-size.y/2).Transform(rotation));
 
-        float[] verts = getCameraOffset(topLeft,topRight,bottomRight,bottomLeft);
         int colorWanted = getColor(color);
-        int[] colors = {colorWanted,colorWanted,colorWanted,colorWanted};
-        short[] indices = {0,2,1,0,3,1};
-        canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,8,verts,0, null,0,colors,0,indices,0,6, Paint);
+
+        // Draw a Triangle on the Canvas
+        canvas.drawVertices(Canvas.VertexMode.TRIANGLE_STRIP,
+                8,
+                getCameraOffset(topLeft,topRight,bottomRight,bottomLeft),
+                0,
+                null,
+                0,
+                new int[] {colorWanted,colorWanted,colorWanted,colorWanted},
+                0,
+                new short[] {0,2,1,0,3,1},
+                0,
+                6,
+                Paint);
         postInvalidate();
     }
 
