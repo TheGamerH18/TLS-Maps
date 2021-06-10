@@ -14,8 +14,33 @@ public class AStar {
         waypoints.add(wayPoint);
     }
 
+
+
     public ArrayList<WayPoint> CalculateRoute(WayPoint Location,WayPoint Goal) {
         ArrayList<WayPoint> route = new ArrayList<WayPoint>();
+        route.add(Location);
+
+        ArrayList<WayPoint> points = new ArrayList<>();
+
+        ArrayList<WayPoint> currentNodes = new ArrayList<WayPoint>();
+        boolean reachedgoal = false;
+
+        while (reachedgoal!=true) {
+            ArrayList<WayPoint> nextNodes = new ArrayList<WayPoint>();
+
+            for (int count=0;count<currentNodes.size();count++){
+                WayPoint tempNode = currentNodes.get(count);
+                ArrayList<WayPoint> neighbourNodes = tempNode.getNeighbourPoints();
+                nextNodes.addAll(neighbourNodes);
+                if (tempNode == Goal) {
+                    reachedgoal = true;
+                    break;
+                }
+            }
+
+
+
+        }
 
 
         return route;

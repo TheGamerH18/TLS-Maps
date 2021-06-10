@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import main.tls_maps.map.AStar;
 import main.tls_maps.map.Map;
 import main.tls_maps.map.Vector2;
 import main.tls_maps.map.Wall;
@@ -46,32 +47,38 @@ public class CustomView extends View {
     private int Level = 0;
 
     private Vector2 Position = new Vector2();
-    private double Scale = .5;
+    private double Scale = 1;
     private double GlobRotation = 0;
 
     private final int MinLevel = 0;
     private final int MaxLevel = 2;
 
+    private final AStar astar;
+
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
     public CustomView(Context context) {
         super(context);
+        astar = new AStar();
         init();
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        astar = new AStar();
         init();
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        astar = new AStar();
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        astar = new AStar();
         init();
     }
 
@@ -89,6 +96,7 @@ public class CustomView extends View {
 
     private void init() {
         Paint = new Paint();
+
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i = 0; i<= MaxLevel; i++) {
             Map newLevelMap = new Map(i);
@@ -97,12 +105,13 @@ public class CustomView extends View {
         }
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
+        //BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(10000,1),0,"CYAN"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
+        CurrentMap.addWayPoint(new WayPoint("2204",new Vector2(500,5),0));
         //Log.d("Test",""+String.valueOf(R.));
         for(String MapName : MAPNAMES){
             ReadFile(MapName+".xml");
@@ -284,7 +293,11 @@ public class CustomView extends View {
     private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints) {
         for (int i=0;i<wayPoints.size();i++) {
             WayPoint currentWayPoint = wayPoints.get(i);
-            canvas.drawCircle(200,200,50,Paint);
+            Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+            Vector2 waypointpos = currentWayPoint.position.sub(Position).add(screenMiddle);
+            Paint otherpaint = new Paint();
+            otherpaint.setARGB(255,0,0,255);
+            canvas.drawCircle((float) waypointpos.x,(float) waypointpos.y,50,otherpaint);
         }
     }
 
@@ -293,12 +306,12 @@ public class CustomView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         drawMap(canvas, BackGround);
-
+        drawMap(canvas, CurrentMap);
         if (WayPointDebug) {
             //drawWayPoints();
+            drawWayPoints(canvas,CurrentMap.WayPointsOnMap);
         }
 
-        drawMap(canvas, CurrentMap);
 
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
