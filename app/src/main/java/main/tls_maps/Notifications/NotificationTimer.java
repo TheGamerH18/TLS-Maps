@@ -40,6 +40,7 @@ public class NotificationTimer extends BroadcastReceiver {
         // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
         // send the Notification
-        NM.notify(uid ,notification.getNotification());
+        try {NM.notify(uid ,notification.getNotification());}
+        catch (Exception ignored){}
     }
 }
