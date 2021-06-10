@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import main.tls_maps.MainActivity;
+import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.R;
 
 public class Notification {
@@ -29,6 +30,7 @@ public class Notification {
      */
     public Notification(Context context, String msg, int UID, int NoteUID) {
         this.UID = UID;
+        if(!CheckUID(context, this.UID, NoteUID)) return;
         NotificationChannel(context);
         notificationManager = NotificationManagerCompat.from(context);
 
@@ -117,6 +119,18 @@ public class Notification {
     private PendingIntent contentIntent(Context context) {
         Intent activityintent = new Intent(context, MainActivity.class);
         return PendingIntent.getActivity(context, this.UID, activityintent, 0);
+    }
+
+    /**
+     * Checks if the Notification is still registered in the Note
+     * @param context - Context of Application
+     * @param UID - UID of Notification
+     * @param NoteUID - UID of the Note
+     * @return true if the Notification exists
+     */
+    private boolean CheckUID(Context context, int UID, int NoteUID) {
+        NotesContent notesContent = new NotesContent(context);
+        return notesContent.getbyUID(context, NoteUID).checkNotificationUID(UID);
     }
 
     /**
