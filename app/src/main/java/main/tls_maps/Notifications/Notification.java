@@ -32,6 +32,14 @@ public class Notification {
         NotificationChannel(context);
         notificationManager = NotificationManagerCompat.from(context);
 
+        Intent deleteIntent = new Intent(context, NotificationDeleteReceiver.class);
+        deleteIntent.putExtra("UID", this.UID);
+        deleteIntent.putExtra("NoteUID", NoteUID);
+        PendingIntent pendingdeleteIntent = PendingIntent.getBroadcast(context,
+                this.UID,
+                deleteIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         Intent broadcastIntent = new Intent(context, NotificationReceiver.class);
         broadcastIntent.putExtra("UID", this.UID);
         broadcastIntent.putExtra("NoteUID", NoteUID);
@@ -44,6 +52,7 @@ public class Notification {
         // Create Notification
         builder = createBuilder(context, msg);
         builder.addAction(R.mipmap.ic_launcher, "Löschen", actionIntent);
+        builder.setDeleteIntent(pendingdeleteIntent);
     }
 
     /**
