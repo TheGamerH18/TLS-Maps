@@ -1,6 +1,6 @@
 package main.tls_maps.ui.home;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,16 +10,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import main.tls_maps.databinding.FragmentHomeBinding;
+
 // import com.google.android.gms.vision.CameraSource;
 // import com.google.android.gms.vision.barcode.Barcode;
 // import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-import main.tls_maps.databinding.FragmentHomeBinding;
-
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
+    public static String from;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.start.setText(from);
 
         binding.floatingActionButtonUp.setOnClickListener(new View.OnClickListener() {
 
@@ -76,31 +77,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1)
-                    return;
-               /* BarcodeDetector detector;
-                detector = new BarcodeDetector.Builder(v.getContext())
-                        .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
-                        .build();
-
-                CameraSource cameraSource = new CameraSource.Builder(v.getContext(), detector)
-                        .setRequestedPreviewSize(1920, 1080)
-                        .setAutoFocusEnabled(true) //you should add this feature
-                        .build();
-            /*
-                try {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        cameraSource.start());
-                    } else {
-                        ActivityCompat.requestPermissions(ScannedBarcodeActivity.this, new
-                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-             */
+                startActivity(new Intent(getActivity(), main.tls_maps.QRCode.Scanner.class));
             }
         });
 
@@ -112,13 +89,13 @@ public class HomeFragment extends Fragment {
                 binding.imageHome.ChangeLevel(-1);
             }
         });
-
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        from = null;
         binding = null;
     }
 }
