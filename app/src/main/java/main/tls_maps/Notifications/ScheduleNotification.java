@@ -42,6 +42,13 @@ public class ScheduleNotification {
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
 
+    /**
+     * Schedules a new Notification for a Note
+     * @param context - Context of Application
+     * @param msg - Message / Usually the Content of the Note
+     * @param triggerAt - Time in Milliseconds, when the Notification should be Triggered
+     * @param NoteUID - Unique ID of the Note
+     */
     public ScheduleNotification (Context context, String msg, long triggerAt, int NoteUID) {
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
         int uid = getUniqueID();

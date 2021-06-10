@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * Class for providing Notes to the Specific Fragment.
  */
 public class NotesContent {
 
@@ -28,6 +25,10 @@ public class NotesContent {
         readlist(context);
     }
 
+    /**
+     * Sets the Recyclerview
+     * @param recyclerView - RecyclerView
+     */
     public void recyclerview(RecyclerView recyclerView) {
         rv = recyclerView;
     }
@@ -95,12 +96,16 @@ public class NotesContent {
         }
     }
 
+    /**
+     * Used to create a new Unique ID
+     * @return A Unique ID
+     */
     private int getUniqueID() {
         return (int) (System.currentTimeMillis() < 0 ?-(System.currentTimeMillis()):System.currentTimeMillis());
     }
 
     /**
-     * A Note containing, the content and a id
+     * A Note containing, the content, a ID and a Unique ID
      */
     public static class Note implements Serializable{
         public final String content;
@@ -118,14 +123,25 @@ public class NotesContent {
             this.uid = uid;
         }
 
+        /**
+         * Returns the Unique ID of the note to Identify the Specific note
+         * @return Unique ID of note
+         */
         public int getUid() {
             return uid;
         }
 
+        /**
+         * Sets the id of the note if it is above 0
+         * @param id - new id
+         */
         public void setId(int id) {
-            this.id = id;
+            if(id >= 0) this.id = id;
         }
 
+        /**
+         * @return Value of the id
+         */
         public int getId() {
             return id;
         }

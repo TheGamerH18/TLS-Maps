@@ -104,6 +104,11 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             });
         }
 
+        /**
+         * Creates Notification bassed on the created Calender from the Date and Time Picker
+         * Dialog.
+         * @param v - View
+         */
         private void createNotification(View v) {
             if(cl.getTimeInMillis() >= System.currentTimeMillis()) {
                 new ScheduleNotification(v.getContext(),

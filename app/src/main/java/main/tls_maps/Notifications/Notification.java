@@ -20,6 +20,13 @@ public class Notification {
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder builder;
 
+    /**
+     * Creates a Notification with a NoteUID
+     * @param context - Context of Application
+     * @param msg - Message of Notification / Usually the Content of the Note
+     * @param UID - Unique ID of Notification
+     * @param NoteUID - Unique ID of Note
+     */
     public Notification(Context context, String msg, int UID, int NoteUID) {
         this.UID = UID;
         NotificationChannel(context);
@@ -36,11 +43,11 @@ public class Notification {
 
         // Create Notification
         builder = createBuilder(context, msg);
-        builder.addAction(R.mipmap.ic_launcher, "Toast", actionIntent);
+        builder.addAction(R.mipmap.ic_launcher, "Löschen", actionIntent);
     }
 
     /**
-     * Creates a new Notification
+     * Creates a new Notification without a NoteUID
      * @param msg - Message of Notification
      * @param context - Context of Application
      * @param UID - Unique Identifier, for Channel and Notification
@@ -53,6 +60,12 @@ public class Notification {
         builder = createBuilder(context, msg);
     }
 
+    /**
+     * Creates a Basic Notification
+     * @param context - Context of Application
+     * @param msg - Message of Notification
+     * @return NotificationCompat.Builder modified with needed Information
+     */
     private NotificationCompat.Builder createBuilder(Context context, String msg) {
         // Create Notification
         return new NotificationCompat.Builder(context, ""+this.UID)
@@ -66,6 +79,10 @@ public class Notification {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
     }
 
+    /**
+     * Creates the Notification Channel, if needed
+     * @param context - Context of Application
+     */
     private void NotificationChannel(Context context) {
         // Tries to create a new NotificationChannel in > Android 8.0
         if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
@@ -83,6 +100,11 @@ public class Notification {
         }
     }
 
+    /**
+     * Creates a Pending Intent, Pointing to the MainActivity
+     * @param context - Context of Application
+     * @return Pending Intent, Pointing to MainActivity
+     */
     private PendingIntent contentIntent(Context context) {
         Intent activityintent = new Intent(context, MainActivity.class);
         return PendingIntent.getActivity(context, this.UID, activityintent, 0);
