@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import main.tls_maps.MainActivity;
 
 public class ScheduleNotification {
 
@@ -48,6 +49,8 @@ public class ScheduleNotification {
     public ScheduleNotification (Context context, String msg, long triggerAt, int NoteUID) {
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
         int uid = getUniqueID();
+        MainActivity.notes.getbyUID(context, NoteUID).addNotification(uid);
+        MainActivity.notes.writelist(context);
         notificationIntent.putExtra("UID", uid);
         notificationIntent.putExtra("Notification", msg);
         notificationIntent.putExtra("NoteUID", NoteUID);
