@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import main.tls_maps.MainActivity;
 import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.NoteItems.NotesContent.Note;
 import main.tls_maps.databinding.FragmentNotesBinding;
@@ -68,7 +69,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     View.OnClickListener delete = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            NotesContent.removeItem(""+mId.getText(), v.getContext());
+                            MainActivity.notes.removeItem(""+mId.getText(), v.getContext());
                             notifyDataSetChanged();
                         }
                     };

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import main.tls_maps.MainActivity;
 import main.tls_maps.R;
 import main.tls_maps.NoteItems.NotesContent;
 
@@ -71,7 +72,7 @@ public class NotesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new NotesRecyclerViewAdapter(NotesContent.getITEMS()));
+            recyclerView.setAdapter(new NotesRecyclerViewAdapter(MainActivity.notes.getITEMS()));
         }
         return view;
     }
