@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class NotesContent {
 
-    private List<Note> ITEMS = new ArrayList<Note>();
+    private List<Note> ITEMS = new ArrayList<>();
     RecyclerView rv;
 
     /**
@@ -23,6 +23,19 @@ public class NotesContent {
      */
     public NotesContent(Context context){
         readlist(context);
+    }
+
+    /**
+     * Returns Note by UID
+     * @param UID - UID of the Note
+     * @return Note if found, else null
+     */
+    public Note getbyUID(Context context, int UID) {
+        readlist(context);
+        for(Note note : ITEMS) {
+            if(note.getUid() == UID) return note;
+        }
+        return null;
     }
 
     /**
@@ -66,7 +79,8 @@ public class NotesContent {
         for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
 
         writelist(context);
-        if(rv.getAdapter() != null) rv.getAdapter().notifyDataSetChanged();
+        try {rv.getAdapter().notifyDataSetChanged();}
+        catch (Exception ignored){};
     }
 
     /**
