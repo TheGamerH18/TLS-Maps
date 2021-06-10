@@ -70,6 +70,16 @@ public class ScheduleNotification {
     }
 
     /**
+     * Creates a Notification, which is fired Instantly
+     * @param context - Context of Application
+     * @param msg - Message of the Notification / Usually the Content of the Note
+     * @param NoteUID - ID of the Note
+     */
+    public ScheduleNotification (Context context, String msg, int NoteUID) {
+        this(context, msg, 0, NoteUID);
+    }
+
+    /**
      * @return a UID based on the Time, to send the
      * the Notification and for the Pending intent,
      * if 2 Pendings have the same ID only 1 should be Fired
