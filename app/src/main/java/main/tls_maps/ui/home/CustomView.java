@@ -210,28 +210,16 @@ public class CustomView extends View {
 
             if(ev.getPointerCount() >= 2) {
 
-                // TODO Rotation - Skalierung zum mittelpunkt von x1,y1 und x2,y2
+                // TODO Skalierung zum mittelpunkt von x1,y1 und x2,y2
                 /**
                  * Bitte das System nicht auf Velocity umstellen, es entstehen dadurch Sprünge
                  * einfach Offsets nehmen
                  */
 
-                double   distance = Math.sqrt((Math.pow(ev.getX(0)-ev.getX(1),2)+Math.pow(ev.getY(0)-ev.getY(1),2))),
-                                r = distance/2,
-                          centerX = (ev.getX(0)+ev.getX(1))/2,
-                          centerY = (ev.getY(0)+ev.getY(1))/2,
-                        centerDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2)+Math.pow(ev.getY(0)-centerY,2))),
-                         punktDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2))),
-                            angle = Math.atan(punktDis/centerDis)*(180);
+                // Calculate the angle of the Rotation
+                float rotation = this.calcAngle(ev);
+                this.GlobRotation = (rotation == -1)?this.GlobRotation : rotation;
 
-                this.GlobRotation = angle;
-                Log.d("Rotate", "Dist: " + distance + "  rad: " + r + "  Center: " + centerX + ", " + centerY + "  Winkel: " + angle);
-
-                PosX += (float)centerX - LastTouchX;
-                PosY += (float)centerY - LastTouchY;
-
-                LastTouchX = (float)centerX;
-                LastTouchY = (float)centerY;
                 // Hier wird nach events geprüft
                 ScaleDetector.onTouchEvent(ev);
                 return true;
@@ -304,6 +292,45 @@ public class CustomView extends View {
                 }
             }
             return true;
+    }
+
+    /**
+     *  This Method is need for the 2 Finger Rotaion, and also for debug the angle
+     * @param ev the MotionEvent is needed to get all Coordinations
+     * @return the angle that need to be set, there is also a Debug inside of the Methode for the >= 180° problem with triangles
+     */
+    private float calcAngle(MotionEvent ev) {
+
+        // This is just calculation for the Circle wich is needed to make a correct Angle
+        // punktDis is the point that can be do magic,
+        // With this point is should be possible to make
+        // the Rotation start not hopping, but there can be
+        // conflicts with the readjustment for 45° angles
+        double  distance = Math.sqrt((Math.pow(ev.getX(0)-ev.getX(1),2)+Math.pow(ev.getY(0)-ev.getY(1),2))),
+                r = distance/2,
+                centerX = (ev.getX(0)+ev.getX(1))/2,
+                centerY = (ev.getY(0)+ev.getY(1))/2,
+                centerDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2)+Math.pow(ev.getY(0)-centerY,2))),
+                punktDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2))),
+                angle = Math.atan(punktDis/centerDis)*(180/Math.PI);
+
+        if(r-centerDis > 2 && r-centerDis < -2)
+            return -1;
+
+        // Lets Fix the Angle, because its impossible for a Triangle to have a angle that is greater or equal than 180°
+        // and we work with triangles here
+
+        // Be Careful with this, little Changes can make it Jump
+        if(ev.getY(0) <= ev.getY(1) && ev.getX(0) <= ev.getX(1))
+            angle = -(angle + 180)*2;
+        else if(ev.getY(0) <= ev.getY(1) && ev.getX(0) >= ev.getX(1))
+            angle = angle - 90;
+        else if(ev.getY(0) >= ev.getY(1) && ev.getX(0) <= ev.getX(1))
+            angle = angle*2;
+        else if(ev.getY(0) >= ev.getY(1) && ev.getX(0) >= ev.getX(1))
+            angle = -angle;
+
+        return (float) (angle/0.75);
     }
 
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
