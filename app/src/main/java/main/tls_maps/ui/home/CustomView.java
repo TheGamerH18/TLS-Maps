@@ -13,6 +13,7 @@ import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -204,22 +205,53 @@ public class CustomView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
 
-
-
-
-
-
             final int action = ev.getAction();
 
-            switch (action) {
+            if(ev.getPointerCount() >= 2) {
 
-
-
-                case MotionEvent.ACTION_POINTER_DOWN: {
-                    Log.d("Testing Down","it has been clicked down with: "+ev.getPointerCount());
-
-                    break;
+                if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                    lastangle = calcAngle(ev);
                 }
+
+                // TODO Skalierung zum mittelpunkt von x1,y1 und x2,y2
+                /**
+                 * Bitte das System nicht auf Velocity umstellen, es entstehen dadurch Sprünge
+                 * einfach Offsets nehmen
+                 */
+
+                // Calculate the angle of the Rotation
+                double angle = this.calcAngle(ev);
+                this.GlobRotation+=(lastangle-angle);
+
+                Vector2 pointer0 = new Vector2(ev.getX(0),ev.getY(0));
+                Vector2 pointer1 = new Vector2(ev.getX(1),ev.getY(1));
+
+                Vector2 _center = pointer0.lerp(pointer1,0.5);
+
+                //double centerX = (ev.getX(0)+ev.getX(1))/2;
+                //double centerY = (ev.getY(0)+ev.getY(1))/2;
+
+                //Vector2 otherCenter = new Vector2(centerX,centerY);
+                Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+
+                //Vector2 RootScreenSize = new Vector2(MainActivity.displayMetrics.widthPixels,MainActivity.displayMetrics.heightPixels);
+
+
+
+                //Log.d("REEEE",""+ev.getSize());
+
+                Vector2 Center = _center.sub(screenMiddle);
+                //Position = Position.add(Center).Transform((lastangle-angle)).sub(Center);
+                lastangle = angle;
+                //this.GlobRotation = (rotation == -1)?this.GlobRotation : rotation;
+
+
+                // Hier wird nach events geprüft
+                ScaleDetector.onTouchEvent(ev);
+                return true;
+            }
+
+            switch (action) {
 
                 case MotionEvent.ACTION_DOWN: {
 
@@ -231,46 +263,12 @@ public class CustomView extends View {
                     LastTouchX = x;
                     LastTouchY = y;
 
-
-
-                    // Remember the Starting angle
-                    if (ev.getPointerCount() >= 2) {
-                        lastangle = calcAngle(ev);
-                        Log.d("Set Lastangle","Settings lastangle to: "+lastangle);
-                    }
-
-
                     // Save the ID of this pointer (for dragging)
                     ActivePointerId = ev.getActionIndex();
                     break;
                 }
 
                 case MotionEvent.ACTION_MOVE: {
-
-                    if(ev.getPointerCount() >= 2) {
-
-                        Log.d("Test","This is repeating thingy?");
-
-                        // TODO Skalierung zum mittelpunkt von x1,y1 und x2,y2
-                        /**
-                         * Bitte das System nicht auf Velocity umstellen, es entstehen dadurch Sprünge
-                         * einfach Offsets nehmen
-                         */
-
-                        // Calculate the angle of the Rotation
-                        double angle = this.calcAngle(ev);
-                        this.GlobRotation+=(lastangle-angle);
-                        Position = Position.Transform((lastangle-angle));
-                        lastangle = angle;
-                        //this.GlobRotation = (rotation == -1)?this.GlobRotation : rotation;
-
-
-                        // Hier wird nach events geprüft
-                        ScaleDetector.onTouchEvent(ev);
-                        return true;
-                    }
-
-
                     // get the Coordinates
                     final float x = ev.getX();
                     final float y = ev.getY();
@@ -281,9 +279,6 @@ public class CustomView extends View {
 
                     // Set the Pos
                     Position = Position.add(new Vector2(-dx,-dy).Transform(-GlobRotation));
-
-
-
 
                     invalidate();
 
@@ -362,7 +357,7 @@ public class CustomView extends View {
 
 
         Vector2 E = new Vector2(ev.getX(0)-centerX,ev.getY(0)-centerY);
-        double angle = Math.toDegrees(E.unit().angle());
+        double angle = Math.toDegrees(E.unit().angle()+360);
         //Log.d("Position Debug", E.unit().ToString()+" Angle: "+angle);
 
 
