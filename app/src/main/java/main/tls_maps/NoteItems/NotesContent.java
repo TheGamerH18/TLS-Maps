@@ -2,19 +2,19 @@ package main.tls_maps.NoteItems;
 
 import android.content.Context;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * Class for providing Notes to the Specific Fragment.
  */
 public class NotesContent {
 
-    private List<Note> ITEMS = new ArrayList<Note>();
+    private List<Note> ITEMS = new ArrayList<>();
+    RecyclerView rv;
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
@@ -26,9 +26,31 @@ public class NotesContent {
     }
 
     /**
+     * Returns Note by UID
+     * @param UID - UID of the Note
+     * @return Note if found, else null
+     */
+    public Note getbyUID(Context context, int UID) {
+        readlist(context);
+        for(Note note : ITEMS) {
+            if(note.getUid() == UID) return note;
+        }
+        return null;
+    }
+
+    /**
+     * Sets the Recyclerview
+     * @param recyclerView - RecyclerView
+     */
+    public void recyclerview(RecyclerView recyclerView) {
+        rv = recyclerView;
+    }
+
+    /**
      * @return - List<> ITEMS
      */
-    public List<Note> getITEMS() {
+    public List<Note> getITEMS(Context act) {
+        readlist(act);
         return ITEMS;
     }
 
@@ -39,33 +61,34 @@ public class NotesContent {
      */
     public void addItem(String content, Context context) {
         int id = ITEMS.size();
-        ITEMS.add(new Note(content, id));
+        ITEMS.add(new Note(content, id, getUniqueID()));
         writelist(context);
     }
 
     /**
      * Removes an Item from the List ITEMS
-     * @param Nummer - Index of the Item to delete
      * @param context - Context of Application
+     * @param uid - Index of the Item to delete
      */
-    public void removeItem(String Nummer, Context context) {
-        int id = Integer.parseInt(Nummer);
-        System.out.println(ITEMS.toString());
-        ITEMS.remove(id);
-        System.out.println(ITEMS.toString());
-        System.out.println(ITEMS.size());
-        for(int i = 0; i < ITEMS.size(); i ++) {
-            ITEMS.get(i).id = ""+i;
-        }
+    public void removeItem(Context context, int uid) {
+        int id = -1;
+        for (Note note: ITEMS)
+            if (note.getUid() == uid) id = note.getId();
+        if(id != -1) ITEMS.remove(id);
+
+        for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
+
         writelist(context);
+        try {rv.getAdapter().notifyDataSetChanged();}
+        catch (Exception ignored){};
     }
 
     /**
      * Reads the List ITEMS from Filesystem
-     * @param act - Context of Application
+     * @param context - Context of Application
      */
-    private void readlist(Context act) {
-        String ser = SerializeObject.ReadSettings(act, "notes.dat");
+    private void readlist(Context context) {
+        String ser = SerializeObject.ReadSettings(context, "notes.dat");
         if(ser != null && !ser.equalsIgnoreCase("")) {
             Object obj = SerializeObject.stringToObject(ser);
             // Cast in Arraylist
@@ -78,30 +101,96 @@ public class NotesContent {
 
     /**
      * Writes List ITEMS to Filesystem
-     * @param act - Context of Application
+     * @param context - Context of Application
      */
-    private void writelist(Context act) {
+    public void writelist(Context context) {
         String ser = SerializeObject.objectToString((Serializable) ITEMS);
         if(ser != null && !ser.equalsIgnoreCase("")) {
-            SerializeObject.WriteSettings(act, ser, "notes.dat");
+            SerializeObject.WriteSettings(context, ser, "notes.dat");
         }
     }
 
     /**
-     * A Note containing, the content and a id
+     * Used to create a new Unique ID
+     * @return A Unique ID
+     */
+    private int getUniqueID() {
+        return (int) (System.currentTimeMillis() < 0 ?-(System.currentTimeMillis()):System.currentTimeMillis());
+    }
+
+    /**
+     * A Note containing, the content, a ID and a Unique ID
      */
     public static class Note implements Serializable{
         public final String content;
-        public String id;
+        private int id;
+        private final int uid;
+        private final ArrayList<Integer> NotificationUIDs = new ArrayList<>();
 
         /**
          * Constructor
          * @param content - Content of Note
          * @param id - ID of Note
          */
-        public Note(String content, int id) {
+        public Note(String content, int id, int uid) {
             this.content = content;
-            this.id = ""+id;
+            this.id = id;
+            this.uid = uid;
+        }
+
+        /**
+         * Returns the Unique ID of the note to Identify the Specific note
+         * @return Unique ID of note
+         */
+        public int getUid() {
+            return uid;
+        }
+
+        /**
+         * Sets the id of the note if it is above 0
+         * @param id - new id
+         */
+        public void setId(int id) {
+            if(id >= 0) this.id = id;
+        }
+
+        /**
+         * Adds the UID of a Notification to the Note
+         * @param uid - UID of the Notification
+         */
+        public void addNotification(int uid) {
+            if(uid != 0) NotificationUIDs.add(uid);
+        }
+
+        /**
+         * Removes the UID of a Notification from the Note
+         * @param uid - UID of the Notification
+         */
+        public void removeNotification(int uid) {
+            int index = -1;
+            for(int i = 0; i < NotificationUIDs.size(); i ++) {
+                if(NotificationUIDs.get(i) == uid) index = i;
+            }
+            if(index != -1) NotificationUIDs.remove(index);
+        }
+
+        /**
+         * Checks if the UID of the Notification is registered in this Note
+         * @param uid - UID of the Notification
+         * @return true if the UID is registered
+         */
+        public boolean checkNotificationUID(int uid) {
+            for(int UID : NotificationUIDs) {
+                if(UID == uid) return true;
+            }
+            return false;
+        }
+
+        /**
+         * @return Value of the id
+         */
+        public int getId() {
+            return id;
         }
 
         @Override

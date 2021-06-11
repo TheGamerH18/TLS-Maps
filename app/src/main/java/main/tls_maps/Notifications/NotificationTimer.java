@@ -3,13 +3,12 @@ package main.tls_maps.Notifications;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
-import java.util.ArrayList;
-
 public class NotificationTimer extends BroadcastReceiver {
+
+    private Notification notification;
 
     /**
      * Empty Constructor for the Init of the Receiver
@@ -27,14 +26,21 @@ public class NotificationTimer extends BroadcastReceiver {
         String msg = intent.getStringExtra("Notification");
 
         // Get the UID | Or get a Fallback UID
-        int uid = intent.getIntExtra("UID", ((int) System.currentTimeMillis()));
+        int uid = intent.getIntExtra("UID", (int) System.currentTimeMillis());
 
-        // Create the Notification
-        Notification notification = new Notification(msg, context, uid);
+        int noteUID = intent.getIntExtra("NoteUID", -1);
+
+        if(noteUID == -1) {
+            // Create the Notification, without
+            notification = new Notification(msg, context, uid);
+        } else {
+            notification = new Notification(context, msg, uid, noteUID);
+        }
 
         // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
         // send the Notification
-        NM.notify(uid ,notification.getNotification());
+        try {NM.notify(uid ,notification.getNotification());}
+        catch (Exception ignored){}
     }
 }
