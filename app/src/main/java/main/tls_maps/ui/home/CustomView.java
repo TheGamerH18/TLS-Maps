@@ -335,32 +335,47 @@ public class CustomView extends View {
     private void getNeighbor(String start, NodeList nodeList ) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
-        Log.d("TAG", "getNeighbor: " + start);
         int lvl = Integer.parseInt(namedNodeMapAttr.getNamedItem("level").getNodeValue());
         double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
 
-        for (int count=0;count<mapNode.getChildNodes().getLength();count++) {
+        for (int count = 0; count < mapNode.getChildNodes().getLength(); count++) {
             Node lineNode = mapNode.getChildNodes().item(count);
             if (lineNode.getNodeType() == Node.ELEMENT_NODE) {
                 String RMNumber = lineNode.getAttributes().getNamedItem("name").getNodeValue();
-                if(RMNumber != start)
+                if(!RMNumber.equals(start))
                     continue;
                 String x = lineNode.getAttributes().getNamedItem("x").getNodeValue();
                 String y = lineNode.getAttributes().getNamedItem("y").getNodeValue();
                 String[] neighbors = (lineNode.getAttributes().getNamedItem("neighbours").getNodeValue()).split("/");
+                WayPoints.add(new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl));
+                Log.d("TAG", "created: " + start);
                 for(String name: neighbors) {
                     if(!find(name))
                         getNeighbor(name, nodeList);
                 }
-                WayPoints.add(new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl));
-                Log.d("TAG", "created: " + start);
+                for(String name: neighbors) {
+                    try {
+                        WayPoints.get(WayPoints.size() - 1).AddNeighbourPoint(getWayPoint(name));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
+        return;
+    }
+
+    private WayPoint getWayPoint(String name) throws Exception {
+        for(int i = 0; i < WayPoints.size(); i++) {
+            if(WayPoints.get(i).getName().equals(name))
+                return WayPoints.get(i);
+        }
+        throw new Exception("WayPoint doesnt exists!\t" + name);
     }
 
     private boolean find(String name) {
         for(WayPoint wp: WayPoints){
-            if(wp.getName() == name)
+            if(wp.getName().equals(name))
                 return true;
         }
         return false;
