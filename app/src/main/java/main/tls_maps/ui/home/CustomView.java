@@ -294,7 +294,7 @@ public class CustomView extends View {
         for (int i=0;i<wayPoints.size();i++) {
             WayPoint currentWayPoint = wayPoints.get(i);
             Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-            Vector2 waypointpos = currentWayPoint.position.sub(Position).add(screenMiddle);
+            Vector2 waypointpos = currentWayPoint.getPosition().sub(Position).add(screenMiddle);
             Paint otherpaint = new Paint();
             otherpaint.setARGB(255,0,0,255);
             canvas.drawCircle((float) waypointpos.x,(float) waypointpos.y,50,otherpaint);

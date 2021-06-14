@@ -19,5 +19,19 @@ public class WayPoint {
         NeighbourPoints.add(wayPoint);
     }
 
-    public ArrayList<WayPoint> getNeighbourPoints() { return NeighbourPoints; }
+    public ArrayList<WayPoint> getNeighbourPoints() {
+        return this.NeighbourPoints;
+    }
+
+    public Vector2 getPosition() {
+        return this.position;
+    }
+
+    public int getLevel() {
+        return this.Level;
+    }
+
+    public String getName() {
+        return this.Name;
+    }
 }
