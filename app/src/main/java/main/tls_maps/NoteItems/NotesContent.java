@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Class for providing Notes to the Specific Fragment.
+ * Reads and writes List to and from Storage using the {@link SerializeObject} class.
+ * Also tries to call a specified RecyclerView to Update data in View.
  */
 public class NotesContent {
 
@@ -119,7 +121,9 @@ public class NotesContent {
     }
 
     /**
-     * A Note containing, the content, a ID and a Unique ID
+     * A Note containing, the content, a ID, a Unique ID and all connected Notifications, which where created using
+     * {@link main.tls_maps.Notifications.ScheduleNotification}.
+     * Represents a single Note.
      */
     public static class Note implements Serializable{
         public final String content;
@@ -128,7 +132,7 @@ public class NotesContent {
         private final ArrayList<Integer> NotificationUIDs = new ArrayList<>();
 
         /**
-         * Constructor
+         * Constructor, defines needed and unchangeable values.
          * @param content - Content of Note
          * @param id - ID of Note
          */
