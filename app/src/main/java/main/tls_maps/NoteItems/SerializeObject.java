@@ -100,7 +100,7 @@ public class SerializeObject {
 
     /**
      * Read data from file and put it into a string
-     * @param context
+     * @param context - Context of Application
      * @param filename - fully qualified string name
      * @return string
      */
