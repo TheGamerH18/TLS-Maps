@@ -16,7 +16,7 @@ public class Map {
         WallsOnMap.add(wallToAdd);
     }
 
-    public void addWayPoint(WayPoint wayPoint) {
-        WayPointsOnMap.add(wayPoint);
+    public void addWayPoint(WayPoint name) {
+        WayPointsOnMap.add(name);
     }
 }

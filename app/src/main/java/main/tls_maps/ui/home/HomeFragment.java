@@ -12,15 +12,17 @@ import androidx.fragment.app.Fragment;
 
 import main.tls_maps.databinding.FragmentHomeBinding;
 
-// import com.google.android.gms.vision.CameraSource;
-// import com.google.android.gms.vision.barcode.Barcode;
-// import com.google.android.gms.vision.barcode.BarcodeDetector;
-
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     public static String from;
 
+    /**
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the View to the MainActivity
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
