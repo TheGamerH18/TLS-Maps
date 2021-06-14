@@ -10,7 +10,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+
 import main.tls_maps.databinding.FragmentHomeBinding;
+import main.tls_maps.map.AStar;
+import main.tls_maps.map.WayPoint;
 
 public class HomeFragment extends Fragment {
 
@@ -50,6 +56,17 @@ public class HomeFragment extends Fragment {
 
         binding.search.setOnClickListener(new View.OnClickListener() {
 
+            class getWP {
+                public WayPoint getWayPoint(String wpString, ArrayList<WayPoint> wayPoints) {
+                    for(WayPoint wp: wayPoints) {
+                        if(wp.getName().toLowerCase().equals(wpString.toLowerCase())) {
+                            return wp;
+                        }
+                    }
+                    return null;
+                }
+            }
+
             @Override
             public void onClick(View v) {
 
@@ -60,7 +77,19 @@ public class HomeFragment extends Fragment {
                     Log.d("FindRoom", "getTargets: " + target);
                     return;
                 }
-                Log.d("LaunchAStar", "Start: " + from + "\tTarget: " + target);
+                ArrayList<WayPoint> wayPoints = binding.imageHome.getWayPoints();
+                WayPoint fromWP = new getWP().getWayPoint(from, wayPoints);
+                WayPoint targetWP = new getWP().getWayPoint(target, wayPoints);
+                if(fromWP == null)
+                    Snackbar.make(v, "Startpunkt konnte nicht gefunden werden", Snackbar.LENGTH_LONG).show();
+                else if(targetWP == null)
+                    Snackbar.make(v, "Zielpunkt konnte nicht gefunden werden", Snackbar.LENGTH_LONG).show();
+                else {
+                    ArrayList<WayPoint> route = new AStar(fromWP, targetWP).getRoute();
+                    for(WayPoint wp: route) {
+                        Log.d("Route", " " + wp.getName());
+                    }
+                }
             }
         });
 

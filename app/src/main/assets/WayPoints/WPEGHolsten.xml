@@ -14,7 +14,7 @@
 <waypoint name="6109" x="6109" y="342" neighbours="6108/6107/6111/6116/_Ausgang02"/>
 <waypoint name="6108" x="1200" y="270" neighbours="6107/6109/_Treppe00/_Ausgang03"/>
 <waypoint name="6107" x="1200" y="270" neighbours="6108/6109/_Treppe00/_Ausgang03"/>
-<waypoint name="7102" x="137" y="790" neighbours="6114/7103/7101/_Ausgang01"/>
+<waypoint name="7102" x="137" y="790" neighbours="7104/7103/7101/_Ausgang01"/>
 <waypoint name="7103" x="137" y="790" neighbours="7102/7104/7101/_Ausgang01"/>
 <waypoint name="7104" x="137" y="790" neighbours="7102/7103/7101/_Ausgang01"/>
 <waypoint name="7101" x="350" y="790" neighbours="7102/7103/7104/6117/_Ausgang01"/>

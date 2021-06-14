@@ -6,7 +6,7 @@ public class WayPoint {
     private final String Name;
     private final Vector2 position;
     private final int Level;
-    private ArrayList<WayPoint> NeighbourPoints = new ArrayList<WayPoint>();
+    private ArrayList<WayPoint> NeighbourPoints = new ArrayList<>();
 
 
     public WayPoint(String Name, Vector2 Position, int Level) {
@@ -15,7 +15,7 @@ public class WayPoint {
         this.Level = Level;
     }
 
-    public void AddNeighbourPoint(WayPoint wayPoint) {
+    public void addNeighbourPoint(WayPoint wayPoint) {
         NeighbourPoints.add(wayPoint);
     }
 

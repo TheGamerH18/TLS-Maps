@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import main.tls_maps.map.AStar;
 import main.tls_maps.map.Map;
 import main.tls_maps.map.Vector2;
 import main.tls_maps.map.Wall;
@@ -40,7 +39,8 @@ public class CustomView extends View {
 
     public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholsten", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
     private static final String[] WAYPOINTS = new String[] {"WPEGHolsten"};
-    private static final ArrayList<WayPoint> WayPoints = new ArrayList<>();
+
+    private ArrayList<WayPoint> WayPoints = new ArrayList<>();
 
     private Paint Paint;
 
@@ -55,33 +55,43 @@ public class CustomView extends View {
     private final int MinLevel = 0;
     private final int MaxLevel = 2;
 
-    private final AStar astar;
-
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
     public CustomView(Context context) {
         super(context);
-        astar = new AStar();
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        astar = new AStar();
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        astar = new AStar();
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        astar = new AStar();
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Map getMapAtLevel(int level) {
@@ -96,7 +106,7 @@ public class CustomView extends View {
         return levelMap;
     }
 
-    private void init() {
+    private void init() throws Exception {
         Paint = new Paint();
 
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
@@ -123,6 +133,12 @@ public class CustomView extends View {
         }
         for(WayPoint wp: WayPoints){
             Log.d("TAG", "Room: " + wp.getName());
+        }
+        if((WayPoints.get(Integer.parseInt("" + (int) Math.floor(Math.random()*WayPoints.size()))).getNeighbourPoints().size()) == 0) {
+            throw new Exception("Nachbar Punkte konnten nicht gesetzt werden");
+        }
+        for(WayPoint wp : WayPoints.get(1).getNeighbourPoints()){
+            Log.d("" + WayPoints.get(1).getName(), " " + wp.getName());
         }
     }
 
@@ -205,6 +221,10 @@ public class CustomView extends View {
     private int getColor(String name) {
         @ColorInt int color = Color.parseColor(name);
         return color;
+    }
+
+    public ArrayList<WayPoint> getWayPoints () {
+        return this.WayPoints;
     }
 
     protected void ChangeLevel(int going) {
@@ -333,6 +353,7 @@ public class CustomView extends View {
     }
 
     private void getNeighbor(String start, NodeList nodeList ) {
+        int index = WayPoints.size();
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
         int lvl = Integer.parseInt(namedNodeMapAttr.getNamedItem("level").getNodeValue());
@@ -355,7 +376,7 @@ public class CustomView extends View {
                 }
                 for(String name: neighbors) {
                     try {
-                        WayPoints.get(WayPoints.size() - 1).AddNeighbourPoint(getWayPoint(name));
+                        WayPoints.get(index).addNeighbourPoint(getWayPoint(name));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
