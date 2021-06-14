@@ -39,6 +39,8 @@ import main.tls_maps.map.WayPoint;
 public class CustomView extends View {
 
     public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholsten", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
+    private static final String[] WAYPOINTS = new String[] {"WPEGHolsten"};
+    private static final ArrayList<WayPoint> WayPoints = new ArrayList<>();
 
     private Paint Paint;
 
@@ -114,7 +116,13 @@ public class CustomView extends View {
         CurrentMap.addWayPoint(new WayPoint("2204",new Vector2(500,5),0));
         //Log.d("Test",""+String.valueOf(R.));
         for(String MapName : MAPNAMES){
-            ReadFile(MapName+".xml");
+            ReadFile("Maps/"+MapName+".xml");
+        }
+        for(String WayPoints : WAYPOINTS){
+            ReadFile("WayPoints/"+WayPoints+".xml");
+        }
+        for(WayPoint wp: WayPoints){
+            Log.d("TAG", "Room: " + wp.getName());
         }
     }
 
@@ -130,14 +138,16 @@ public class CustomView extends View {
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             // read from a project's resources folder
-            InputStream stream = assetManager.open("Maps/"+fileName);
+            InputStream stream = assetManager.open(fileName);
             Document doc = db.parse(stream);
 
             //System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
             //System.out.println("------");
 
-            if (doc.hasChildNodes()) {
+            if (doc.hasChildNodes() && fileName.contains("Maps")) {
                 getLinesfromNodes(doc.getChildNodes());
+            } else if(doc.hasChildNodes() && fileName.contains("WayPoints")) {
+                getWayPoints(doc.getChildNodes());
             }
             Log.d("XML READING","File " + ((doc.hasChildNodes())?"":"not ") + "Found: "+fileName);
 
@@ -163,9 +173,7 @@ public class CustomView extends View {
 
         for (int count=0;count<mapNode.getChildNodes().getLength();count++) {
             Node lineNode = mapNode.getChildNodes().item(count);
-            //Log.d("XML NODE TYPE",""+LineNode.getNodeType());
             if (lineNode.getNodeType() == Node.ELEMENT_NODE) {
-                //Log.d("Node Name", "" + LineNode.getNodeName());
                 NamedNodeMap namedNodeMap = lineNode.getAttributes();
                 String stroke = namedNodeMap.getNamedItem("stroke").getNodeValue();
                 String x1 = namedNodeMap.getNamedItem("x1").getNodeValue();
@@ -307,15 +315,54 @@ public class CustomView extends View {
     protected void onDraw(Canvas canvas) {
         drawMap(canvas, BackGround);
         drawMap(canvas, CurrentMap);
-        if (WayPointDebug) {
-            //drawWayPoints();
+        if (WayPointDebug)
             drawWayPoints(canvas,CurrentMap.WayPointsOnMap);
-        }
 
 
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
     }
 
-    // TODO - Hand Movements for scaling, rotation | -Add a better Rotation
+
+
+    private void getWayPoints(NodeList nodeList) {
+        Node mapNode = nodeList.item(0);
+        NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
+        String start = namedNodeMapAttr.getNamedItem("start").getNodeValue();
+        getNeighbor(start, nodeList);
+    }
+
+    private void getNeighbor(String start, NodeList nodeList ) {
+        Node mapNode = nodeList.item(0);
+        NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
+        Log.d("TAG", "getNeighbor: " + start);
+        int lvl = Integer.parseInt(namedNodeMapAttr.getNamedItem("level").getNodeValue());
+        double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
+
+        for (int count=0;count<mapNode.getChildNodes().getLength();count++) {
+            Node lineNode = mapNode.getChildNodes().item(count);
+            if (lineNode.getNodeType() == Node.ELEMENT_NODE) {
+                String RMNumber = lineNode.getAttributes().getNamedItem("name").getNodeValue();
+                if(RMNumber != start)
+                    continue;
+                String x = lineNode.getAttributes().getNamedItem("x").getNodeValue();
+                String y = lineNode.getAttributes().getNamedItem("y").getNodeValue();
+                String[] neighbors = (lineNode.getAttributes().getNamedItem("neighbours").getNodeValue()).split("/");
+                for(String name: neighbors) {
+                    if(!find(name))
+                        getNeighbor(name, nodeList);
+                }
+                WayPoints.add(new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl));
+                Log.d("TAG", "created: " + start);
+            }
+        }
+    }
+
+    private boolean find(String name) {
+        for(WayPoint wp: WayPoints){
+            if(wp.getName() == name)
+                return true;
+        }
+        return false;
+    }
 }
