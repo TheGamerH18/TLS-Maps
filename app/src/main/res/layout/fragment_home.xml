@@ -14,7 +14,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:src="@android:drawable/arrow_up_float"
+        android:src="@drawable/ic_level_up"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonDown"
         app:layout_constraintEnd_toEndOf="parent"
         android:focusable="true" />
@@ -27,7 +27,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="104dp"
         android:clickable="true"
-        android:src="@android:drawable/arrow_down_float"
+        android:src="@drawable/ic_level_down"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:focusable="true" />
