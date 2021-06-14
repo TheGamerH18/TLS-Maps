@@ -129,8 +129,11 @@ public class Notification {
      * @return true if the Notification exists
      */
     private boolean CheckUID(Context context, int UID, int NoteUID) {
-        NotesContent notesContent = new NotesContent(context);
-        return notesContent.getbyUID(context, NoteUID).checkNotificationUID(UID);
+        try {
+            return MainActivity.notes.getbyUID(context, NoteUID).checkNotificationUID(UID);
+        } catch (Exception ignored) {
+            return new NotesContent(context).getbyUID(context, NoteUID).checkNotificationUID(UID);
+        }
     }
 
     /**

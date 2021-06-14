@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.tls_maps.ui.notes.NotesFragment;
+import main.tls_maps.ui.notes.NotesRecyclerViewAdapter;
+
 /**
  * Class for providing Notes to the Specific Fragment.
  */
@@ -15,6 +18,7 @@ public class NotesContent {
 
     private List<Note> ITEMS = new ArrayList<>();
     RecyclerView rv;
+    NotesFragment nf;
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
@@ -42,8 +46,9 @@ public class NotesContent {
      * Sets the Recyclerview
      * @param recyclerView - RecyclerView
      */
-    public void recyclerview(RecyclerView recyclerView) {
+    public void recyclerview(RecyclerView recyclerView, NotesFragment fragment) {
         rv = recyclerView;
+        nf = fragment;
     }
 
     /**
@@ -79,8 +84,8 @@ public class NotesContent {
         for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
 
         writelist(context);
-        try {rv.getAdapter().notifyDataSetChanged();}
-        catch (Exception ignored){};
+        if(rv.getAdapter() != null)
+            rv.setAdapter(new NotesRecyclerViewAdapter(ITEMS, nf));
     }
 
     /**
