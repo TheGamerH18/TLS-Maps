@@ -17,6 +17,7 @@ public class AStar {
 
 
     public ArrayList<WayPoint> CalculateRoute(WayPoint Location,WayPoint Goal) {
+        // Kann weg
         ArrayList<WayPoint> route = new ArrayList<WayPoint>();
         route.add(Location);
 
