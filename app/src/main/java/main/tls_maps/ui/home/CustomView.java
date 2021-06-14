@@ -2,9 +2,11 @@ package main.tls_maps.ui.home;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.icu.text.Transliterator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,7 +15,6 @@ import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -29,7 +30,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import main.tls_maps.MainActivity;
 import main.tls_maps.map.Map;
 import main.tls_maps.map.Vector2;
 import main.tls_maps.map.Wall;
@@ -45,11 +45,14 @@ public class CustomView extends View {
 
     private Map BackGround;
     private Map CurrentMap;
-    private int Level = 0;
 
-    private Vector2 Position = new Vector2();
+
+    private int Level = 0;
+    private Vector2 CameraPosition = new Vector2();
+    private double CameraAngle = 0;
+
     private double Scale = .5;
-    private double GlobRotation = 0;
+
 
     private final int MinLevel = 0;
     private final int MaxLevel = 2;
@@ -60,7 +63,7 @@ public class CustomView extends View {
 
     private float LastTouchX;
     private float LastTouchY;
-    private double lastangle = -10000000;
+    private double lastangle;
 
     public CustomView(Context context) {
         super(context);
@@ -104,8 +107,8 @@ public class CustomView extends View {
         CurrentMap = getMapAtLevel(Level);
         BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         //BackGround.addWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
-        BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),90,"BlACK"));
-        BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),0,"BLACK"));
+        BackGround.addWall(new Wall(new Vector2(0,-0.5),new Vector2(1,10000),90,"BlACK"));
+        BackGround.addWall(new Wall(new Vector2(-0.5,0),new Vector2(1,10000),0,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
@@ -221,18 +224,25 @@ public class CustomView extends View {
 
                 // Calculate the angle of the Rotation
                 double angle = this.calcAngle(ev);
-                this.GlobRotation+=(lastangle-angle);
+                this.CameraAngle +=(lastangle-angle);
 
                 Vector2 pointer0 = new Vector2(ev.getX(0),ev.getY(0));
                 Vector2 pointer1 = new Vector2(ev.getX(1),ev.getY(1));
 
                 Vector2 _center = pointer0.lerp(pointer1,0.5);
+                Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+                Vector2 centertoscreenMiddle = _center.sub(screenMiddle);
+
+                Vector2 pivotPoint = _center.add(screenMiddle).add(CameraPosition);
+
+
+                CameraPosition = CameraPosition.sub(pivotPoint).Transform(CameraAngle).add(pivotPoint);
 
                 //double centerX = (ev.getX(0)+ev.getX(1))/2;
                 //double centerY = (ev.getY(0)+ev.getY(1))/2;
 
                 //Vector2 otherCenter = new Vector2(centerX,centerY);
-                Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+                //
 
                 //Vector2 RootScreenSize = new Vector2(MainActivity.displayMetrics.widthPixels,MainActivity.displayMetrics.heightPixels);
 
@@ -240,7 +250,7 @@ public class CustomView extends View {
 
                 //Log.d("REEEE",""+ev.getSize());
 
-                Vector2 Center = _center.sub(screenMiddle);
+                //Vector2 Center = _center.sub(screenMiddle);
                 //Position = Position.add(Center).Transform((lastangle-angle)).sub(Center);
                 lastangle = angle;
                 //this.GlobRotation = (rotation == -1)?this.GlobRotation : rotation;
@@ -278,7 +288,7 @@ public class CustomView extends View {
                     final float dy = y - LastTouchY;
 
                     // Set the Pos
-                    Position = Position.add(new Vector2(-dx,-dy).Transform(-GlobRotation));
+                    CameraPosition = CameraPosition.add(new Vector2(-dx,-dy).Transform(-CameraAngle));
 
                     invalidate();
 
@@ -371,10 +381,14 @@ public class CustomView extends View {
 
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
         Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-        topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
-        topRight = topRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
-        bottomLeft = bottomLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
-        bottomRight = bottomRight.sub(Position).Transform(GlobRotation).add(screenMiddle);
+
+        // First subtract from the Corner Position the Camera Position to get an Offset
+        // transform that around the Camera with CameraAngle and getting the rotated
+        // And finally add screenMiddle to account for Canvas starting at the top left to bottom right
+        topLeft = topLeft.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
+        topRight = topRight.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
+        bottomLeft = bottomLeft.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
+        bottomRight = bottomRight.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
 
         return new float[] {
                 (float) topLeft.x, (float) topLeft.y,
@@ -435,6 +449,7 @@ public class CustomView extends View {
         if (WayPointDebug) {
             //drawWayPoints();
         }
+        canvas.drawCircle(0-(float) CameraPosition.x-5+getWidth()/2,0-(float) CameraPosition.y-5+getHeight()/2,10,Paint);
 
         drawMap(canvas, CurrentMap);
 
