@@ -10,14 +10,14 @@
         android:id="@+id/floatingActionButtonUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:src="@android:drawable/arrow_up_float"
+        android:src="@drawable/ic_level_up"
         app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonDown"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonDown"
@@ -27,9 +27,10 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="104dp"
         android:clickable="true"
-        android:src="@android:drawable/arrow_down_float"
+        android:src="@drawable/ic_level_down"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
     <main.tls_maps.ui.home.CustomView
         android:id="@+id/image_home"
@@ -48,7 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginRight="3dp"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/blue_200"
         android:gravity="center_horizontal"
         android:src="@android:drawable/ic_menu_search"
         android:textAlignment="center"
@@ -62,6 +63,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_marginTop="2dp"
         android:visibility="visible"
         app:layout_constrainedWidth="true"
@@ -76,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:hint="Start"
+            android:hint="@string/start"
             android:textAlignment="center" />
 
 
@@ -89,6 +92,8 @@
         android:layout_marginLeft="3dp"
         android:layout_marginTop="2dp"
         android:visibility="visible"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintLeft_toRightOf="@id/LocationOutside"
         app:layout_constraintTop_toTopOf="parent"
@@ -101,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
-            android:hint="Ziel"
+            android:hint="@string/ziel"
             android:textAlignment="center" />
 
 
