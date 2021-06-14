@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Map {
 
-    public ArrayList<String> WayPointsOnMap = new ArrayList<String>();
+    public ArrayList<WayPoint> WayPointsOnMap = new ArrayList<WayPoint>();
     public ArrayList<Wall> WallsOnMap = new ArrayList<Wall>();
     public final int Level;
 
@@ -16,7 +16,7 @@ public class Map {
         WallsOnMap.add(wallToAdd);
     }
 
-    public void addWayPoint(String name) {
+    public void addWayPoint(WayPoint name) {
         WayPointsOnMap.add(name);
     }
 }
