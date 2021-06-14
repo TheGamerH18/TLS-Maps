@@ -8,12 +8,28 @@ public class AStar {
 
 
 
-    ArrayList< ArrayList<WayPoint> > Routen = new ArrayList<>();
+    protected static ArrayList< ArrayList<WayPoint> > Routen = new ArrayList<>();
 
     public AStar(WayPoint start, WayPoint goal) {
-        this.CalculateRoute(new ArrayList<>(), start, goal);
+        CalculateRoute(new ArrayList<>(), start, goal);
     }
 
+    private void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location, WayPoint Goal) {
+        ArrayList<WayPoint> backUpPath = path;
+        for (WayPoint neighbor : Location.getNeighbourPoints()) {
+            path = backUpPath;
+            Log.d("TAG", "CalculateRoute: " + neighbor.getName());
+            path.add(neighbor);
+            if (Location != Goal)
+                CalculateRoute(path, neighbor, Goal);
+            else
+                AStar.Routen.add(path);
+        }
+    }
+
+    private boolean visited(WayPoint neighbor, ArrayList<WayPoint> path) {
+        return path.contains(neighbor);
+    }
     public ArrayList<WayPoint> getRoute() {
         try {
             return getShortest();
@@ -23,30 +39,28 @@ public class AStar {
         return null;
     }
 
-    private void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location, WayPoint Goal) {
-        for (WayPoint neighbor : Location.getNeighbourPoints()) {
-            if (visited(neighbor, path))
-                continue;
-            Log.d("TAG", "CalculateRoute: " + neighbor.getName());
-            path.add(neighbor);
-            if (Location == Goal)
-                Routen.add(path);
-            else
-                CalculateRoute(path, neighbor, Goal);
-        }
-    }
-
-    private boolean visited(WayPoint neighbor, ArrayList<WayPoint> path) {
-        return path.contains(neighbor);
-    }
-
     private ArrayList<WayPoint> getShortest() throws Exception {
-        int shortest = Integer.MAX_VALUE-1;
+        int shortest = 0;
+
+
+        Log.d("TAG", "all " + Routen.size());
+
+
+        for(int i = 0; i < Routen.size(); ++i){
+            for(WayPoint wp : Routen.get(i)){
+                Log.d("Route " + i , wp.getName());
+            }
+        }
+
+
         if(Routen.isEmpty())
             throw new Exception("Routen sind nicht verfügbar!");
-        for(int i = 0; i < Routen.size(); i++){
-            shortest = Routen.get(i).size() < shortest ? i : shortest;
+
+
+        for(int i = 0; i <= Routen.size(); i++){
+            shortest = (Routen.get(i).size() < Routen.get(shortest).size())? i : shortest;
         }
+
         return Routen.get(shortest);
     }
 }
