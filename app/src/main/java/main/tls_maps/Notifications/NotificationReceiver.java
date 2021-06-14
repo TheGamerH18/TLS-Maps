@@ -9,6 +9,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import main.tls_maps.MainActivity;
 import main.tls_maps.NoteItems.NotesContent;
+import main.tls_maps.R;
 
 /**
  * BroadcastReceiver is called, if the User clicks on the Deleted button of a {@link Notification}.
@@ -28,7 +29,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         // Cancel Notification
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
         NM.cancel(UID);
-        Toast.makeText(context, "Gelöscht", Toast.LENGTH_LONG).show();
+        // Create Toast to Notify User about the action
+        Toast.makeText(context, R.string.deletednotemsg, Toast.LENGTH_LONG).show();
 
         // Try to delete the Note, either using the Object in MainActivity or using its own Object
         try {

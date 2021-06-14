@@ -13,4 +13,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ziel">Ziel</string>
     <string name="start">Start</string>
+    <string name="deletednotemsg">Gelöscht</string>
+    <string name="NotificationDeleteBtn">Löschen</string>
 </resources>

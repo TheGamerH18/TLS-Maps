@@ -60,7 +60,7 @@ public class Notification {
 
         // Create Notification
         builder = createBuilder(context, msg);
-        builder.addAction(R.mipmap.ic_launcher, "Löschen", actionIntent);
+        builder.addAction(R.mipmap.ic_launcher, context.getString(R.string.NotificationDeleteBtn), actionIntent);
         builder.setDeleteIntent(pendingdeleteIntent);
     }
 
