@@ -79,6 +79,11 @@ public class CustomView extends View {
         init(context);
     }
 
+    /**
+     * Finds which Map is at the Specific Level.
+     * @param level which Level is searched for.
+     * @return the Map at that Level, if found.
+     */
     private Map getMapAtLevel(int level) {
         Map levelMap = null;
         for (int i = MinLevel; i< Maps.size(); i++) {
@@ -91,6 +96,10 @@ public class CustomView extends View {
         return levelMap;
     }
 
+    /**
+     * This is just a Method for after the Constructor.
+     * @param context Context.
+     */
     private void init(Context context) {
 
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
@@ -121,6 +130,10 @@ public class CustomView extends View {
     }
 
 
+    /**
+     * This opens a XML File To read.
+     * @param fileName the String Name of what File to read.
+     */
     private void ReadFile(String fileName) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -148,6 +161,10 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * This reads the XML file that was Opened by ReadFile, Recursively on itself for nodes.
+     * @param nodeList the XML Nodes that should be searched through now.
+     */
     private void getLinesfromNodes(NodeList nodeList) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
@@ -196,11 +213,20 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Small function to find a Color.
+     * @param name String name of the Color.
+     * @return Returns int of the Color.
+     */
     private int getColor(String name) {
         @ColorInt int color = Color.parseColor(name);
         return color;
     }
 
+    /**
+     * Open Function for the Buttons to change the CurrentMap Level.
+     * @param going If the Level is going down or up.
+     */
     protected void ChangeLevel(int going) {
         Level = Math.min(Math.max(Level +going, MinLevel), MaxLevel);
         CurrentMap = getMapAtLevel(Level);
@@ -339,7 +365,11 @@ public class CustomView extends View {
      * @return the angle that need to be set, there is also a Debug inside of the Methode for the >= 180° problem with triangles
      */
 
-
+    /**
+     * This calculates the Angle the Pointers have been Rotated by.
+     * @param ev MotionEvent.
+     * @return Double of the Angle that it was turned by.
+     */
     private double calcAngle(MotionEvent ev) {
 
         // This is just calculation for the Circle wich is needed to make a correct Angle
