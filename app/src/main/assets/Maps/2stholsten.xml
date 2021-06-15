@@ -1,5 +1,4 @@
-<map Level="2" xoff="0" yoff="0" scale="1" rotation="0">
-
+<map Level="2" xoff="3000" yoff="2000" scale="0.7" rotation="180">
 <line x1="219.5" y1="12" x2="219.5" y2="242" stroke="#FF0000"/>
 <line x1="219.5" y1="308" x2="219.5" y2="341" stroke="#FF0000"/>
 <line x1="369.5" y1="341" x2="369.5" y2="472" stroke="#FF0000"/>
@@ -11,4 +10,8 @@
 <line x1="440" y1="109.5" x2="927" y2="109.5" stroke="#FF0000"/>
 <line x1="511" y1="340.5" x2="927" y2="340.5" stroke="#FF0000"/>
 <line x1="10" y1="340.5" x2="369" y2="340.5" stroke="#FF0000"/>
+<line x1="9" y1="471.5" x2="927" y2="471.5" stroke="#FF0000"/>
+<line x1="10" y1="11.5" x2="927" y2="11.5" stroke="#FF0000"/>
+<line x1="9.5" y1="471" x2="9.49998" y2="11" stroke="#FF0000"/>
+<line x1="926.5" y1="471" x2="926.5" y2="12" stroke="#FF0000"/>
 </map>

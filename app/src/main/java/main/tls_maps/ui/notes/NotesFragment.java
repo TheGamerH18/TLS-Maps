@@ -2,19 +2,17 @@ package main.tls_maps.ui.notes;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import main.tls_maps.MainActivity;
 import main.tls_maps.R;
-import main.tls_maps.NoteItems.NotesContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +70,8 @@ public class NotesFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new NotesRecyclerViewAdapter(MainActivity.notes.getITEMS()));
+            recyclerView.setAdapter(new NotesRecyclerViewAdapter(MainActivity.notes.getITEMS(context), this));
+            MainActivity.notes.recyclerview(recyclerView, this);
         }
         return view;
     }

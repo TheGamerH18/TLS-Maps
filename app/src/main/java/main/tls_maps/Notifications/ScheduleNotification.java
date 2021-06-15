@@ -4,12 +4,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.util.Log;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import main.tls_maps.MainActivity;
 
+/**
+ * Used to create a Notification, either instantly or at a specified time
+ * Calls {@link NotificationTimer}.
+ */
 public class ScheduleNotification {
 
     /**
@@ -32,8 +33,44 @@ public class ScheduleNotification {
         notificationIntent.putExtra("Notification" , msg);
 
         // Create The Pending
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, UID , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                UID ,
+                notificationIntent ,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT
+        );
         // Create the Alarm
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
+    }
+
+    /**
+     * Schedules a new Notification for a Note
+     * @param context - Context of Application
+     * @param msg - Message / Usually the Content of the Note
+     * @param triggerAt - Time in Milliseconds, when the Notification should be Triggered
+     * @param NoteUID - Unique ID of the Note
+     */
+    public ScheduleNotification (Context context, String msg, long triggerAt, int NoteUID) {
+        Intent notificationIntent = new Intent(context, NotificationTimer.class);
+        int uid = getUniqueID();
+
+        // Adds Notification to Note
+        MainActivity.notes.getbyUID(context, NoteUID).addNotification(uid);
+        MainActivity.notes.writelist(context);
+
+        // Put Extras into the Intent, to Identify the Notification.
+        notificationIntent.putExtra("UID", uid);
+        notificationIntent.putExtra("Notification", msg);
+        notificationIntent.putExtra("NoteUID", NoteUID);
+
+        // Create PendingIntent
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                uid,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT
+                );
+
+        // Give the PendingIntent to the Systems Alarm Manager
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }
@@ -41,6 +78,16 @@ public class ScheduleNotification {
     // To create a Instant Notification
     public ScheduleNotification (String msg, Context context) {
         this(msg, 0, context);
+    }
+
+    /**
+     * Creates a Notification, which is fired Instantly
+     * @param context - Context of Application
+     * @param msg - Message of the Notification / Usually the Content of the Note
+     * @param NoteUID - ID of the Note
+     */
+    public ScheduleNotification (Context context, String msg, int NoteUID) {
+        this(context, msg, 0, NoteUID);
     }
 
     /**

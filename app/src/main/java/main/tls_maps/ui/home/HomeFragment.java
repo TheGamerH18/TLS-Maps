@@ -35,7 +35,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Log.d("ClickEvent","The Level Up button has been Pressed");
+                // This makes the Level go one Up, if Possible.
+                //Log.d("ClickEvent","The Level Up button has been Pressed");
                 binding.imageHome.ChangeLevel(1);
             }
         });
@@ -43,7 +44,8 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Log.d("ClickEvent","The Level Down button has been Pressed");
+                // This makes the level go one Down, if Possible.
+                //Log.d("ClickEvent","The Level Down button has been Pressed");
                 binding.imageHome.ChangeLevel(-1);
             }
         });

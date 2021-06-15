@@ -38,7 +38,7 @@ import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class CustomView extends View {
 
-    public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholstein", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
+    public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholsten", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
 
     private Paint Paint;
 
