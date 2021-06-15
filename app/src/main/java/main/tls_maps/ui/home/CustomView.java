@@ -6,7 +6,6 @@ import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.icu.text.Transliterator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -51,7 +50,7 @@ public class CustomView extends View {
     private Vector2 CameraPosition = new Vector2();
     private double CameraAngle = 0;
 
-    private double Scale = .5;
+    private double ZoomScale = .5;
 
 
     private final int MinLevel = 0;
@@ -96,13 +95,14 @@ public class CustomView extends View {
 
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
-        Paint = new Paint();
+        Paint = new Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
         //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i = 0; i<= MaxLevel; i++) {
             Map newLevelMap = new Map(i);
             Maps.add(newLevelMap);
             //Log.d("Hm",""+i);
         }
+
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
         BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
@@ -111,6 +111,9 @@ public class CustomView extends View {
         BackGround.addWall(new Wall(new Vector2(-0.5,0),new Vector2(1,10000),0,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
+        CurrentMap.addWayPoint(new WayPoint("IDK",new Vector2(200,1000), CurrentMap.Level));
+        CurrentMap.addWayPoint(new WayPoint("REEE",new Vector2(600,1120), CurrentMap.Level));
+
         //Log.d("Test",""+String.valueOf(R.));
         for(String MapName : MAPNAMES){
             ReadFile(MapName+".xml");
@@ -231,12 +234,15 @@ public class CustomView extends View {
 
                 Vector2 _center = pointer0.lerp(pointer1,0.5);
                 Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-                Vector2 centertoscreenMiddle = _center.sub(screenMiddle);
+                Vector2 centertoscreenMiddle = screenMiddle.sub(_center);
 
-                Vector2 pivotPoint = _center.add(screenMiddle).add(CameraPosition);
+                Vector2 pivotPoint = centertoscreenMiddle.add(CameraPosition);
 
 
-                CameraPosition = CameraPosition.sub(pivotPoint).Transform(CameraAngle).add(pivotPoint);
+
+                //CameraPosition = CameraPosition.sub(pivotPoint).Transform(CameraAngle).add(pivotPoint);
+
+
 
                 //double centerX = (ev.getX(0)+ev.getX(1))/2;
                 //double centerY = (ev.getY(0)+ev.getY(1))/2;
@@ -379,6 +385,14 @@ public class CustomView extends View {
         return angle;
     }
 
+    /**
+     * This Offets the Positions to the Camera.
+     * @param topLeft the topleft Vertice Position.
+     * @param topRight the topright Vertice Position.
+     * @param bottomRight the bottomright Vertice Position.
+     * @param bottomLeft the bottomleft Vertice Position.
+     * @return an Array of float marking the positions of each Vertice to draw as x,y,x,y...
+     */
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
         Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
 
@@ -390,6 +404,7 @@ public class CustomView extends View {
         bottomLeft = bottomLeft.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
         bottomRight = bottomRight.sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
 
+        // Now Return an float array of x,y Positions
         return new float[] {
                 (float) topLeft.x, (float) topLeft.y,
                 (float) bottomRight.x, (float) bottomRight.y,
@@ -398,11 +413,20 @@ public class CustomView extends View {
         };
     }
 
+    /**
+     * This draws the Actual Line, used for Walls and Waypoint Lines.
+     * @param position this determines where the Line is Positioned.
+     * @param size this determines the size of the Line (NOTE: x is limited to 4).
+     * @param rotation this determines the rotation of the Line.
+     * @param color this is the Color of the line.
+     * @param canvas the Object to draw on.
+     */
     private void drawLine(Vector2 position, Vector2 size, double rotation, String color, Canvas canvas) {
+        // Apply ZoomScale to Position and Size
+        position = position.mul(ZoomScale);
+        size = new Vector2(size.x<=4?size.x:4,size.y*ZoomScale);
 
-        position = position.mul(Scale);
-        size = new Vector2(4,size.mul(Scale).y);
-
+        // Calculate the 4 Corners of the Vertices for Lines
         Vector2 topRight = position.add(size.mul(0.5).Transform(rotation));
         Vector2 bottomLeft = position.add(size.mul(-0.5).Transform(rotation));
         Vector2 topLeft = position.add(new Vector2(-size.x/2,size.y/2).Transform(rotation));
@@ -426,6 +450,11 @@ public class CustomView extends View {
         postInvalidate();
     }
 
+    /**
+     * This draws all the Walls from a Specific Map.
+     * @param canvas the Object to draw on.
+     * @param mapToDraw the Map which to get the Walls from.
+     */
     private void drawMap(Canvas canvas, Map mapToDraw) {
         for (int i=0;i<mapToDraw.WallsOnMap.size();i++) {
             Wall thisWall = mapToDraw.WallsOnMap.get(i);
@@ -433,29 +462,69 @@ public class CustomView extends View {
         }
     }
 
-    private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints) {
+    /**
+     * This draws a Line between two Waypoints.
+     * @param canvas the Object to drawn on.
+     * @param wp1 Waypoint 1
+     * @param wp2 Waypoint 2
+     */
+    private void drawLine_WayPoint(Canvas canvas, WayPoint wp1, WayPoint wp2,String Color) {
+        // Calculates all the needed information to draw the Line between the two Waypoints.
+        Vector2 position = wp1.position.lerp(wp2.position,0.5);
+        Vector2 size = new Vector2(3,wp1.position.sub(wp2.position).magnitude());
+        double rotation = -Math.toDegrees(wp1.position.sub(wp2.position).angle());
+        drawLine(position,size,rotation,Color,canvas);
+    }
+
+    /**
+     * This is for Drawing an Array of WayPoints, made for Routes.
+     * @param canvas the Object to draw on.
+     * @param wayPoints the ArrayList of WayPoints which tell the Route to go.
+     */
+    private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints,String Color) {
+        WayPoint lastWP = null;
+        Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+        // WayPoint Size
+        double size = 15*ZoomScale;
+
+        // Loop through all Waypoints to draw them
         for (int i=0;i<wayPoints.size();i++) {
             WayPoint currentWayPoint = wayPoints.get(i);
-            canvas.drawCircle(200,200,50,Paint);
+            Vector2 ActualPosition = currentWayPoint.position.mul(ZoomScale).sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
+            Paint.setColor(getColor(Color));
+            canvas.drawCircle((float) (ActualPosition.x),(float) (ActualPosition.y), (float) size,Paint);
+
+            // Check if a previous Waypoint exists.
+            if (lastWP != null) {
+                // Draw a Line between Current and Last Waypoint.
+                drawLine_WayPoint(canvas,currentWayPoint,lastWP,Color);
+            }
+            // Overwrite the Last to the Current Waypoint.
+            lastWP = currentWayPoint;
         }
     }
 
-    private boolean WayPointDebug = true;
+    private boolean RouteSet = true;
 
+    /**
+     * This gets Repeatedly activated by a parent Class, it gives the Canvas to draw on.
+     * @param canvas the Object to draw on.
+     */
     @Override
     protected void onDraw(Canvas canvas) {
+
+        // First draw the Background as the lowest Layer to get overdrawn by others.
         drawMap(canvas, BackGround);
 
-        if (WayPointDebug) {
-            //drawWayPoints();
-        }
-        canvas.drawCircle(0-(float) CameraPosition.x-5+getWidth()/2,0-(float) CameraPosition.y-5+getHeight()/2,10,Paint);
-
+        // Draw the Current Map, like Rooms hallways and such.
         drawMap(canvas, CurrentMap);
 
+        // Draw the Waypoints and their Connections, for the Route.
+        if (RouteSet) {
+            // Change the "GREEN" Color for what you need/want.
+            drawWayPoints(canvas, CurrentMap.WayPointsOnMap,"GREEN");
+        }
 
-
-        //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
     }
 
@@ -463,16 +532,20 @@ public class CustomView extends View {
 
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            //Scale *= detector.getScaleFactor();
+            // Apply the Change in Scale
+            ZoomScale *= detector.getScaleFactor();
+
+            // Keep the Position the same.
+            if (ZoomScale >= 0.25 && ZoomScale <= 2) CameraPosition = CameraPosition.mul(detector.getScaleFactor());
 
             // Don't let the object get too small or too large.
-            Scale = Math.max(0.25f, Math.min(Scale, 2.0f));
+            ZoomScale = Math.max(0.25f, Math.min(ZoomScale, 2.0f));
 
             invalidate();
             return true;
         }
     }
 
-    // TODO - Hand Movements for scaling, rotation | -Add a better Rotation
+    // TODO -Add a better Rotation
 
     }
