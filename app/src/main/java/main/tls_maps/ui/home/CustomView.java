@@ -63,6 +63,7 @@ public class CustomView extends View {
             init();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(200);
         }
     }
 
@@ -72,6 +73,7 @@ public class CustomView extends View {
             init();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(200);
         }
     }
 
@@ -81,6 +83,7 @@ public class CustomView extends View {
             init();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(200);
         }
     }
 
@@ -91,6 +94,7 @@ public class CustomView extends View {
             init();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(200);
         }
     }
 
@@ -131,17 +135,10 @@ public class CustomView extends View {
         for(String WayPoints : WAYPOINTS){
             ReadFile("WayPoints/"+WayPoints+".xml");
         }
-        for(WayPoint wp: WayPoints){
-            Log.d("TAG", "Room: " + wp.getName());
-        }
         if((WayPoints.get(Integer.parseInt("" + (int) Math.floor(Math.random()*WayPoints.size()))).getNeighbourPoints().size()) == 0) {
             throw new Exception("Nachbar Punkte konnten nicht gesetzt werden");
         }
-        for(WayPoint wp : WayPoints.get(1).getNeighbourPoints()){
-            Log.d("" + WayPoints.get(1).getName(), " " + wp.getName());
-        }
     }
-
 
     private void ReadFile(String fileName) {
         // Instantiate the Factory
@@ -391,6 +388,7 @@ public class CustomView extends View {
             if(WayPoints.get(i).getName().equals(name))
                 return WayPoints.get(i);
         }
+        Log.d("Not Found", "getWayPoint: " + name);
         throw new Exception("WayPoint doesnt exists!\t" + name);
     }
 

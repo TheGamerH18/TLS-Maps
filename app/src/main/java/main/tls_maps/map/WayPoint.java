@@ -8,7 +8,6 @@ public class WayPoint {
     private final int Level;
     private ArrayList<WayPoint> NeighbourPoints = new ArrayList<>();
 
-
     public WayPoint(String Name, Vector2 Position, int Level) {
         this.Name = Name;
         this.position = Position;
@@ -33,5 +32,9 @@ public class WayPoint {
 
     public String getName() {
         return this.Name;
+    }
+
+    public Vector2 getVector() {
+        return this.position;
     }
 }

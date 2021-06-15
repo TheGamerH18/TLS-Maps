@@ -86,11 +86,6 @@ public class HomeFragment extends Fragment {
                     Snackbar.make(v, "Zielpunkt konnte nicht gefunden werden", Snackbar.LENGTH_LONG).show();
                 else {
                     AStar astar = new AStar(fromWP, targetWP);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     ArrayList<WayPoint> route = astar.getRoute();
                     for(WayPoint wp: route) {
                         Log.d("Route", " " + wp.getName());

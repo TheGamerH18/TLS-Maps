@@ -7,60 +7,51 @@ import java.util.ArrayList;
 public class AStar {
 
 
-
-    protected static ArrayList< ArrayList<WayPoint> > Routen = new ArrayList<>();
+    private final WayPoint Goal;
+    private final WayPoint Start;
+    private ArrayList<WayPoint> Route;
+    private WayPoint Position;
 
     public AStar(WayPoint start, WayPoint goal) {
-        CalculateRoute(new ArrayList<>(), start, goal);
+        this.Goal = goal;
+        this.Start = start;
+        this.Position = start;
+        ArrayList<WayPoint> path = new ArrayList<>();
+        path.add(start);
+        CalculateRoute(path, start);
     }
 
-    private void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location, WayPoint Goal) {
-        ArrayList<WayPoint> backUpPath = path;
-        for (WayPoint neighbor : Location.getNeighbourPoints()) {
-            path = backUpPath;
-            Log.d("TAG", "CalculateRoute: " + neighbor.getName());
-            path.add(neighbor);
-            if (Location != Goal)
-                CalculateRoute(path, neighbor, Goal);
-            else
-                AStar.Routen.add(path);
-        }
-    }
+    public void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location) {
+        for(WayPoint wp : Location.getNeighbourPoints()) {
+            if(wp.getName().equals(Goal.getName()) || wp.equals(Goal)) {
+                Log.d("TAG", "CalculateRoute: Goal found!");
+                path.add(wp);
+                this.Route = path;
+            }
+            if(wpIsRelavant(wp)){
+                if(path.contains(wp))
+                    continue;
+                Log.d("TAG", "CalculateRoute: Relavant WayPoint found!" + wp.getName());
+                path.add(wp);
+                this.Position = wp;
+                CalculateRoute(path, wp);
+            } else {
 
-    private boolean visited(WayPoint neighbor, ArrayList<WayPoint> path) {
-        return path.contains(neighbor);
-    }
-    public ArrayList<WayPoint> getRoute() {
-        try {
-            return getShortest();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private ArrayList<WayPoint> getShortest() throws Exception {
-        int shortest = 0;
-
-
-        Log.d("TAG", "all " + Routen.size());
-
-
-        for(int i = 0; i < Routen.size(); ++i){
-            for(WayPoint wp : Routen.get(i)){
-                Log.d("Route " + i , wp.getName());
             }
         }
+    }
 
-
-        if(Routen.isEmpty())
-            throw new Exception("Routen sind nicht verfügbar!");
-
-
-        for(int i = 0; i <= Routen.size(); i++){
-            shortest = (Routen.get(i).size() < Routen.get(shortest).size())? i : shortest;
+    private boolean wpIsRelavant(WayPoint wp) {
+        Log.d("TAG", "wpIsRelavant: " + (Goal.getPosition().sub(wp.getPosition()).magnitude()) + " < " + Goal.getPosition().sub(Position.getPosition()).magnitude() + "      WP: " + wp.getName());
+        if(Goal.getPosition().sub(wp.getPosition()).magnitude() < Goal.getPosition().sub(Position.getPosition()).magnitude()){
+            return true;
         }
+        return false;
+    }
 
-        return Routen.get(shortest);
+    public ArrayList<WayPoint> getRoute() {
+        if(this.Route == null)
+            return new ArrayList<>();
+        return this.Route;
     }
 }
