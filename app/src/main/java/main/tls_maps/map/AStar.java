@@ -7,78 +7,30 @@ import java.util.ArrayList;
 public class AStar {
 
 
-    private final WayPoint Start, Goal;
-    protected WayPoint[][] Routen = new WayPoint[][]{};
+
+    protected static ArrayList< ArrayList<WayPoint> > Routen = new ArrayList<>();
 
     public AStar(WayPoint start, WayPoint goal) {
-        this.Start = start;
-        this.Goal = goal;
-        CalculateRoute(new WayPoint[]{start}, start, goal);
+        CalculateRoute(new ArrayList<>(), start, goal);
     }
 
-    private void CalculateRoute(WayPoint[] path, WayPoint Location, WayPoint Goal) {
-        WayPoint[] backUpPath = path;
+    private void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location, WayPoint Goal) {
+        ArrayList<WayPoint> backUpPath = path;
         for (WayPoint neighbor : Location.getNeighbourPoints()) {
             path = backUpPath;
-            Log.d("", "Cuurent Path:");
-            for(WayPoint wp : path) {
-                Log.d("Path", wp.getName());
-            }
-            Log.d("", "\t\t\t\t\t");
-            if(!isValid(neighbor, path))
-                continue;
-
-            path = arrayAdd(neighbor, path);
-            Routen = arrayAdd(path, Routen);
-            CalculateRoute(path, neighbor, Goal);
-        }
-    }
-
-    private WayPoint[] arrayAdd (WayPoint addTo, WayPoint[] array) {
-        WayPoint[] newArray = new WayPoint[array.length+1];
-        for(int i = 0; i < array.length+1; ++i){
-            if(i < array.length)
-                newArray[i] = array[i];
+            Log.d("TAG", "CalculateRoute: " + neighbor.getName());
+            path.add(neighbor);
+            if (Location != Goal)
+                CalculateRoute(path, neighbor, Goal);
             else
-                newArray[i] = addTo;
+                AStar.Routen.add(path);
         }
-        return newArray;
-    }
-
-    private WayPoint[][] arrayAdd (WayPoint[] addTo, WayPoint[][] array) {
-        WayPoint[][] newArray = new WayPoint[array.length+1][];
-        for(int i = 0; i < array.length+1; ++i){
-            if(i < array.length)
-                newArray[i] = array[i];
-            else
-                newArray[i] = addTo;
-        }
-        return newArray;
-    }
-
-    private boolean isValid(WayPoint neighbor, WayPoint[] path) {
-        if(pathContains(neighbor, path) || path.length > 25)
-            return false;
-
-        return true;
-    }
-
-    private boolean pathContains(WayPoint neighbor, WayPoint[] path) {
-        for(WayPoint wp : path){
-            if(wp.getName().equals(neighbor.getName()))
-                return true;
-        }
-        return false;
-    }
-
-    private boolean isGoal(WayPoint neighbor, WayPoint goal) {
-        return neighbor == goal;
     }
 
     private boolean visited(WayPoint neighbor, ArrayList<WayPoint> path) {
         return path.contains(neighbor);
     }
-    public WayPoint[] getRoute() {
+    public ArrayList<WayPoint> getRoute() {
         try {
             return getShortest();
         } catch (Exception e) {
@@ -87,33 +39,28 @@ public class AStar {
         return null;
     }
 
-    private WayPoint[] getShortest() throws Exception {
+    private ArrayList<WayPoint> getShortest() throws Exception {
         int shortest = 0;
 
-        Log.d("", "all: " + Routen.length);
 
-        if(Routen == null)
-            throw new Exception("Keine Routen gefunden!");
+        Log.d("TAG", "all " + Routen.size());
 
 
-        for(int i = 0; i < Routen.length; i++){
-            if(Routen[i].length < Routen[shortest].length && isValid(i))
-                shortest = i;
+        for(int i = 0; i < Routen.size(); ++i){
+            for(WayPoint wp : Routen.get(i)){
+                Log.d("Route " + i , wp.getName());
+            }
         }
-        Log.d("TAG", "getShortest: " + Routen[shortest].length);
-        return Routen[shortest];
-    }
 
-    private boolean isValid(int i) {
-        boolean containsStart = false, containsGoal = false;
-        for(int x = 0; x < Routen[i].length; ++x) {
-            if(Routen[i][x].getName().equals(Goal.getName()))
-                containsGoal = true;
-            if(Routen[i][x].getName().equals(Start.getName()))
-                containsStart = true;
+
+        if(Routen.isEmpty())
+            throw new Exception("Routen sind nicht verfügbar!");
+
+
+        for(int i = 0; i <= Routen.size(); i++){
+            shortest = (Routen.get(i).size() < Routen.get(shortest).size())? i : shortest;
         }
-        if(containsGoal && containsStart)
-            return true;
-        return false;
+
+        return Routen.get(shortest);
     }
 }

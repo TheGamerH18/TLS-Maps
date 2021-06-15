@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    WayPoint[] route = astar.getRoute();
+                    ArrayList<WayPoint> route = astar.getRoute();
                     for(WayPoint wp: route) {
                         Log.d("Route", " " + wp.getName());
                     }
