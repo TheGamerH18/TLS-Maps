@@ -42,8 +42,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        overridePendingTransition(0,0);
+
+        notes = new NotesContent(getApplicationContext());
+
+        //Is this needed??? The Pull merge screwed up somethings for some reason, /~Space
+        //displayMetrics = new DisplayMetrics();
+        //getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -15,6 +15,8 @@ public class WayPoint {
         this.Level = Level;
     }
 
+    public Vector2 getPosition() {return this.position;}
+
     public void AddNeighbourPoint(WayPoint name) {
         NeighbourPoints.add(name);
     }

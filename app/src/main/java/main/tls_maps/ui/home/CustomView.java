@@ -114,7 +114,7 @@ public class CustomView extends View {
 
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
+        //BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
         //BackGround.addWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(0,-0.5),new Vector2(1,10000),90,"BlACK"));
         BackGround.addWall(new Wall(new Vector2(-0.5,0),new Vector2(1,10000),0,"BLACK"));
@@ -122,6 +122,7 @@ public class CustomView extends View {
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         CurrentMap.addWayPoint(new WayPoint("IDK",new Vector2(200,1000), CurrentMap.Level));
         CurrentMap.addWayPoint(new WayPoint("REEE",new Vector2(600,1120), CurrentMap.Level));
+        CurrentMap.addWayPoint(new WayPoint("Hewo",new Vector2(300,1500),CurrentMap.Level));
 
         //Log.d("Test",""+String.valueOf(R.));
         for(String MapName : MAPNAMES){
@@ -500,9 +501,9 @@ public class CustomView extends View {
      */
     private void drawLine_WayPoint(Canvas canvas, WayPoint wp1, WayPoint wp2,String Color) {
         // Calculates all the needed information to draw the Line between the two Waypoints.
-        Vector2 position = wp1.position.lerp(wp2.position,0.5);
-        Vector2 size = new Vector2(3,wp1.position.sub(wp2.position).magnitude());
-        double rotation = -Math.toDegrees(wp1.position.sub(wp2.position).angle());
+        Vector2 position = wp1.getPosition().lerp(wp2.getPosition(),0.5);
+        Vector2 size = new Vector2(3,wp1.getPosition().sub(wp2.getPosition()).magnitude());
+        double rotation = -Math.toDegrees(wp1.getPosition().sub(wp2.getPosition()).angle());
         drawLine(position,size,rotation,Color,canvas);
     }
 
@@ -520,7 +521,7 @@ public class CustomView extends View {
         // Loop through all Waypoints to draw them
         for (int i=0;i<wayPoints.size();i++) {
             WayPoint currentWayPoint = wayPoints.get(i);
-            Vector2 ActualPosition = currentWayPoint.position.mul(ZoomScale).sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
+            Vector2 ActualPosition = currentWayPoint.getPosition().mul(ZoomScale).sub(CameraPosition).Transform(CameraAngle).add(screenMiddle);
             Paint.setColor(getColor(Color));
             canvas.drawCircle((float) (ActualPosition.x),(float) (ActualPosition.y), (float) size,Paint);
 
@@ -542,6 +543,8 @@ public class CustomView extends View {
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        // Turn the Background Gray, this can be removed cause it causes the button background to be different.
+        canvas.drawColor(Color.LTGRAY);
 
         // First draw the Background as the lowest Layer to get overdrawn by others.
         drawMap(canvas, BackGround);
