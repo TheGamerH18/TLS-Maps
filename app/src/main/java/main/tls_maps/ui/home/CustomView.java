@@ -38,7 +38,9 @@ import main.tls_maps.map.WayPoint;
 public class CustomView extends View {
 
     public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholsten", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
-    private static final String[] WAYPOINTS = new String[] {"WPEGHolsten"};
+
+    // TODO all WayPoints
+    private static final String[] WAYPOINTS = new String[] {"WPEGHolsten", "WPEGHolsten.xml"};
 
     private ArrayList<WayPoint> WayPoints = new ArrayList<>();
 
@@ -57,6 +59,10 @@ public class CustomView extends View {
 
     private ArrayList<Map> Maps = new ArrayList<Map>(3);
 
+    /**
+     * Method needed
+     * @param context - The Context of the Activity
+     */
     public CustomView(Context context) {
         super(context);
         try {
@@ -67,6 +73,11 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Method needed
+     * @param context
+     * @param attrs
+     */
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         try {
@@ -77,6 +88,12 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Method needed
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         try {
@@ -87,6 +104,13 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Method needed
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     * @param defStyleRes
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -98,6 +122,11 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Get the Map at Level x
+     * @param level the Level that is wanted
+     * @return the Map of the Level
+     */
     private Map getMapAtLevel(int level) {
         Map levelMap = null;
         for (int i = MinLevel; i< Maps.size(); i++) {
@@ -110,6 +139,10 @@ public class CustomView extends View {
         return levelMap;
     }
 
+    /**
+     * the Initialing
+     * @throws Exception a Expection if there is Something critical Wrong with the WayPoint, what will kill the App
+     */
     private void init() throws Exception {
         Paint = new Paint();
 
@@ -140,6 +173,10 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * read a File
+     * @param fileName the Name of the File
+     */
     private void ReadFile(String fileName) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -169,6 +206,18 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Get the Current Levelo of the Map
+     * @return the Current Map Level
+     */
+    public int getLevel() {
+        return this.Level;
+    }
+
+    /**
+     * This Method is for the Maps
+     * @param nodeList the NodeList from the XML Document
+     */
     private void getLinesfromNodes(NodeList nodeList) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
@@ -215,15 +264,28 @@ public class CustomView extends View {
         }
     }
 
+    /**
+     * Get a Color
+     * @param name Color Name
+     * @return the Color as Int
+     */
     private int getColor(String name) {
         @ColorInt int color = Color.parseColor(name);
         return color;
     }
 
+    /**
+     * Is in HomeFragment needed
+     * @return the ArrayList of all WayPoints
+     */
     public ArrayList<WayPoint> getWayPoints () {
         return this.WayPoints;
     }
 
+    /**
+     * Change Level
+     * @param going change Level to X
+     */
     protected void ChangeLevel(int going) {
         Level = Math.min(Math.max(Level +going, MinLevel), MaxLevel);
         CurrentMap = getMapAtLevel(Level);
@@ -231,6 +293,10 @@ public class CustomView extends View {
 
     private VelocityTracker mVelocityTracker = null;
 
+    /**
+     * This Is for the Movemnt tracking on the Map
+     * @param event the Event self
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int index = event.getActionIndex();
@@ -274,6 +340,14 @@ public class CustomView extends View {
         return true;
     }
 
+    /**
+     * Get the Current Camera Offset
+     * @param topLeft
+     * @param topRight
+     * @param bottomRight
+     * @param bottomLeft
+     * @return the verts
+     */
     private float[] getCameraOffset(Vector2 topLeft, Vector2 topRight, Vector2 bottomRight, Vector2 bottomLeft) {
         Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
         topLeft = topLeft.sub(Position).Transform(GlobRotation).add(screenMiddle);
@@ -290,6 +364,14 @@ public class CustomView extends View {
         return verts;
     }
 
+    /**
+     * Draw a Line with 2 Trianlges of the Map
+     * @param position
+     * @param size
+     * @param rotation
+     * @param color
+     * @param canvas
+     */
     private void drawLine(Vector2 position, Vector2 size, double rotation, String color, Canvas canvas) {
 
         position = position.mul(Scale);
@@ -308,6 +390,11 @@ public class CustomView extends View {
         postInvalidate();
     }
 
+    /**
+     * Draw the Map on the Canvas
+     * @param canvas
+     * @param mapToDraw
+     */
     private void drawMap(Canvas canvas, Map mapToDraw) {
         for (int i=0;i<mapToDraw.WallsOnMap.size();i++) {
             Wall thisWall = mapToDraw.WallsOnMap.get(i);
@@ -315,33 +402,19 @@ public class CustomView extends View {
         }
     }
 
-    private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints) {
-        for (int i=0;i<wayPoints.size();i++) {
-            WayPoint currentWayPoint = wayPoints.get(i);
-            Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-            Vector2 waypointpos = currentWayPoint.getPosition().sub(Position).add(screenMiddle);
-            Paint otherpaint = new Paint();
-            otherpaint.setARGB(255,0,0,255);
-            canvas.drawCircle((float) waypointpos.x,(float) waypointpos.y,50,otherpaint);
-        }
-    }
-
-    private boolean WayPointDebug = true;
-
     @Override
     protected void onDraw(Canvas canvas) {
         drawMap(canvas, BackGround);
         drawMap(canvas, CurrentMap);
-        if (WayPointDebug)
-            drawWayPoints(canvas,CurrentMap.WayPointsOnMap);
-
 
         //canvas.drawText("Position: "+Position.ToString(),50,50,paint);
         super.onDraw(canvas);
     }
 
-
-
+    /**
+     * Start the Recursiv WayPoint reading
+     * @param nodeList - The NodeList of the XML Document
+     */
     private void getWayPoints(NodeList nodeList) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
@@ -349,6 +422,13 @@ public class CustomView extends View {
         getNeighbor(start, nodeList);
     }
 
+    /**
+     * This Method reads all WayPoints and is also Checking for Error in the Connection of the WayPoints
+     *
+     * This Method is Recursiv
+     * @param start - The Current WayPoint
+     * @param nodeList - the NodeList of the XML Document
+     */
     private void getNeighbor(String start, NodeList nodeList ) {
         int index = WayPoints.size();
         Node mapNode = nodeList.item(0);
@@ -365,7 +445,19 @@ public class CustomView extends View {
                 String x = lineNode.getAttributes().getNamedItem("x").getNodeValue();
                 String y = lineNode.getAttributes().getNamedItem("y").getNodeValue();
                 String[] neighbors = (lineNode.getAttributes().getNamedItem("neighbours").getNodeValue()).split("/");
-                WayPoints.add(new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl));
+                String knot = lineNode.getAttributes().getNamedItem("knot").getNodeValue();
+                WayPoint now = new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl);
+                if(!knot.isEmpty()) {
+                    now.sethasKnot();
+                    if(!find(knot))
+                        getNeighbor(knot, nodeList);
+                    try {
+                        now.setKnot(getWayPoint(knot));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                WayPoints.add(now);
                 Log.d("TAG", "created: " + start);
                 for(String name: neighbors) {
                     if(!find(name))
@@ -383,6 +475,14 @@ public class CustomView extends View {
         return;
     }
 
+    /**
+     * This Methode Checks if the WayPoint already exits or not
+     * @param name the WayPoint Name
+     * @return the WayPoint
+     * @throws Exception Throw a Exception if the WayPoint doesnt exists, but this Should happen because of the Check in creating them
+     *
+     * If this Error Occruing then it might be that a Connection in the WayPoints is Wrong
+     */
     private WayPoint getWayPoint(String name) throws Exception {
         for(int i = 0; i < WayPoints.size(); i++) {
             if(WayPoints.get(i).getName().equals(name))
@@ -392,6 +492,11 @@ public class CustomView extends View {
         throw new Exception("WayPoint doesnt exists!\t" + name);
     }
 
+    /**
+     * This Method is for the Reading of the WayPoints
+     * @param name the Name of the WayPoint
+     * @return true if the WayPoint exists
+     */
     private boolean find(String name) {
         for(WayPoint wp: WayPoints){
             if(wp.getName().equals(name))

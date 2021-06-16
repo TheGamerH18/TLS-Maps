@@ -1,0 +1,23 @@
+<waypoints level="1" rotation="90" start="_Treppe00">
+<waypoint name="_Treppe00" x="1553" y="280" knot="" neighbours="_Treppe10"/>
+<waypoint name="_Treppe01" x="1733" y="280" knot="" neighbours="_Treppe11"/>
+<waypoint name="_Treppe10" x="1553" y="280" knot="" neighbours="_Treppe00/6207"/>
+<waypoint name="_Treppe11" x="1733" y="280" knot="" neighbours="_Treppe01/5201"/>
+<waypoint name="_Treppe20" x="1553" y="280" knot="" neighbours="_Treppe10"/>
+<waypoint name="_Treppe21" x="1733" y="280" knot="" neighbours="_Treppe11"/>
+<waypoint name="6213" x="137" y="377" knot="" neighbours="6213"/>
+<waypoint name="6214" x="137" y="377" knot="" neighbours="6213/6215"/>
+<waypoint name="6215" x="271" y="377" knot="" neighbours="6214/6212"/>
+<waypoint name="6212" x="351" y="377" knot="" neighbours="6215/6216"/>
+<waypoint name="6211" x="500" y="377" knot="" neighbours="6216"/>
+<waypoint name="6216" x="500" y="377" knot="" neighbours="6211/6212/6209"/>
+<waypoint name="6209" x="920" y="377" knot="" neighbours="6207/6216"/>
+<waypoint name="6208" x="1200" y="270" knot="" neighbours="6207"/>
+<waypoint name="6207" x="1200" y="270" knot="" neighbours="6208/6209/_Treppe10"/>
+<waypoint name="7202" x="137" y="790" knot="_Ausgang01" neighbours="7203"/>
+<waypoint name="7203" x="137" y="790" knot="_Ausgang01" neighbours="7204/7202/7201"/>
+<waypoint name="7204" x="137" y="790" knot="_Ausgang01" neighbours="7203"/>
+<waypoint name="7201" x="350" y="790" knot="_Ausgang01" neighbours="7203/6217"/>
+<waypoint name="5203" x="2000" y="780" knot="_Ausgang03" neighbours="5201"/>
+<waypoint name="5201" x="2000" y="780" knot="_Ausgang03" neighbours="5203"/>
+</waypoints>
