@@ -100,6 +100,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                             now.get(Calendar.DAY_OF_MONTH));
                     dpd.show(fragment.getChildFragmentManager(), "test");
                     dpd.dismissOnPause(true);
+                    dpd.vibrate(false);
                 }
             });
         }
@@ -139,6 +140,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
                     true);
             tpd.show(fragment.getChildFragmentManager(), "test");
             tpd.dismissOnPause(true);
+            tpd.vibrate(false);
             cl.set(Calendar.YEAR, year);
             cl.set(Calendar.MONTH, monthOfYear);
             cl.set(Calendar.DAY_OF_MONTH, dayOfMonth);
