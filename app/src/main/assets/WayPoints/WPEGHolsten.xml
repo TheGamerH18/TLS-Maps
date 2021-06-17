@@ -2,7 +2,7 @@
     <waypoint name="_Ausgang00" x="31" y="377" knot="" neighbours="6114"/>
     <waypoint name="_Ausgang01" x="351" y="614" knot="" neighbours="7101/7102/7103/7104/6112"/>
     <waypoint name="_Ausgang02" x="704" y="390" knot="" neighbours="6109/6116/6117/7101/_Treppe00"/>
-    <waypoint name="_Ausgang03" x="1733" y="280" knot="" neighbours="_Treppe00/_Treppe01/6107/5101"/>
+    <waypoint name="_Ausgang03" x="1733" y="280" knot="" neighbours="_Treppe00/_Treppe01/6107/5101/_Ausgang04"/>
     <waypoint name="_Treppe00" x="1553" y="280" knot="" neighbours="_Ausgang03/_Ausgang02/6107"/>
     <waypoint name="_Treppe01" x="1733" y="280" knot="" neighbours="_Ausgang03/5101/_Treppe00"/>
     <waypoint name="6113" x="137" y="377" knot="" neighbours="6113"/>

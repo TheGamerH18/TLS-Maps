@@ -50,6 +50,14 @@ public class HomeFragment extends Fragment {
                 showRoute();
             }
         });
+
+        binding.QR.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), main.tls_maps.QRCode.Scanner.class));
+            }
+        });
         binding.floatingActionButtonDown.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -82,7 +90,7 @@ public class HomeFragment extends Fragment {
              */
             @Override
             public void onClick(View v) {
-
+                
                 String from = binding.start.getText().toString();
                 String target = binding.target.getText().toString();
 
@@ -99,7 +107,9 @@ public class HomeFragment extends Fragment {
                     Snackbar.make(v, "Zielpunkt konnte nicht gefunden werden", Snackbar.LENGTH_LONG).show();
                 else {
                     ArrayList<WayPoint> route = new ArrayList<>();
+                    Log.d("TAG", "onClick: before");
                     if(!(""+ from.charAt(1)).equals(""+target.charAt(1))) {
+                        Log.d("TAG", "onClick: if");
                         // get the difference
                         try {
                             int fromInt = Integer.parseInt(""+from.charAt(1));
@@ -121,12 +131,17 @@ public class HomeFragment extends Fragment {
                             e.printStackTrace();
                         }
                     } else {
+                        Log.d("TAG", "onClick: else");
                         AStar astar = new AStar(fromWP, targetWP);
                         route = astar.getRoute();
 
                     }
+                    Log.d("TAG", "onClick: after");
                     binding.imageHome.getMapAtLevel(binding.imageHome.getLevel()).setRoute(route);
+                    if(route == null || route.isEmpty())
+                        Log.d("TAG", "onClick: ALLE");
                     for (WayPoint wp : route) {
+                        Log.d("TAG", "onClick: for");
                         Log.d("Route", " " + wp.getName());
                     }
                 }

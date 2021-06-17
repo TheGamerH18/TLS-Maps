@@ -1,11 +1,15 @@
 package main.tls_maps.map;
 
+import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class AStar {
-    private ArrayList<WayPoint> Route;
-    private ArrayList<WayPoint> StartRoute;
-    private ArrayList<WayPoint> GoalRoute;
+    private ArrayList<WayPoint> Route = null;
+    private ArrayList<WayPoint> StartRoute = null;
+    private ArrayList<WayPoint> GoalRoute = null;
     private WayPoint Position;
 
     /**
@@ -20,7 +24,7 @@ public class AStar {
      * @param start - Where is the Start
      * @param goal - Where is the End
      */
-    public AStar(WayPoint start, WayPoint goal) {
+    public AStar(@NotNull WayPoint start, @NotNull WayPoint goal) {
 
         // Empty ArrayList for the Recursive call
         ArrayList<WayPoint> path = new ArrayList<>();
@@ -59,19 +63,14 @@ public class AStar {
             // Calculate the Route
             CalculateRoute(path, start, start.getKnot());
 
-            // Put the Route in
-            this.StartRoute = Route;
-
-            // reset Everything
-            Route = null;
+            // reset
             path = new ArrayList<>();
 
             // Make the Knot as Start
             start = start.getKnot();
         }
 
-        // This calculate the Rest of the Route
-
+        // This calculates the Rest of the Route
         // Set the Position
         this.Position = start;
 
@@ -81,14 +80,12 @@ public class AStar {
         // Calculate the Route
         CalculateRoute(path, start, goal);
 
-        // put together
-        if(this.StartRoute != null) {
-            // The StartRoute needs to come before
-            this.StartRoute.addAll(this.Route);
-            this.Route = this.StartRoute;
-        }
-        if(this.GoalRoute != null)
-            this.Route.addAll(this.GoalRoute);
+        // The StartRoute needs to come before
+
+        if(this.GoalRoute == null)
+            return;
+
+        this.Route.addAll(this.GoalRoute);
     }
 
 
@@ -102,13 +99,16 @@ public class AStar {
      * @param Location - where is the Algorhythm
      * @param Goal - the Target WayPoint
      */
-    public void CalculateRoute(ArrayList<WayPoint> path, WayPoint Location, WayPoint Goal) {
+    public void CalculateRoute(@NotNull ArrayList<WayPoint> path, @NotNull WayPoint Location, @NotNull WayPoint Goal) {
 
+        Log.d("TAG", "Von " + Location.getName() + " nach " + Goal.getName());
         // Loop through all Neighbors
         for(WayPoint wp : Location.getNeighbourPoints()) {
+            Log.d("Nachbar", "CalculateRoute: " + wp.getName());
 
             // Check if the WayPoint is the Target
             if(wp.getName().equals(Goal.getName()) || wp.equals(Goal)) {
+                Log.d("TAG", "CalculateRoute: target found");
                 path.add(wp);
                 this.Route = path;
             }
@@ -133,7 +133,7 @@ public class AStar {
      * @param Goal - Where we need to get to
      * @return true if the WayPoint is Relevant
      */
-    private boolean wpIsRelavant(WayPoint wp, WayPoint Goal) {
+    private boolean wpIsRelavant(@NotNull WayPoint wp, @NotNull WayPoint Goal) {
 
         // Check if is distance is getting Lower
         if(Goal.getPosition().sub(wp.getPosition()).magnitude() < Goal.getPosition().sub(Position.getPosition()).magnitude()){
@@ -147,7 +147,7 @@ public class AStar {
      * This Method is to get the Route
      * @return the fastest Route to get to the Target
      */
-    public ArrayList<WayPoint> getRoute() {
+    public @NotNull ArrayList<WayPoint> getRoute() {
         // Catch if there isnt a Route
         if(this.Route == null)
             return new ArrayList<>();
@@ -163,7 +163,7 @@ public class AStar {
      * @param wayPoints - the ArrayList of all WayPoints
      * @return
      */
-    public WayPoint getStair(WayPoint fromWP, ArrayList<WayPoint> wayPoints) {
+    public @NotNull WayPoint getStair(@NotNull WayPoint fromWP, @NotNull ArrayList<WayPoint> wayPoints) {
 
         // Init the Variables
         double lowest = Integer.MAX_VALUE;

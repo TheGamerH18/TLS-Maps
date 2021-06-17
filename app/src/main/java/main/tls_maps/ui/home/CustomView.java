@@ -42,7 +42,7 @@ public class CustomView extends View {
     public static final String[] MAPNAMES = new String[] {"1stholstein", "2stholsten", "EGHolsten", "Hauptgebäude1Stock", "HauptgebäudeEg"};
 
     // TODO all WayPoints
-    private static final String[] WAYPOINTS = new String[] {"WPEGHolsten", "WPEGHolsten.xml"};
+    private static final String[] WAYPOINTS = new String[] {"WPEGHolsten", "test", "test", "test", "WPEGPark"};
 
     private ArrayList<WayPoint> WayPoints = new ArrayList<>();
 
@@ -490,7 +490,7 @@ public class CustomView extends View {
     private void drawMap(Canvas canvas, Map mapToDraw) {
         for (int i=0;i<mapToDraw.WallsOnMap.size();i++) {
             Wall thisWall = mapToDraw.WallsOnMap.get(i);
-            drawLine(thisWall.Position,thisWall.Size,thisWall.Rotation,thisWall.Color,canvas);
+            drawLine(thisWall.Position,thisWall.Size,thisWall.Rotation,"BLACK",canvas);
         }
     }
   
@@ -512,7 +512,7 @@ public class CustomView extends View {
         // Draw the Waypoints and their Connections, for the Route.
         if (RouteSet) {
             // Change the "GREEN" Color for what you need/want.
-            drawWayPoints(canvas, CurrentMap.WayPointsOnMap,"GREEN");
+            drawWayPoints(canvas, CurrentMap.WayPointsOnMap,"BLUE");
         }
 
         super.onDraw(canvas);
