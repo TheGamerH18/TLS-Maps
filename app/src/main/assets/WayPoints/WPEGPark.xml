@@ -1,0 +1,11 @@
+<waypoints level="0" rotation="0" scale="0.9" start="_Ausgang04">
+    <waypoint name="3102" x="1635" y="225" knot="" neighbours="3101"/>
+    <waypoint name="3101" x="1700" y="225" knot="" neighbours="3102/3103"/>
+    <waypoint name="3103" x="1700" y="225" knot="_Ausgang04" neighbours="3102/3104"/>
+    <waypoint name="3104" x="2065" y="225" knot="" neighbours="3103/3105"/>
+    <waypoint name="3106" x="2300" y="225" knot="" neighbours="3104/3106"/>
+    <waypoint name="3105" x="2250" y="225" knot="" neighbours="3104/3106/3108"/>
+    <waypoint name="3108" x="2250" y="225" knot="" neighbours="3105"/>
+    <waypoint name="_Treppe02" x="1800" y="400" knot="" neighbours="_Ausgang04/3103"/>
+    <waypoint name="_Ausgang04" x="1750" y="400" knot="" neighbours="_Treppe02/3103"/>
+</waypoints>
