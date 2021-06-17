@@ -19,8 +19,8 @@ import main.tls_maps.ui.notes.NotesRecyclerViewAdapter;
 public class NotesContent {
 
     private List<Note> ITEMS = new ArrayList<>();
-    RecyclerView rv;
-    NotesFragment nf;
+    private RecyclerView rv;
+    private NotesFragment nf;
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
