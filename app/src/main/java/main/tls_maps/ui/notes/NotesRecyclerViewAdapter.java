@@ -132,7 +132,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         }
 
         @Override
-        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(ViewHolder.this,
                     now.get(Calendar.HOUR_OF_DAY),
@@ -147,11 +147,11 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         }
 
         @Override
-        public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        public void onTimeSet(TimePickerDialog timePickerDialog, int hourOfDay, int minute, int second) {
             cl.set(Calendar.HOUR_OF_DAY, hourOfDay);
             cl.set(Calendar.MINUTE, minute);
             cl.set(Calendar.SECOND, second);
-            createNotification(view.getView());
+            createNotification(timePickerDialog.getView());
         }
     }
 }
