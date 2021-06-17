@@ -162,22 +162,20 @@ public class CustomView extends View {
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
         Paint = new Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
-        //CurrentMap = new Map(1,new Vector2(0,0),"Erdgeschoss");
         for (int i = 0; i<= MaxLevel; i++) {
             Map newLevelMap = new Map(i);
             Maps.add(newLevelMap);
             //Log.d("Hm",""+i);
         }
-
         BackGround = new Map(-500000);
         CurrentMap = getMapAtLevel(Level);
-        //BackGround.addWall(new Wall(new Vector2(100,100),new Vector2(50,75),0,"#FF0000"));
-        //BackGround.addWall(new Wall(new Vector2(),new Vector2(100,100),45,"BLACK"));
+
+        // Background to mark Position 0,0
         BackGround.addWall(new Wall(new Vector2(0,-0.5),new Vector2(1,10000),90,"BlACK"));
         BackGround.addWall(new Wall(new Vector2(-0.5,0),new Vector2(1,10000),0,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),45,"BLACK"));
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
-        //Log.d("Test",""+String.valueOf(R.));
+
         for(String MapName : MAPNAMES){
             ReadFile("Maps/"+MapName+".xml", 0);
         }
@@ -197,21 +195,20 @@ public class CustomView extends View {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
+        // Get the Assets
         AssetManager assetManager = getResources().getAssets();
 
         try {
 
-            // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();
             // read from a project's resources folder
             InputStream stream = assetManager.open(fileName);
+            // parse XML file
             Document doc = db.parse(stream);
 
-            //System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            //System.out.println("------");
-
+            // Check if its a Maps or Waypoints XML
             if (doc.hasChildNodes() && fileName.contains("Maps")) {
-                getLinesfromNodes(doc.getChildNodes(), i);
+                getLinesfromNodes(doc.getChildNodes());
             } else if(doc.hasChildNodes() && fileName.contains("WayPoints")) {
                 getWayPoints(doc.getChildNodes(), i);
             }
@@ -223,38 +220,42 @@ public class CustomView extends View {
     }
 
     /**
-     * Get the Current Levelo of the Map
+     * Get the Current Level of the Map
      * @return the Current Map Level
      */
     public int getLevel() {
         return this.Level;
     }
   
-    /*
+    /**
      * This reads the XML file that was Opened by ReadFile, Recursively on itself for nodes.
      * @param nodeList the XML Nodes that should be searched through now.
      */
-    private void getLinesfromNodes(NodeList nodeList, int i) {
+    private void getLinesfromNodes(NodeList nodeList) {
+        // Get the Maps data
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
+        // Get the Map Level
         String level = namedNodeMapAttr.getNamedItem("Level").getNodeValue();
+
+        // Get the Map Offsets
         String xOff = namedNodeMapAttr.getNamedItem("xoff").getNodeValue();
         this.xOff.add(xOff);
         String yOff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
         this.yOff.add(yOff);
         Vector2 posOff = new Vector2(Double.parseDouble(xOff),Double.parseDouble(yOff));
-        //Log.d("Map Name",""+MapNode.getNodeName());
-
-
         double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
         double scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
 
         Map MapToAddTo = getMapAtLevel(Integer.parseInt(level));
 
+        // Go through the Maps Line nodes
         for (int count=0;count<mapNode.getChildNodes().getLength();count++) {
             Node lineNode = mapNode.getChildNodes().item(count);
+            // Check if its a Element node and not Text node
             if (lineNode.getNodeType() == Node.ELEMENT_NODE) {
                 NamedNodeMap namedNodeMap = lineNode.getAttributes();
+                // Get the Line data
                 String stroke = namedNodeMap.getNamedItem("stroke").getNodeValue();
                 String x1 = namedNodeMap.getNamedItem("x1").getNodeValue();
                 String y1 = namedNodeMap.getNamedItem("y1").getNodeValue();
@@ -263,6 +264,7 @@ public class CustomView extends View {
                 Vector2 p1 = new Vector2(Double.parseDouble(x1),Double.parseDouble(y1));
                 Vector2 p2 = new Vector2(Double.parseDouble(x2),Double.parseDouble(y2));
 
+                // Apply Map offsets to Line
                 p1 = p1.Transform(rotation);
                 p2 = p2.Transform(rotation);
 
@@ -270,14 +272,14 @@ public class CustomView extends View {
                 p1 = nullVector.lerp(p1,scale);
                 p2 = nullVector.lerp(p2,scale);
 
-                Vector2 middle = p1.lerp(p2,0.5).add(posOff);
+                // Calculate the Lines position,size,rotation
+                Vector2 position = p1.lerp(p2,0.5).add(posOff);
                 Vector2 size = new Vector2(10,p1.sub(p2).magnitude());
                 double rotationOfVector = -Math.toDegrees(p1.sub(p2).angle());
 
-                Wall NewWall = new Wall(middle,size,rotationOfVector,stroke);
+                // Add the Line to the Map
+                Wall NewWall = new Wall(position,size,rotationOfVector,stroke);
                 MapToAddTo.addWall(NewWall);
-                //Log.d("Wall Creation","Created wall at: "+Middle.ToString()+" with size of "+Size.ToString()+" and a rotation of "+rotation+" and color "+stroke);
-                //Log.d("Xml reading","Found item: "+stroke);
             }
         }
     }
@@ -301,10 +303,8 @@ public class CustomView extends View {
     }
 
     /**
-     * Change Level
-     * @param going change Level to X
      * Open Function for the Buttons to change the CurrentMap Level.
-     * @param going If the Level is going down or up.
+     * @param going Change Level by if it is going down or up.
      */
     protected void ChangeLevel(int going) {
         Level = Math.min(Math.max(Level +going, MinLevel), MaxLevel);
@@ -315,7 +315,7 @@ public class CustomView extends View {
 
     /**
      * This Is for the Movemnt tracking on the Map
-     * @param event the Event self
+     * @param ev the Event self
      */
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -324,6 +324,7 @@ public class CustomView extends View {
 
             if(ev.getPointerCount() >= 2) {
 
+                // If this is the first time running from pressing down, update the Lastangle
                 if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
                     lastangle = calcAngle(ev);
                 }
@@ -331,38 +332,7 @@ public class CustomView extends View {
                 // Calculate the angle of the Rotation
                 double angle = this.calcAngle(ev);
                 this.CameraAngle +=(lastangle-angle);
-
-                Vector2 pointer0 = new Vector2(ev.getX(0),ev.getY(0));
-                Vector2 pointer1 = new Vector2(ev.getX(1),ev.getY(1));
-
-                Vector2 _center = pointer0.lerp(pointer1,0.5);
-                Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-                Vector2 centertoscreenMiddle = screenMiddle.sub(_center);
-
-                Vector2 pivotPoint = centertoscreenMiddle.add(CameraPosition);
-
-
-
-                //CameraPosition = CameraPosition.sub(pivotPoint).Transform(CameraAngle).add(pivotPoint);
-
-
-
-                //double centerX = (ev.getX(0)+ev.getX(1))/2;
-                //double centerY = (ev.getY(0)+ev.getY(1))/2;
-
-                //Vector2 otherCenter = new Vector2(centerX,centerY);
-                //
-
-                //Vector2 RootScreenSize = new Vector2(MainActivity.displayMetrics.widthPixels,MainActivity.displayMetrics.heightPixels);
-
-
-
-                //Log.d("REEEE",""+ev.getSize());
-
-                //Vector2 Center = _center.sub(screenMiddle);
-                //Position = Position.add(Center).Transform((lastangle-angle)).sub(Center);
                 lastangle = angle;
-                //this.GlobRotation = (rotation == -1)?this.GlobRotation : rotation;
 
 
                 // Hier wird nach events geprüft
@@ -408,10 +378,7 @@ public class CustomView extends View {
                     break;
                 }
 
-                case MotionEvent.ACTION_UP: {
-                    ActivePointerId = INVALID_POINTER_ID;
-                    break;
-                }
+                case MotionEvent.ACTION_UP:
 
                 case MotionEvent.ACTION_CANCEL: {
                     ActivePointerId = INVALID_POINTER_ID;
@@ -435,62 +402,19 @@ public class CustomView extends View {
             }
             return true;
     }
-  
-  
-    /*
-     *  This Method is need for the 2 Finger Rotaion, and also for debug the angle
-     * @param ev the MotionEvent is needed to get all Coordinations
-     * @return the angle that need to be set, there is also a Debug inside of the Methode for the >= 180° problem with triangles
-     */
 
     /**
      * This calculates the Angle the Pointers have been Rotated by.
-     * @param ev MotionEvent.
+     * @param ev the MotionEvent is needed to get all Coordinations.
      * @return Double of the Angle that it was turned by.
      */
     private double calcAngle(MotionEvent ev) {
 
-        // This is just calculation for the Circle wich is needed to make a correct Angle
-        // punktDis is the point that can be do magic,
-        // With this point is should be possible to make
-        // the Rotation start not hopping, but there can be
-        // conflicts with the readjustment for 45° angles
-        //double  distance = Math.sqrt((Math.pow(ev.getX(0)-ev.getX(1),2)+Math.pow(ev.getY(0)-ev.getY(1),2))),
-        //r = distance/2,
+        // This Calculates the Angle the Point1 is relevant to the Center right now, in Unit Circle
         double centerX = (ev.getX(0)+ev.getX(1))/2;
         double centerY = (ev.getY(0)+ev.getY(1))/2;
-        //centerDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2)+Math.pow(ev.getY(0)-centerY,2))),
-        ///punktDis = Math.sqrt((Math.pow(ev.getX(0)-centerX,2))),
-        //angle = Math.atan(punktDis/centerDis)*(180/Math.PI);
-
-        //if(r-centerDis > 2 && r-centerDis < -2)
-        //    return -1;
-
-        // Lets Fix the Angle, because its impossible for a Triangle to have a angle that is greater or equal than 180°
-        // and we work with triangles here
-
-        // Be Careful with this, little Changes can make it Jump
-        /*if(ev.getY(0) <= ev.getY(1) && ev.getX(0) <= ev.getX(1))
-            angle = -(angle + 180)*2;
-        else if(ev.getY(0) <= ev.getY(1) && ev.getX(0) >= ev.getX(1))
-            angle = angle - 90;
-        else if(ev.getY(0) >= ev.getY(1) && ev.getX(0) <= ev.getX(1))
-            angle = angle*2;
-        else if(ev.getY(0) >= ev.getY(1) && ev.getX(0) >= ev.getX(1))
-            angle = -angle;*/
-
-
-        Vector2 E = new Vector2(ev.getX(0)-centerX,ev.getY(0)-centerY);
-        double angle = Math.toDegrees(E.unit().angle()+360);
-        //Log.d("Position Debug", E.unit().ToString()+" Angle: "+angle);
-
-
-        //Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
-
-        //Vector2 Center = new Vector2(centerX,centerY).sub(screenMiddle);
-
-        //Position = Position.Transform((angle-lastangle));//-ByPass.unit().angle())
-        return angle;
+        Vector2 Pointer1Offset = new Vector2(ev.getX(0)-centerX,ev.getY(0)-centerY);
+        return Math.toDegrees(Pointer1Offset.unit().angle()+360);
     }
 
     /**
@@ -521,7 +445,7 @@ public class CustomView extends View {
         };
     }
   
-    /*
+    /**
      * This draws the Actual Line, used for Walls and Waypoint Lines.
      * @param position this determines where the Line is Positioned.
      * @param size this determines the size of the Line (NOTE: x is limited to 4).
@@ -558,7 +482,7 @@ public class CustomView extends View {
         postInvalidate();
     }
   
-    /*
+    /**
      * This draws all the Walls from a Specific Map.
      * @param canvas the Object to draw on.
      * @param mapToDraw the Map which to get the Walls from.
@@ -617,7 +541,7 @@ public class CustomView extends View {
         WayPoint lastWP = null;
         Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
         // WayPoint Size
-        double size = 1*ZoomScale;
+        double size = 15*ZoomScale;
 
         // Loop through all Waypoints to draw them
         for (int i=0;i<wayPoints.size();i++) {
@@ -711,12 +635,12 @@ public class CustomView extends View {
     }
 
     /**
-     * This Methode Checks if the WayPoint already exits or not
+     * This Method Checks if the WayPoint already exists or not
      * @param name the WayPoint Name
      * @return the WayPoint
      * @throws Exception Throw a Exception if the WayPoint doesnt exists, but this Should happen because of the Check in creating them
      *
-     * If this Error Occruing then it might be that a Connection in the WayPoints is Wrong
+     * If this Error is Occuring then it might be that a Connection in the WayPoints is Wrong
      */
     private WayPoint getWayPoint(String name) throws Exception {
         for(int i = 0; i < WayPoints.size(); i++) {
@@ -757,6 +681,6 @@ public class CustomView extends View {
             return true;
         }
     }
-    // TODO -Add a better Rotation
+    // TODO -Add a better Rotation / - Keep Zoom from Jumping
 }
 
