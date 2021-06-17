@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
                     Snackbar.make(v, "Zielpunkt konnte nicht gefunden werden", Snackbar.LENGTH_LONG).show();
                 else {
                     ArrayList<WayPoint> route = new ArrayList<>();
-                    if(!(""+ from.charAt(1)).equals(target.charAt(1))) {
+                    if(!(""+ from.charAt(1)).equals(""+target.charAt(1))) {
                         // get the difference
                         try {
                             int fromInt = Integer.parseInt(""+from.charAt(1));
@@ -117,19 +117,15 @@ public class HomeFragment extends Fragment {
                             String newStair = new StringBuilder(nearstStair.getName()).replace(nearstStair.getName().length()-2,nearstStair.getName().length()-2,""+difference).toString().replaceFirst("0", "");
                             nearstStair = new getWP().getWayPoint(newStair, wayPoints);
                             route.addAll(new AStar(nearstStair, targetWP).getRoute());
-
-                            for(WayPoint wp : route){
-                                Log.d("TAG", "Route: " + wp.getName());
-                            }
-
-
                         } catch ( Exception e ) {
                             e.printStackTrace();
                         }
                     } else {
                         AStar astar = new AStar(fromWP, targetWP);
                         route = astar.getRoute();
+
                     }
+                    binding.imageHome.getMapAtLevel(binding.imageHome.getLevel()).setRoute(route);
                     for (WayPoint wp : route) {
                         Log.d("Route", " " + wp.getName());
                     }

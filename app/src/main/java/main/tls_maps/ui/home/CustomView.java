@@ -2,10 +2,10 @@ package main.tls_maps.ui.home;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +14,7 @@ import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -75,7 +76,7 @@ public class CustomView extends View {
     public CustomView(Context context) {
         super(context);
         try {
-            init();
+            init(context);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(200);
@@ -90,7 +91,7 @@ public class CustomView extends View {
     public CustomView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         try {
-            init();
+            init(context);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(200);
@@ -106,7 +107,7 @@ public class CustomView extends View {
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         try {
-            init();
+            init(context);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(200);
@@ -124,7 +125,7 @@ public class CustomView extends View {
     public CustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         try {
-            init();
+            init(context);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(200);
@@ -136,7 +137,7 @@ public class CustomView extends View {
      * @param level which Level is searched for.
      * @return the Map at that Level, if found.
      */
-    private Map getMapAtLevel(int level) {
+    protected Map getMapAtLevel(int level) {
         Map levelMap = null;
         for (int i = MinLevel; i< Maps.size(); i++) {
             Map tempMap = Maps.get(i);
@@ -155,7 +156,7 @@ public class CustomView extends View {
      * the Initialing
      * @throws Exception a Expection if there is Something critical Wrong with the WayPoint, what will kill the App
      */
-    private void init(Context context) {
+    private void init(Context context) throws Exception {
 
         ScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
@@ -619,7 +620,7 @@ public class CustomView extends View {
         WayPoint lastWP = null;
         Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
         // WayPoint Size
-        double size = 15*ZoomScale;
+        double size = 1*ZoomScale;
 
         // Loop through all Waypoints to draw them
         for (int i=0;i<wayPoints.size();i++) {

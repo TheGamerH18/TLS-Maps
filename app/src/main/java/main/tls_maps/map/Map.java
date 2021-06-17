@@ -19,4 +19,8 @@ public class Map {
     public void addWayPoint(WayPoint wayPoint) {
         WayPointsOnMap.add(wayPoint);
     }
+
+    public void setRoute(ArrayList<WayPoint> route) {
+        this.WayPointsOnMap = route;
+    }
 }
