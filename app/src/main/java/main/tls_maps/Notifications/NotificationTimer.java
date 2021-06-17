@@ -7,7 +7,7 @@ import android.content.Intent;
 import androidx.core.app.NotificationManagerCompat;
 
 /**
- * BroadcastReceiver called using {@link ScheduleNotification}. Creates and shows the Notification
+ * BroadcastReceiver called using {@link ScheduleNotification}. Creates and shows the timed Notification
  */
 public class NotificationTimer extends BroadcastReceiver {
 
@@ -31,19 +31,19 @@ public class NotificationTimer extends BroadcastReceiver {
         // Get the UID | Or get a Fallback UID
         int uid = intent.getIntExtra("UID", (int) System.currentTimeMillis());
 
+        // Get the NoteUID or get a Fallback UID
         int noteUID = intent.getIntExtra("NoteUID", -1);
 
         // Create the Notification, either with or without noteUID
-        if(noteUID == -1) {
+        if(noteUID == -1)
             notification = new Notification(msg, context, uid);
-        } else {
+        else
             notification = new Notification(context, msg, uid, noteUID);
-        }
 
         // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
         // Try to send Notification. Usually fails, if the Notification is null
-        try {NM.notify(uid ,notification.getNotification());}
+        try {NM.notify(uid, notification.getNotification());}
         catch (Exception ignored){}
     }
 }
