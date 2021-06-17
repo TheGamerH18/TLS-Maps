@@ -21,7 +21,7 @@ import android.util.Log;
 /**
  * Take an object and serialize and then save it to preferences
  * @author John Matthews
- *
+ * https://stackoverflow.com/questions/11640122/save-an-arraylist-to-file-on-android/11653188#11653188
  */
 public class SerializeObject {
     private final static String TAG = "SerializeObject";
@@ -100,7 +100,7 @@ public class SerializeObject {
 
     /**
      * Read data from file and put it into a string
-     * @param context
+     * @param context - Context of Application
      * @param filename - fully qualified string name
      * @return string
      */

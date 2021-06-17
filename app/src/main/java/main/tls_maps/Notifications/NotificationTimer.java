@@ -6,6 +6,9 @@ import android.content.Intent;
 
 import androidx.core.app.NotificationManagerCompat;
 
+/**
+ * BroadcastReceiver called using {@link ScheduleNotification}. Creates and shows the Notification
+ */
 public class NotificationTimer extends BroadcastReceiver {
 
     private Notification notification;
@@ -30,8 +33,8 @@ public class NotificationTimer extends BroadcastReceiver {
 
         int noteUID = intent.getIntExtra("NoteUID", -1);
 
+        // Create the Notification, either with or without noteUID
         if(noteUID == -1) {
-            // Create the Notification, without
             notification = new Notification(msg, context, uid);
         } else {
             notification = new Notification(context, msg, uid, noteUID);
@@ -39,7 +42,7 @@ public class NotificationTimer extends BroadcastReceiver {
 
         // Create the Notification Manager
         NotificationManagerCompat NM = NotificationManagerCompat.from(context);
-        // send the Notification
+        // Try to send Notification. Usually fails, if the Notification is null
         try {NM.notify(uid ,notification.getNotification());}
         catch (Exception ignored){}
     }

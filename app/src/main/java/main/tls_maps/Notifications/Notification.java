@@ -14,6 +14,11 @@ import main.tls_maps.MainActivity;
 import main.tls_maps.NoteItems.NotesContent;
 import main.tls_maps.R;
 
+/**
+ * This Class is creating a Notification. Usually called from {@link ScheduleNotification}
+ * or directly to create a Notification instantly. Remember to call
+ * {@link Notification#getNotification()} to retrieve the Notification.
+ */
 public class Notification {
 
     private static final String title = "TLS-Maps";
@@ -34,6 +39,7 @@ public class Notification {
         NotificationChannel(context);
         notificationManager = NotificationManagerCompat.from(context);
 
+        // Creates Intent, which is called, on deleting the Notification
         Intent deleteIntent = new Intent(context, NotificationDeleteReceiver.class);
         deleteIntent.putExtra("UID", this.UID);
         deleteIntent.putExtra("NoteUID", NoteUID);
@@ -42,6 +48,7 @@ public class Notification {
                 deleteIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Creates Intent, called on pressing delete btn in Notification
         Intent broadcastIntent = new Intent(context, NotificationReceiver.class);
         broadcastIntent.putExtra("UID", this.UID);
         broadcastIntent.putExtra("NoteUID", NoteUID);
@@ -53,7 +60,7 @@ public class Notification {
 
         // Create Notification
         builder = createBuilder(context, msg);
-        builder.addAction(R.mipmap.ic_launcher, "Löschen", actionIntent);
+        builder.addAction(R.mipmap.ic_launcher, context.getString(R.string.NotificationDeleteBtn), actionIntent);
         builder.setDeleteIntent(pendingdeleteIntent);
     }
 
@@ -72,7 +79,7 @@ public class Notification {
     }
 
     /**
-     * Creates a Basic Notification
+     * Creates a Basic Notification, with a ContentIntent pointing to the MainActivity.
      * @param context - Context of Application
      * @param msg - Message of Notification
      * @return NotificationCompat.Builder modified with needed Information
@@ -129,8 +136,11 @@ public class Notification {
      * @return true if the Notification exists
      */
     private boolean CheckUID(Context context, int UID, int NoteUID) {
-        NotesContent notesContent = new NotesContent(context);
-        return notesContent.getbyUID(context, NoteUID).checkNotificationUID(UID);
+        try {
+            return MainActivity.notes.getbyUID(context, NoteUID).checkNotificationUID(UID);
+        } catch (Exception ignored) {
+            return new NotesContent(context).getbyUID(context, NoteUID).checkNotificationUID(UID);
+        }
     }
 
     /**

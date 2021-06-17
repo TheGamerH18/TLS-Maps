@@ -7,6 +7,10 @@ import android.content.Intent;
 
 import main.tls_maps.MainActivity;
 
+/**
+ * Used to create a Notification, either instantly or at a specified time
+ * Calls {@link NotificationTimer}.
+ */
 public class ScheduleNotification {
 
     /**
@@ -49,17 +53,24 @@ public class ScheduleNotification {
     public ScheduleNotification (Context context, String msg, long triggerAt, int NoteUID) {
         Intent notificationIntent = new Intent(context, NotificationTimer.class);
         int uid = getUniqueID();
+
+        // Adds Notification to Note
         MainActivity.notes.getbyUID(context, NoteUID).addNotification(uid);
         MainActivity.notes.writelist(context);
+
+        // Put Extras into the Intent, to Identify the Notification.
         notificationIntent.putExtra("UID", uid);
         notificationIntent.putExtra("Notification", msg);
         notificationIntent.putExtra("NoteUID", NoteUID);
 
+        // Create PendingIntent
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 uid,
                 notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT
                 );
+
+        // Give the PendingIntent to the Systems Alarm Manager
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent);
     }

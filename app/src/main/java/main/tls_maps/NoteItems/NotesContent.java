@@ -8,13 +8,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.tls_maps.ui.notes.NotesFragment;
+import main.tls_maps.ui.notes.NotesRecyclerViewAdapter;
+
 /**
  * Class for providing Notes to the Specific Fragment.
+ * Reads and writes List to and from Storage using the {@link SerializeObject} class.
+ * Also tries to call a specified RecyclerView to Update data in View.
  */
 public class NotesContent {
 
     private List<Note> ITEMS = new ArrayList<>();
     RecyclerView rv;
+    NotesFragment nf;
 
     /**
      * Initializes the Notes, Reads all Notes from Filesystem.
@@ -42,8 +48,9 @@ public class NotesContent {
      * Sets the Recyclerview
      * @param recyclerView - RecyclerView
      */
-    public void recyclerview(RecyclerView recyclerView) {
+    public void recyclerview(RecyclerView recyclerView, NotesFragment fragment) {
         rv = recyclerView;
+        nf = fragment;
     }
 
     /**
@@ -79,8 +86,8 @@ public class NotesContent {
         for(int i = 0; i < ITEMS.size(); i ++) ITEMS.get(i).id = i;
 
         writelist(context);
-        try {rv.getAdapter().notifyDataSetChanged();}
-        catch (Exception ignored){};
+        if(rv.getAdapter() != null)
+            rv.setAdapter(new NotesRecyclerViewAdapter(ITEMS, nf));
     }
 
     /**
@@ -119,7 +126,9 @@ public class NotesContent {
     }
 
     /**
-     * A Note containing, the content, a ID and a Unique ID
+     * A Note containing, the content, a ID, a Unique ID and all connected Notifications, which where created using
+     * {@link main.tls_maps.Notifications.ScheduleNotification}.
+     * Represents a single Note.
      */
     public static class Note implements Serializable{
         public final String content;
@@ -128,7 +137,7 @@ public class NotesContent {
         private final ArrayList<Integer> NotificationUIDs = new ArrayList<>();
 
         /**
-         * Constructor
+         * Constructor, defines needed and unchangeable values.
          * @param content - Content of Note
          * @param id - ID of Note
          */
