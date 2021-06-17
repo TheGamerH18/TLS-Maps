@@ -1,4 +1,4 @@
-<waypoints level="0" rotation="90" start="_Ausgang00">
+<waypoints level="0" rotation="180" scale="0.9"  start="_Ausgang00">
     <waypoint name="_Ausgang00" x="31" y="377" knot="" neighbours="6114"/>
     <waypoint name="_Ausgang01" x="351" y="614" knot="" neighbours="7101/7102/7103/7104/6112"/>
     <waypoint name="_Ausgang02" x="704" y="390" knot="" neighbours="6109/6116/6117/7101/_Treppe00"/>

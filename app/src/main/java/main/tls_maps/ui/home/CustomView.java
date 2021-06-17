@@ -68,6 +68,7 @@ public class CustomView extends View {
     private float LastTouchX;
     private float LastTouchY;
     private double lastangle;
+    private ArrayList<String> yOff = new ArrayList<>(), xOff = new ArrayList<>();
 
     /**
      * Method needed
@@ -178,10 +179,10 @@ public class CustomView extends View {
         BackGround.addWall(new Wall(new Vector2(),new Vector2(1,10000),-45,"BLACK"));
         //Log.d("Test",""+String.valueOf(R.));
         for(String MapName : MAPNAMES){
-            ReadFile("Maps/"+MapName+".xml");
+            ReadFile("Maps/"+MapName+".xml", 0);
         }
-        for(String WayPoints : WAYPOINTS){
-            ReadFile("WayPoints/"+WayPoints+".xml");
+        for(int i = 0; i < WAYPOINTS.length; ++i){
+            ReadFile("WayPoints/"+WAYPOINTS[i]+".xml", i);
         }
         if((WayPoints.get(Integer.parseInt("" + (int) Math.floor(Math.random()*WayPoints.size()))).getNeighbourPoints().size()) == 0) {
             throw new Exception("Nachbar Punkte konnten nicht gesetzt werden");
@@ -192,7 +193,7 @@ public class CustomView extends View {
      * This opens a XML File To read.
      * @param fileName the String Name of what File to read.
      */
-    private void ReadFile(String fileName) {
+    private void ReadFile(String fileName, int i) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -210,9 +211,9 @@ public class CustomView extends View {
             //System.out.println("------");
 
             if (doc.hasChildNodes() && fileName.contains("Maps")) {
-                getLinesfromNodes(doc.getChildNodes());
+                getLinesfromNodes(doc.getChildNodes(), i);
             } else if(doc.hasChildNodes() && fileName.contains("WayPoints")) {
-                getWayPoints(doc.getChildNodes());
+                getWayPoints(doc.getChildNodes(), i);
             }
             Log.d("XML READING","File " + ((doc.hasChildNodes())?"":"not ") + "Found: "+fileName);
 
@@ -233,12 +234,14 @@ public class CustomView extends View {
      * This reads the XML file that was Opened by ReadFile, Recursively on itself for nodes.
      * @param nodeList the XML Nodes that should be searched through now.
      */
-    private void getLinesfromNodes(NodeList nodeList) {
+    private void getLinesfromNodes(NodeList nodeList, int i) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
         String level = namedNodeMapAttr.getNamedItem("Level").getNodeValue();
         String xOff = namedNodeMapAttr.getNamedItem("xoff").getNodeValue();
+        this.xOff.add(xOff);
         String yOff = namedNodeMapAttr.getNamedItem("yoff").getNodeValue();
+        this.yOff.add(yOff);
         Vector2 posOff = new Vector2(Double.parseDouble(xOff),Double.parseDouble(yOff));
         //Log.d("Map Name",""+MapNode.getNodeName());
 
@@ -324,12 +327,6 @@ public class CustomView extends View {
                 if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
                     lastangle = calcAngle(ev);
                 }
-
-                // TODO Skalierung zum mittelpunkt von x1,y1 und x2,y2
-                /**
-                 * Bitte das System nicht auf Velocity umstellen, es entstehen dadurch Sprünge
-                 * einfach Offsets nehmen
-                 */
 
                 // Calculate the angle of the Rotation
                 double angle = this.calcAngle(ev);
@@ -645,11 +642,11 @@ public class CustomView extends View {
      * Start the Recursiv WayPoint reading
      * @param nodeList - The NodeList of the XML Document
      */
-    private void getWayPoints(NodeList nodeList) {
+    private void getWayPoints(NodeList nodeList, int i) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
         String start = namedNodeMapAttr.getNamedItem("start").getNodeValue();
-        getNeighbor(start, nodeList);
+        getNeighbor(start, nodeList, i);
     }
 
     /**
@@ -659,12 +656,14 @@ public class CustomView extends View {
      * @param start - The Current WayPoint
      * @param nodeList - the NodeList of the XML Document
      */
-    private void getNeighbor(String start, NodeList nodeList ) {
+    private void getNeighbor(String start, NodeList nodeList, int i) {
         int index = WayPoints.size();
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
+
         int lvl = Integer.parseInt(namedNodeMapAttr.getNamedItem("level").getNodeValue());
         double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
+        double scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
 
         for (int count = 0; count < mapNode.getChildNodes().getLength(); count++) {
             Node lineNode = mapNode.getChildNodes().item(count);
@@ -674,13 +673,19 @@ public class CustomView extends View {
                     continue;
                 String x = lineNode.getAttributes().getNamedItem("x").getNodeValue();
                 String y = lineNode.getAttributes().getNamedItem("y").getNodeValue();
+                Vector2 p1 = new Vector2(Double.parseDouble(x)+Double.parseDouble(xOff.get(i)),Double.parseDouble(y)+Double.parseDouble(yOff.get(i)));
+
+                p1 = p1.Transform(rotation);
+
+                Vector2 nullVector = new Vector2();
+                p1 = nullVector.lerp(p1,scale);
                 String[] neighbors = (lineNode.getAttributes().getNamedItem("neighbours").getNodeValue()).split("/");
                 String knot = lineNode.getAttributes().getNamedItem("knot").getNodeValue();
-                WayPoint now = new WayPoint(start, new Vector2(Double.parseDouble(x), Double.parseDouble(y)), lvl);
+                WayPoint now = new WayPoint(start, new Vector2(Double.parseDouble(x)+Double.parseDouble(xOff.get(i)), Double.parseDouble(y)+Double.parseDouble(yOff.get(i))), lvl);
                 if(!knot.isEmpty()) {
                     now.sethasKnot();
                     if(!find(knot))
-                        getNeighbor(knot, nodeList);
+                        getNeighbor(knot, nodeList, i);
                     try {
                         now.setKnot(getWayPoint(knot));
                     } catch (Exception e) {
@@ -691,7 +696,7 @@ public class CustomView extends View {
                 Log.d("TAG", "created: " + start);
                 for(String name: neighbors) {
                     if(!find(name))
-                        getNeighbor(name, nodeList);
+                        getNeighbor(name, nodeList, i);
                 }
                 for(String name: neighbors) {
                     try {
