@@ -1,10 +1,12 @@
-package main.tls_maps.map;
+package main.tls_maps.map.pathFinding;
 
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import main.tls_maps.map.WayPoint;
 
 public class AStar {
     private ArrayList<WayPoint> Route = null;

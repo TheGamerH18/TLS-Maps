@@ -5,15 +5,13 @@ import java.util.ArrayList;
 public class WayPoint {
     private final String Name;
     private final Vector2 position;
-    private final int Level;
     private boolean hasKnot;
     private ArrayList<WayPoint> NeighbourPoints = new ArrayList<>();
     private WayPoint Knot;
 
-    public WayPoint(String Name, Vector2 Position, int Level) {
+    public WayPoint(String Name, Vector2 Position) {
         this.Name = Name;
         this.position = Position;
-        this.Level = Level;
     }
 
     public void addNeighbourPoint(WayPoint wayPoint) {
@@ -26,10 +24,6 @@ public class WayPoint {
 
     public Vector2 getPosition() {
         return this.position;
-    }
-
-    public int getLevel() {
-        return this.Level;
     }
 
     public String getName() {
