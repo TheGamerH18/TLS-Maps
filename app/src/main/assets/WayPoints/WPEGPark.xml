@@ -1,11 +1,28 @@
-<waypoints level="0" rotation="0" scale="0.9" start="_Ausgang04">
-    <waypoint name="3102" x="1635" y="225" knot="" neighbours="3101"/>
-    <waypoint name="3101" x="1700" y="225" knot="" neighbours="3102/3103"/>
-    <waypoint name="3103" x="1700" y="225" knot="_Ausgang04" neighbours="3102/3104"/>
+<waypoints level="0" rotation="0" scale="0.9" start="3102">
+    <waypoint name="3102" x="1631" y="225" knot="" neighbours="3101/_Floor0000"/>
+    <waypoint name="3101" x="1700" y="225" knot="" neighbours="3102/3103/3104/_Floor0000"/>
+    <waypoint name="3103" x="1700" y="225" knot="" neighbours="_Floor0000"/>
+    <waypoint name="_Floor0000" x="1750" y="225" knot="" neighbours="3103/_Ausgang04"/>
     <waypoint name="3104" x="2065" y="225" knot="" neighbours="3103/3105"/>
-    <waypoint name="3106" x="2300" y="225" knot="" neighbours="3104/3106/3105"/>
+    <waypoint name="3106" x="2300" y="225" knot="" neighbours="3104/3105"/>
     <waypoint name="3105" x="2250" y="225" knot="" neighbours="3104/3106/3108/3106"/>
     <waypoint name="3108" x="2250" y="225" knot="" neighbours="3105"/>
-    <waypoint name="_Treppe02" x="1800" y="400" knot="" neighbours="_Ausgang04/3103"/>
-    <waypoint name="_Ausgang04" x="1750" y="400" knot="" neighbours="_Treppe02/3103/_Ausgnag03"/>
+    <waypoint name="_Treppe02" x="1800" y="400" knot="" neighbours="_Ausgang04/_Floor0000"/>
+    <waypoint name="_Ausgang04" x="1750" y="450" knot="" neighbours="_Treppe02/_Floor0000/_Ausgang05/1110"/>
+    <waypoint name="_Ausgang05" x="2297" y="600" knot="" neighbours="_Ausgang04/_Ausgang06/1110/1111"/>
+    <waypoint name="_Ausgang06" x="2269" y="750" knot="" neighbours="_Ausgang05/1110"/>
+    <waypoint name="_Treppe03" x="2239" y="680" knot="" neighbours="_Ausgang06/_Ausgang05/1110"/>
+    <waypoint name="1110" x="2328" y="735" knot="" neighbours="_Ausgang06/_Ausgang05/_Floor0001"/>
+    <waypoint name="1111" x="2667" y="610" knot="" neighbours="_Ausgang05/_Ausgang04"/>
+    <waypoint name="_Floor0001" x="2000" y="750" knot="" neighbours="_Floor0002/1103"/>
+    <waypoint name="1103" x="2000" y="820" knot="_Floor0001" neighbours=""/>
+    <waypoint name="_Floor0002" x="1820" y="750" knot="" neighbours="_Floor0001/_Floor0004/1104"/>
+    <waypoint name="1104" x="1820" y="820" knot="_Floor0002" neighbours=""/>
+    <waypoint name="_Floor0003" x="1640" y="750" knot="" neighbours="_Floor0002/_Floor0003/1105"/>
+    <waypoint name="1105" x="1640" y="820" knot="_Floor0003" neighbours=""/>
+    <waypoint name="_Floor0004" x="1460" y="750" knot="" neighbours="_Floor0003/_Floor0005/1106"/>
+    <waypoint name="1106" x="1460" y="820" knot="_Floor0004" neighbours=""/>
+    <waypoint name="_Floor0005" x="1280" y="750" knot="" neighbours="_Floor0004/_Treppe04/1107"/>
+    <waypoint name="1107" x="1280" y="820" knot="_Floor0005" neighbours=""/>
+    <waypoint name="_Treppe04" x="1100" y="750" knot="" neighbours="_Floor0005/_Ausgang07"/>
 </waypoints>

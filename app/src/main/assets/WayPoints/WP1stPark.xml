@@ -1,0 +1,23 @@
+<waypoints level="0" rotation="0" scale="0.9" start="3202">
+    <waypoint name="3202" x="1631" y="225" knot="" neighbours="3201/_Floor0010"/>
+    <waypoint name="3201" x="1700" y="225" knot="" neighbours="3202/3203/3204/_Floor0010"/>
+    <waypoint name="3203" x="1700" y="225" knot="" neighbours="_Floor0010"/>
+    <waypoint name="_Floor0010" x="1750" y="225" knot="" neighbours="3203/_Treppe12"/>
+    <waypoint name="3204" x="2065" y="225" knot="" neighbours="3203/3205"/>
+    <waypoint name="3206" x="2300" y="225" knot="" neighbours="3204/3205"/>
+    <waypoint name="3205" x="2250" y="225" knot="" neighbours="3204/3206/3208/3206"/>
+    <waypoint name="3208" x="2250" y="225" knot="" neighbours="3205"/>
+    <waypoint name="_Treppe12" x="1800" y="400" knot="" neighbours="_Floor0010"/>
+    <waypoint name="_Treppe13" x="2239" y="680" knot="" neighbours="1210"/>
+    <waypoint name="_Floor0011" x="2000" y="750" knot="" neighbours="_Floor0012/1203"/>
+    <waypoint name="1203" x="2000" y="820" knot="_Floor0011" neighbours="_Floor0011"/>
+    <waypoint name="_Floor0012" x="1820" y="750" knot="" neighbours="_Floor0011/_Floor0014/1204"/>
+    <waypoint name="1204" x="1820" y="820" knot="_Floor0012" neighbours="_Floor0012"/>
+    <waypoint name="_Floor0013" x="1640" y="750" knot="" neighbours="_Floor0012/_Floor0013/1205"/>
+    <waypoint name="1205" x="1640" y="820" knot="_Floor0013" neighbours="_Floor0013"/>
+    <waypoint name="_Floor0014" x="1460" y="750" knot="" neighbours="_Floor0013/_Floor0015/1206"/>
+    <waypoint name="1206" x="1460" y="820" knot="_Floor0014" neighbours="_Floor0014"/>
+    <waypoint name="_Floor0015" x="1280" y="750" knot="" neighbours="_Floor0014/_Treppe14/1207"/>
+    <waypoint name="1207" x="1280" y="820" knot="_Floor0015" neighbours="_Floor0015"/>
+    <waypoint name="_Treppe14" x="1100" y="750" knot="" neighbours="_Floor0015"/>
+</waypoints>

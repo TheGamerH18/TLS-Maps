@@ -1,14 +1,17 @@
 package main.tls_maps.map.pathFinding;
 
-import android.util.Log;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 import main.tls_maps.map.WayPoint;
 
-public class AStar {
+class AStar {
+
+    /**
+     * I Think that this isnt the A* that I have written, I think it is more like the Floyd
+     */
+
     private ArrayList<WayPoint> Route = null;
     private ArrayList<WayPoint> StartRoute = null;
     private ArrayList<WayPoint> GoalRoute = null;
@@ -70,6 +73,10 @@ public class AStar {
 
             // Make the Knot as Start
             start = start.getKnot();
+
+            this.StartRoute = this.Route;
+
+            this.Route = new ArrayList<>();
         }
 
         // This calculates the Rest of the Route
@@ -83,11 +90,13 @@ public class AStar {
         CalculateRoute(path, start, goal);
 
         // The StartRoute needs to come before
+        if(this.StartRoute != null) {
+            this.StartRoute.addAll(this.Route);
+            this.Route = this.StartRoute;
+        }
 
-        if(this.GoalRoute == null)
-            return;
-
-        this.Route.addAll(this.GoalRoute);
+        if(this.GoalRoute != null)
+            this.Route.addAll(this.GoalRoute);
     }
 
 
@@ -102,15 +111,11 @@ public class AStar {
      * @param Goal - the Target WayPoint
      */
     protected void CalculateRoute(@NotNull ArrayList<WayPoint> path, @NotNull WayPoint Location, @NotNull WayPoint Goal) {
-
-        Log.d("TAG", "Von " + Location.getName() + " nach " + Goal.getName());
         // Loop through all Neighbors
         for(WayPoint wp : Location.getNeighbourPoints()) {
-            Log.d("Nachbar", "CalculateRoute: " + wp.getName());
 
             // Check if the WayPoint is the Target
             if(wp.getName().equals(Goal.getName()) || wp.equals(Goal)) {
-                Log.d("TAG", "CalculateRoute: target found");
                 path.add(wp);
                 this.Route = path;
             }

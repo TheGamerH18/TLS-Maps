@@ -21,17 +21,22 @@ import main.tls_maps.map.WayPoint;
 
 public class WayPoints {
 
+    // TODO all WayPoints, maybe it could be better if we can switch all to JSON? Just to remind me Later
+
+    /**
+     * This class is to get all the WayPoints Synchronised with the Buildings
+     */
+
     private static final ArrayList<WayPoint> WayPoints = new ArrayList<>();
-    public static final String[] WAYPOINTS = new String[] {"WPEGHolsten", "test", "test", "test", "WPEGPark"};
+    public static final String[] WAYPOINTS = new String[] {"placeHolder", "placeHolder", "placeHolder", "WP1stPark", "WPEGPark"};
 
     /**
      * This Reads the given Input Stream
-     * @param i Index of the WayPoints in Array
      * @param xOff Offset for the WayPoints
      * @param yOff Offset for the WayPoints
      * @param stream The File as Input Stream
      */
-    public void ReadFile(int i, String xOff, String yOff, InputStream stream) {
+    public void ReadFile(String xOff, String yOff, InputStream stream) {
         // Instantiate the Factory
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
@@ -43,7 +48,7 @@ public class WayPoints {
             Document doc = db.parse(stream);
 
             // Check if its a Maps or Waypoints XML
-            getWayPointsStart(doc.getChildNodes(), i, xOff, yOff);
+            getWayPointsStart(doc.getChildNodes(), xOff, yOff);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -54,11 +59,11 @@ public class WayPoints {
      * Start the Recursiv WayPoint reading
      * @param nodeList - The NodeList of the XML Document
      */
-    public void getWayPointsStart(NodeList nodeList, int i, String xOff, String yOff) {
+    public void getWayPointsStart(NodeList nodeList, String xOff, String yOff) {
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
         String start = namedNodeMapAttr.getNamedItem("start").getNodeValue();
-        getNeighbor(start, nodeList, i, xOff, yOff);
+        getNeighbor(start, nodeList, xOff, yOff);
     }
 
     /**
@@ -68,12 +73,11 @@ public class WayPoints {
      * @param start - The Current WayPoint
      * @param nodeList - the NodeList of the XML Document
      */
-    private void getNeighbor(String start, NodeList nodeList, int i, String xOff, String yOff) {
+    private void getNeighbor(String start, NodeList nodeList, String xOff, String yOff) {
         int index = WayPoints.size();
         Node mapNode = nodeList.item(0);
         NamedNodeMap namedNodeMapAttr = mapNode.getAttributes();
 
-        int lvl = Integer.parseInt(namedNodeMapAttr.getNamedItem("level").getNodeValue());
         double rotation = Double.parseDouble(namedNodeMapAttr.getNamedItem("rotation").getNodeValue());
         double scale = Double.parseDouble(namedNodeMapAttr.getNamedItem("scale").getNodeValue());
 
@@ -93,11 +97,11 @@ public class WayPoints {
                 p1 = nullVector.lerp(p1,scale);
                 String[] neighbors = (lineNode.getAttributes().getNamedItem("neighbours").getNodeValue()).split("/");
                 String knot = lineNode.getAttributes().getNamedItem("knot").getNodeValue();
-                WayPoint now = new WayPoint(start, new Vector2(Double.parseDouble(x)+Double.parseDouble(xOff), Double.parseDouble(y)+Double.parseDouble(yOff)));
+                WayPoint now = new WayPoint(start, new Vector2(Double.parseDouble(xOff)+Double.parseDouble(x), Double.parseDouble(yOff)+Double.parseDouble(y)));
                 if(!knot.isEmpty()) {
                     now.sethasKnot();
                     if(!find(knot))
-                        getNeighbor(knot, nodeList, i, xOff, yOff);
+                        getNeighbor(knot, nodeList, xOff, yOff);
                     try {
                         now.setKnot(getWayPoint(knot));
                     } catch (Exception e) {
@@ -105,10 +109,9 @@ public class WayPoints {
                     }
                 }
                 WayPoints.add(now);
-                Log.d("TAG", "created: " + start);
                 for(String name: neighbors) {
                     if(!find(name))
-                        getNeighbor(name, nodeList, i, xOff, yOff);
+                        getNeighbor(name, nodeList, xOff, yOff);
                 }
                 for(String name: neighbors) {
                     try {
@@ -148,7 +151,7 @@ public class WayPoints {
             if(WayPoints.get(i).getName().equals(name))
                 return WayPoints.get(i);
         }
-        Log.d("Not Found", "getWayPoint: " + name);
+        Log.e("No WayPoint found", "getWayPoint: " + name);
         throw new Exception("WayPoint doesnt exists!\t" + name);
     }
 

@@ -140,7 +140,7 @@ public class CustomView extends View {
      */
     public Map getMapAtLevel(int level) {
         Map levelMap = null;
-        for (int i = MinLevel; i< Maps.size(); i++) {
+        for (int i = MinLevel; i < Maps.size(); i++) {
             Map tempMap = Maps.get(i);
             if (tempMap.Level == level) {
                 levelMap = tempMap;
@@ -278,7 +278,7 @@ public class CustomView extends View {
                 MapToAddTo.addWall(NewWall);
             }
         }
-        wayPoints.ReadFile(i, xOff, yOff, stream);
+        wayPoints.ReadFile(xOff, yOff, stream);
     }
 
     /**
@@ -567,10 +567,10 @@ public class CustomView extends View {
             ZoomScale *= detector.getScaleFactor();
 
             // Keep the Position the same.
-            if (ZoomScale >= 0.25 && ZoomScale <= 2) CameraPosition = CameraPosition.mul(detector.getScaleFactor());
+            if (ZoomScale >= 0.025 && ZoomScale <= 2) CameraPosition = CameraPosition.mul(detector.getScaleFactor());
 
             // Don't let the object get too small or too large.
-            ZoomScale = Math.max(0.25f, Math.min(ZoomScale, 2.0f));
+            ZoomScale = Math.max(0.025f, Math.min(ZoomScale, 2.0f));
 
             invalidate();
             return true;
