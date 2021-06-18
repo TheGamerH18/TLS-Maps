@@ -24,7 +24,7 @@ public class Notification {
 
     private static final String title = "TLS-Maps";
     final int UID;
-    NotificationCompat.Builder builder;
+    private NotificationCompat.Builder builder;
 
     /**
      * Creates a Notification with a NoteUID
