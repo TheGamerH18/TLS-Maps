@@ -56,6 +56,7 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(getActivity(), main.tls_maps.QRCode.Scanner.class));
             }
         });
+
         binding.floatingActionButtonDown.setOnClickListener(new View.OnClickListener() {
 
             @Override

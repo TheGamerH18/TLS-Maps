@@ -25,10 +25,11 @@ public class WayPoints {
     public static final String[] WAYPOINTS = new String[] {"WPEGHolsten", "test", "test", "test", "WPEGPark"};
 
     /**
-     * This opens a XML File To read.
+     * This Reads the given Input Stream
      * @param i Index of the WayPoints in Array
      * @param xOff Offset for the WayPoints
      * @param yOff Offset for the WayPoints
+     * @param stream The File as Input Stream
      */
     public void ReadFile(int i, String xOff, String yOff, InputStream stream) {
         // Instantiate the Factory

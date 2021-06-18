@@ -12,6 +12,13 @@ import main.tls_maps.map.WayPoint;
 
 public class PathFinding {
 
+    /**
+     * This Class is for the Path finding, it store the Route and makr the Access easier
+     * @param from the Start Location
+     * @param target the Targeted Location
+     * @param binding binding for the Home Fragment to set Route in the Map
+     * @param v the View to make Snackbar if something went wrong
+     */
     public PathFinding(String from, String target, FragmentHomeBinding binding, View v){
 
         ArrayList<WayPoint> wayPoints = WayPoints.getWayPoints();

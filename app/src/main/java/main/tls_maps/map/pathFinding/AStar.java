@@ -17,7 +17,7 @@ public class AStar {
     /**
      *  Empty Constructor for Stair searching
      */
-    public AStar () {
+    protected AStar () {
 
     }
 
@@ -26,7 +26,7 @@ public class AStar {
      * @param start - Where is the Start
      * @param goal - Where is the End
      */
-    public AStar(@NotNull WayPoint start, @NotNull WayPoint goal) {
+    protected AStar(@NotNull WayPoint start, @NotNull WayPoint goal) {
 
         // Empty ArrayList for the Recursive call
         ArrayList<WayPoint> path = new ArrayList<>();
@@ -101,7 +101,7 @@ public class AStar {
      * @param Location - where is the Algorhythm
      * @param Goal - the Target WayPoint
      */
-    public void CalculateRoute(@NotNull ArrayList<WayPoint> path, @NotNull WayPoint Location, @NotNull WayPoint Goal) {
+    protected void CalculateRoute(@NotNull ArrayList<WayPoint> path, @NotNull WayPoint Location, @NotNull WayPoint Goal) {
 
         Log.d("TAG", "Von " + Location.getName() + " nach " + Goal.getName());
         // Loop through all Neighbors
@@ -149,7 +149,7 @@ public class AStar {
      * This Method is to get the Route
      * @return the fastest Route to get to the Target
      */
-    public @NotNull ArrayList<WayPoint> getRoute() {
+    protected @NotNull ArrayList<WayPoint> getRoute() {
         // Catch if there isnt a Route
         if(this.Route == null)
             return new ArrayList<>();
@@ -165,7 +165,7 @@ public class AStar {
      * @param wayPoints - the ArrayList of all WayPoints
      * @return
      */
-    public @NotNull WayPoint getStair(@NotNull WayPoint fromWP, @NotNull ArrayList<WayPoint> wayPoints) {
+    protected @NotNull WayPoint getStair(@NotNull WayPoint fromWP, @NotNull ArrayList<WayPoint> wayPoints) {
 
         // Init the Variables
         double lowest = Integer.MAX_VALUE;
