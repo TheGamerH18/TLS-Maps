@@ -96,17 +96,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.start.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
-                    binding.QR.setVisibility(View.VISIBLE);
-                else
-                    binding.QR.setVisibility(View.GONE);
-            }
-        });
-
         binding.QR.setOnClickListener(new View.OnClickListener() {
 
             @Override
