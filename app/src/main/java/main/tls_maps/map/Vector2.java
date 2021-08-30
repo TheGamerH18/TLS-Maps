@@ -83,7 +83,8 @@ public class Vector2 {
      * @return Returns a new Vector2.
      */
     public Vector2 div(double a) {
-        return new Vector2(this.x/a,this.y/a);
+        double inverse = 1/a;
+        return new Vector2(this.x/inverse,this.y/inverse);
     }
 
     /**
@@ -91,7 +92,7 @@ public class Vector2 {
      * @return double of the distance to the Center.
      */
     public double magnitude() {
-        return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
+        return Math.sqrt(this.x*this.x+this.y*this.y);
     }
 
     /**
@@ -107,10 +108,13 @@ public class Vector2 {
      * @return Returns a normalized Vector2.
      */
     public Vector2 unit() {
-        if (this.x==0 || this.y == 0) {
-            return new Vector2();
+        double mag = this.magnitude();
+        //double mag = Vector3.Dot(this,new Vector3());
+        if (mag>0) {
+            double invmag = 1 / mag;
+            return this.clone().mul(invmag);
         }
-        return this.clone().div(this.magnitude());
+        return this;
     }
 
     /**
