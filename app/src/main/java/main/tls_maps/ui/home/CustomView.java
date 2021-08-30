@@ -286,7 +286,7 @@ public class CustomView extends View {
      * @param name String name of the Color.
      * @return Returns int of the Color.
      */
-    private int getColor(String name) {
+    private static int getColor(String name) {
         @ColorInt int color = Color.parseColor(name);
         return color;
     }
@@ -400,8 +400,8 @@ public class CustomView extends View {
     private double calcAngle(MotionEvent ev) {
 
         // This Calculates the Angle the Point1 is relevant to the Center right now, in Unit Circle
-        double centerX = (ev.getX(0)+ev.getX(1))/2;
-        double centerY = (ev.getY(0)+ev.getY(1))/2;
+        double centerX = (ev.getX(0)+ev.getX(1))*0.5;
+        double centerY = (ev.getY(0)+ev.getY(1))*0.5;
         Vector2 Pointer1Offset = new Vector2(ev.getX(0)-centerX,ev.getY(0)-centerY);
         return Math.toDegrees(Pointer1Offset.unit().angle()+360);
     }
@@ -450,8 +450,8 @@ public class CustomView extends View {
         // Calculate the 4 Corners of the Vertices for Lines
         Vector2 topRight = position.add(size.mul(0.5).Transform(rotation));
         Vector2 bottomLeft = position.add(size.mul(-0.5).Transform(rotation));
-        Vector2 topLeft = position.add(new Vector2(-size.x/2,size.y/2).Transform(rotation));
-        Vector2 bottomRight = position.add(new Vector2(size.x/2,-size.y/2).Transform(rotation));
+        Vector2 topLeft = position.add(new Vector2(-size.x*0.5,size.y*0.5).Transform(rotation));
+        Vector2 bottomRight = position.add(new Vector2(size.x*0.5,-size.y*0.5).Transform(rotation));
 
         int colorWanted = getColor(color);
 
@@ -504,7 +504,7 @@ public class CustomView extends View {
             drawWayPoints(canvas, CurrentMap.WayPointsOnMap,"BLUE",1);
         }
         if(markRoom != null) {
-            ArrayList<WayPoint> wayPointMarker = new ArrayList<WayPoint>();
+            ArrayList<WayPoint> wayPointMarker = new ArrayList<>();
             wayPointMarker.add(markRoom);
             drawWayPoints(canvas, wayPointMarker, "RED", 15);
         }
@@ -533,7 +533,7 @@ public class CustomView extends View {
      */
     private void drawWayPoints(Canvas canvas, ArrayList<WayPoint> wayPoints,String Color, int scaler) {
         WayPoint lastWP = null;
-        Vector2 screenMiddle = new Vector2(getWidth()/2,getHeight()/2);
+        Vector2 screenMiddle = new Vector2(getWidth()*0.5,getHeight()*0.5);
         // WayPoint Size
         double size = scaler*ZoomScale;
 
